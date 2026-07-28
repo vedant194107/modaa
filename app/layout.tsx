@@ -25,7 +25,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-background text-on-background font-body-md overflow-x-hidden">
+      <body className="bg-background text-on-background font-body-md overflow-x-hidden print:overflow-visible">
         {children}
       </body>
     </html>

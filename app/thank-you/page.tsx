@@ -128,7 +128,7 @@ export default function ThankYouPage() {
 
           {/* Right: Order Summary Bento */}
           <div className="lg:col-span-8">
-            <div className="border-4 border-on-surface bg-surface overflow-hidden shadow-[8px_8px_0px_0px_#a90e02]">
+            <div className="border-4 border-on-surface bg-surface overflow-hidden print:overflow-visible shadow-[8px_8px_0px_0px_#a90e02]">
               <div className="p-6 sm:p-8 border-b-4 border-on-surface bg-milano-red text-lemon-chiffon">
                 <h2 className="font-headline-lg text-2xl sm:text-3xl uppercase">Order Summary</h2>
               </div>
