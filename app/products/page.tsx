@@ -65,6 +65,7 @@ function ProductsContent() {
   const [activeSearch, setActiveSearch] = useState(searchArg);
 
   const [catalogProducts, setCatalogProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [availableCategories, setAvailableCategories] = useState<string[]>(["Outerwear", "Denim", "Tops", "Accessories", "Pants"]);
   const [viewMode, setViewMode] = useState<"grid2" | "grid3" | "grid4" | "list">("grid3");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
@@ -116,7 +117,8 @@ function ProductsContent() {
           setCatalogProducts(mapped);
         }
       })
-      .catch((e) => console.error(e));
+      .catch((e) => console.error(e))
+      .finally(() => setIsLoading(false));
   }, []);
 
   // Fetch categories from SQLite API
@@ -569,7 +571,12 @@ function ProductsContent() {
 
           {/* Product List / Grid */}
           <div className="flex-grow">
-            {filteredProducts.length === 0 ? (
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center p-12 sm:p-24 my-4 sm:my-8 border-4 border-on-surface bg-surface shadow-[8px_8px_0px_0px_#a90e02]">
+                <span className="material-symbols-outlined text-4xl text-milano-red animate-spin mb-4">autorenew</span>
+                <h3 className="font-headline-lg uppercase text-lg text-on-surface">Decrypting Drop Archive...</h3>
+              </div>
+            ) : filteredProducts.length === 0 ? (
               <div className="border-4 border-on-surface p-8 sm:p-12 text-center bg-surface shadow-[8px_8px_0px_0px_#a90e02] my-4 sm:my-8">
                 <span className="material-symbols-outlined text-5xl text-milano-red mb-2">filter_alt_off</span>
                 <h3 className="font-headline-lg uppercase text-xl sm:text-2xl mb-3">No Products Match Filters</h3>
