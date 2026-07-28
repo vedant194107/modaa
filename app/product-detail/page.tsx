@@ -192,7 +192,7 @@ function ProductDetailContent() {
   // Fetch product details dynamically if ID is in URL search params
   useEffect(() => {
     if (prodIdParam) {
-      fetch(`/api/admin/products?id=${encodeURIComponent(prodIdParam)}`)
+      fetch(`/api/admin/products?id=${encodeURIComponent(prodIdParam)}&t=${Date.now()}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.success && data.product) {

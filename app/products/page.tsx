@@ -113,7 +113,18 @@ function ProductsContent() {
             stock: p.stock !== undefined ? p.stock : 50,
             status: p.status,
           }));
-          setCatalogProducts(mapped);
+          // Merge database products with default products
+          // Database products take precedence over default products with the same ID
+          const merged = [...defaultProducts];
+          mapped.forEach((dbProd: any) => {
+            const index = merged.findIndex(p => String(p.id) === String(dbProd.id));
+            if (index !== -1) {
+              merged[index] = { ...merged[index], ...dbProd };
+            } else {
+              merged.unshift(dbProd);
+            }
+          });
+          setCatalogProducts(merged);
         }
       })
       .catch((e) => console.error(e));
