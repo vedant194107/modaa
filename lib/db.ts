@@ -325,49 +325,7 @@ export async function seedDatabase() {
   // Check orders
   const orderCountRows = await query("SELECT COUNT(*) as count FROM orders");
   const orderCount = Number(orderCountRows[0].count);
-  if (orderCount === 0) {
-    await query(`
-      INSERT INTO orders (id, user_id, order_number, total, status, items_json, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [
-      "ord_1",
-      "usr_vip",
-      "ORD-8942-01",
-      245.0,
-      "DELIVERED",
-      JSON.stringify([{ id: "prod_1", title: "RAVEN DISTRESSED DENIM", price: 245, quantity: 1, size: "L" }]),
-      "2026-07-15T10:30:00.000Z"
-    ]);
-
-    await query(`
-      INSERT INTO orders (id, user_id, order_number, total, status, items_json, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [
-      "ord_2",
-      "usr_vip",
-      "ORD-7712-02",
-      335.0,
-      "DISPATCHED",
-      JSON.stringify([
-        { id: "prod_2", title: "ARCHITECT CARGO SYSTEM", price: 180, quantity: 1, size: "M" },
-        { id: "prod_3", title: "CORE 500GSM HOODIE", price: 155, quantity: 1, size: "M" }
-      ]),
-      "2026-06-20T14:15:00.000Z"
-    ]);
-
-    await query(`
-      INSERT INTO orders (id, user_id, order_number, total, status, items_json, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [
-      "ord_3",
-      "usr_vip",
-      "ORD-6540-03",
-      210.0,
-      "DELIVERED",
-      JSON.stringify([{ id: "prod_4", title: "TACTICAL VEST - RED", price: 210, quantity: 1, size: "M" }]),
-      "2026-04-10T11:00:00.000Z"
-    ]);
-  }
+  // (We no longer seed dummy orders to keep the admin clean)
 
   // Check Coupons
   const couponCountRows = await query("SELECT COUNT(*) as count FROM coupons");
