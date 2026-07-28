@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { query, queryOne } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 // Helper to ensure categories table exists
 async function initCategoriesTable() {
   await query(`
