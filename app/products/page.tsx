@@ -97,7 +97,7 @@ function ProductsContent() {
 
   // Fetch real products from SQLite API
   useEffect(() => {
-    fetch("/api/admin/products")
+    fetch(`/api/admin/products?t=${Date.now()}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.products) && data.products.length > 0) {
@@ -121,7 +121,7 @@ function ProductsContent() {
 
   // Fetch categories from SQLite API
   useEffect(() => {
-    fetch("/api/admin/categories")
+    fetch(`/api/admin/categories?t=${Date.now()}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.categories) && data.categories.length > 0) {
