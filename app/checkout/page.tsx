@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
 import { getAuthUser, UserSession } from "@/lib/authHelper";
 import { getActiveCartItems, saveActiveCartItems } from "@/lib/cartHelper";
+import { formatPrice, getActiveCurrency, CurrencyCode } from "@/lib/currencyHelper";
 
 interface Address {
   id: string;
@@ -70,6 +71,14 @@ export default function CheckoutPage() {
   const [appliedCoupon, setAppliedCoupon] = useState<any | null>(null);
   const [promoError, setPromoError] = useState("");
   const [validatingPromo, setValidatingPromo] = useState(false);
+  const [currency, setCurrency] = useState<CurrencyCode>("INR");
+
+  useEffect(() => {
+    setCurrency(getActiveCurrency());
+    const handleCurr = (e: any) => setCurrency(e.detail || getActiveCurrency());
+    window.addEventListener("currency-updated", handleCurr);
+    return () => window.removeEventListener("currency-updated", handleCurr);
+  }, []);
 
   useEffect(() => {
     const user = getAuthUser();
@@ -226,7 +235,7 @@ export default function CheckoutPage() {
       if (data.success && data.coupon) {
         const coupon = data.coupon;
         if (subtotal < coupon.minSpend) {
-          setPromoError(`Minimum spend of $${coupon.minSpend.toFixed(2)} required for coupon ${coupon.code}.`);
+          setPromoError(`Minimum spend of ${formatPrice(coupon.minSpend, currency)} required for coupon ${coupon.code}.`);
           return;
         }
         setAppliedCoupon(coupon);
@@ -485,7 +494,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                   <span className="font-headline-md text-lg sm:text-xl text-milano-red">
-                    {subtotal >= 500 ? "FREE" : "$15.00"}
+                    {subtotal >= 500 ? "FREE" : formatPrice(15, currency)}
                   </span>
                 </label>
               </div>
@@ -547,7 +556,9 @@ export default function CheckoutPage() {
                       <p className="font-label-bold text-xs text-on-surface/60 uppercase">
                         Size: {item.size || "M"} | Qty: {item.quantity || 1}
                       </p>
-                      <p className="font-headline-md text-sm text-milano-red">${((item.price || 0) * (item.quantity || 1)).toFixed(2)}</p>
+                      <div className="flex justify-between items-center mt-2">
+                        <p className="font-headline-md text-sm text-milano-red">{formatPrice((item.price || 0) * (item.quantity || 1), currency)}</p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -580,7 +591,7 @@ export default function CheckoutPage() {
                   <div className="flex justify-between items-center bg-green-100 border border-green-700 p-2 font-label-bold text-xs uppercase text-green-900">
                     <span className="flex items-center gap-1">
                       <span className="material-symbols-outlined text-sm">verified</span>
-                      COUPON {appliedCoupon.code} APPLIED ({appliedCoupon.type === "PERCENTAGE" ? `${appliedCoupon.value}% OFF` : `$${appliedCoupon.value} OFF`})
+                      COUPON {appliedCoupon.code} APPLIED ({appliedCoupon.type === "PERCENTAGE" ? `${appliedCoupon.value}% OFF` : `${formatPrice(appliedCoupon.value, currency)} OFF`})
                     </span>
                     <button
                       type="button"
@@ -595,35 +606,35 @@ export default function CheckoutPage() {
 
               {/* Price Calculations */}
               <div className="space-y-3 border-t-2 border-on-surface pt-4 font-label-bold text-sm uppercase">
-                <div className="flex justify-between">
-                  <span className="opacity-70">Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                <div className="flex justify-between font-label-bold text-sm sm:text-base uppercase">
+                  <span>Subtotal</span>
+                  <span>{formatPrice(subtotal, currency)}</span>
                 </div>
                 {discountAmount > 0 && (
-                  <div className="flex justify-between text-green-700 font-bold">
-                    <span>Discount ({appliedCoupon?.code})</span>
-                    <span>-${discountAmount.toFixed(2)}</span>
+                  <div className="flex justify-between font-label-bold text-sm sm:text-base uppercase text-emerald-600">
+                    <span>Discount ({appliedCoupon.code})</span>
+                    <span>-{formatPrice(discountAmount, currency)}</span>
                   </div>
                 )}
-                <div className="flex justify-between">
-                  <span className="opacity-70">Express Shipping</span>
-                  <span>{shippingFee === 0 ? "FREE" : `$${shippingFee.toFixed(2)}`}</span>
+                <div className="flex justify-between font-label-bold text-sm sm:text-base uppercase">
+                  <span>Express Shipping</span>
+                  <span>{shippingFee === 0 ? "FREE" : formatPrice(shippingFee, currency)}</span>
                 </div>
                 {shippingFee > 0 && (
-                  <p className="text-[10px] text-milano-red">FREE SHIPPING ON ORDERS OVER $500.00</p>
+                  <p className="text-[10px] text-milano-red">FREE SHIPPING ON ORDERS OVER {formatPrice(500, currency)}</p>
                 )}
-                <div className="flex justify-between text-base sm:text-lg font-headline-md text-milano-red border-t-2 border-on-surface pt-3">
+                <div className="flex justify-between font-headline-md text-lg sm:text-xl uppercase text-milano-red">
                   <span>Grand Total</span>
-                  <span>${grandTotal.toFixed(2)}</span>
+                  <span>{formatPrice(grandTotal, currency)}</span>
                 </div>
               </div>
 
               {/* Action Button */}
               <button
                 onClick={handlePlaceOrder}
-                className="w-full py-4 bg-milano-red text-lemon-chiffon font-headline-md text-sm sm:text-base uppercase tracking-widest hover:bg-on-surface transition-colors cursor-pointer border-2 border-on-surface shadow-[4px_4px_0px_0px_#000]"
+                className="w-full bg-milano-red text-lemon-chiffon font-headline-md text-lg sm:text-xl uppercase py-4 sm:py-5 border-2 border-on-surface hover:bg-on-surface hover:text-lemon-chiffon transition-colors shadow-[6px_6px_0px_0px_#050505] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[4px_4px_0px_0px_#050505]"
               >
-                Place Order — ${grandTotal.toFixed(2)}
+                Place Order — {formatPrice(grandTotal, currency)}
               </button>
 
               <div className="text-center font-label-bold text-[10px] opacity-60 uppercase tracking-widest space-y-1">
