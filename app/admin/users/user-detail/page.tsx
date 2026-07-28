@@ -87,7 +87,7 @@ function UserDetailContent() {
       setUser(targetUser);
 
       // 2. Fetch REAL Orders for this specific user from database
-      const ordRes = await fetch(`/api/admin/orders?userId=${targetUser.id}`);
+      const ordRes = await fetch(`/api/admin/orders?userId=${targetUser.id}&t=${Date.now()}`);
       const ordData = await ordRes.json();
 
       if (ordData.success && Array.isArray(ordData.orders)) {
@@ -97,7 +97,7 @@ function UserDetailContent() {
       }
 
       // 3. Fetch PARTICULAR Addresses for THIS specific user from database
-      const addrRes = await fetch(`/api/admin/addresses?userId=${targetUser.id}`);
+      const addrRes = await fetch(`/api/admin/addresses?userId=${targetUser.id}&t=${Date.now()}`);
       const addrData = await addrRes.json();
 
       if (addrData.success && Array.isArray(addrData.addresses)) {

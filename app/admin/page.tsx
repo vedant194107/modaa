@@ -80,12 +80,12 @@ export default function AdminDashboardPage() {
   const loadData = () => {
     setLoading(true);
     Promise.all([
-      fetch("/api/admin/stats").then((res) => res.json()).catch(() => ({})),
-      fetch("/api/admin/users").then((res) => res.json()).catch(() => ({})),
-      fetch("/api/admin/products").then((res) => res.json()).catch(() => ({})),
-      fetch("/api/admin/categories").then((res) => res.json()).catch(() => ({})),
-      fetch("/api/admin/orders").then((res) => res.json()).catch(() => ({})),
-      fetch("/api/admin/coupons").then((res) => res.json()).catch(() => ({})),
+      fetch(`/api/admin/stats?t=${Date.now()}`).then((res) => res.json()).catch(() => ({})),
+      fetch(`/api/admin/users?t=${Date.now()}`).then((res) => res.json()).catch(() => ({})),
+      fetch(`/api/admin/products?t=${Date.now()}`).then((res) => res.json()).catch(() => ({})),
+      fetch(`/api/admin/categories?t=${Date.now()}`).then((res) => res.json()).catch(() => ({})),
+      fetch(`/api/admin/orders?t=${Date.now()}`).then((res) => res.json()).catch(() => ({})),
+      fetch(`/api/admin/coupons?t=${Date.now()}`).then((res) => res.json()).catch(() => ({})),
     ]).then(([statsRes, usersRes, prodsRes, catRes, ordersRes, couponRes]) => {
       if (statsRes.success) setStats(statsRes.stats);
       if (usersRes.success) setUsers(usersRes.users);
