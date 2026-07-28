@@ -64,7 +64,7 @@ function ProductsContent() {
   const searchArg = searchParams.get("search") || "";
   const [activeSearch, setActiveSearch] = useState(searchArg);
 
-  const [catalogProducts, setCatalogProducts] = useState<any[]>(defaultProducts);
+  const [catalogProducts, setCatalogProducts] = useState<any[]>([]);
   const [availableCategories, setAvailableCategories] = useState<string[]>(["Outerwear", "Denim", "Tops", "Accessories", "Pants"]);
   const [viewMode, setViewMode] = useState<"grid2" | "grid3" | "grid4" | "list">("grid3");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
@@ -100,7 +100,7 @@ function ProductsContent() {
     fetch(`/api/admin/products?t=${Date.now()}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.products) && data.products.length > 0) {
+        if (data.success && Array.isArray(data.products)) {
           const mapped = data.products.map((p: any) => ({
             id: p.id,
             title: p.title,
@@ -113,18 +113,7 @@ function ProductsContent() {
             stock: p.stock !== undefined ? p.stock : 50,
             status: p.status,
           }));
-          // Merge database products with default products
-          // Database products take precedence over default products with the same ID
-          const merged = [...defaultProducts];
-          mapped.forEach((dbProd: any) => {
-            const index = merged.findIndex(p => String(p.id) === String(dbProd.id));
-            if (index !== -1) {
-              merged[index] = { ...merged[index], ...dbProd };
-            } else {
-              merged.unshift(dbProd);
-            }
-          });
-          setCatalogProducts(merged);
+          setCatalogProducts(mapped);
         }
       })
       .catch((e) => console.error(e));
