@@ -112,6 +112,8 @@ export function getDb(): DatabaseSync {
     try { dbInstance.exec(`ALTER TABLE products ADD COLUMN fit_guide TEXT;`); } catch(e){}
     try { dbInstance.exec(`ALTER TABLE products ADD COLUMN shipping_info TEXT;`); } catch(e){}
     try { dbInstance.exec(`ALTER TABLE products ADD COLUMN sustainability TEXT;`); } catch(e){}
+    try { dbInstance.exec(`ALTER TABLE addresses ADD COLUMN street TEXT DEFAULT '';`); } catch(e){}
+    try { dbInstance.exec(`ALTER TABLE addresses ADD COLUMN pincode TEXT DEFAULT '';`); } catch(e){}
   }
   return dbInstance;
 }
@@ -257,6 +259,8 @@ export async function initPostgresDb() {
   try { await sql.query(`ALTER TABLE products ADD COLUMN fit_guide TEXT;`); } catch(e){}
   try { await sql.query(`ALTER TABLE products ADD COLUMN shipping_info TEXT;`); } catch(e){}
   try { await sql.query(`ALTER TABLE products ADD COLUMN sustainability TEXT;`); } catch(e){}
+  try { await sql.query(`ALTER TABLE addresses ADD COLUMN street TEXT DEFAULT '';`); } catch(e){}
+  try { await sql.query(`ALTER TABLE addresses ADD COLUMN pincode TEXT DEFAULT '';`); } catch(e){}
 }
 
 export async function seedDatabase() {

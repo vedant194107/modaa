@@ -968,7 +968,7 @@ function ProductDetailContent() {
           {/* Submitted Banner */}
           {reviewSubmitted && (
             <div className="bg-milano-red text-lemon-chiffon p-4 border-2 border-on-surface font-label-bold text-xs uppercase animate-fadeIn flex items-center justify-between">
-              <span>✓ Review submitted successfully and recorded in SQLite database!</span>
+              <span>✓ Review submitted successfully and recorded in the database!</span>
               <span className="material-symbols-outlined text-lg">check_circle</span>
             </div>
           )}

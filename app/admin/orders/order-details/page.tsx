@@ -83,7 +83,7 @@ function AdminOrderDetailsContent() {
       }
 
       if (!ordRecord) {
-        setError("Order record not found in SQLite database.");
+        setError("Order record not found in database.");
         setLoading(false);
         return;
       }

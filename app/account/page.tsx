@@ -232,7 +232,7 @@ export default function AccountPage() {
 
                   {loadingOrders ? (
                     <div className="p-8 border-2 border-on-surface bg-surface text-center font-label-bold uppercase">
-                      Querying SQLite Database Orders...
+                      Loading Orders...
                     </div>
                   ) : orders.length === 0 ? (
                     <div className="border-4 border-on-surface p-8 sm:p-12 text-center bg-surface shadow-[8px_8px_0px_0px_#a90e02]">

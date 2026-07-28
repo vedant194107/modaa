@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import Footer from "@/components/Footer";
 import { getWishlist } from "@/lib/wishlistHelper";
+import { getAuthUser, UserSession } from "@/lib/authHelper";
 
 interface Address {
   id: string;
@@ -52,9 +53,34 @@ export default function AddressesPage() {
     country: "India",
   });
 
+  const [authUser, setAuthUser] = useState<UserSession | null>(null);
+
   useEffect(() => {
-    const saved = localStorage.getItem(ADDR_KEY);
-    setAddresses(saved ? JSON.parse(saved) : sampleAddresses);
+    const user = getAuthUser();
+    setAuthUser(user);
+
+    if (user) {
+      // Fetch from backend
+      fetch(`/api/admin/addresses?userId=${user.id}&t=${Date.now()}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.addresses.length > 0) {
+            setAddresses(data.addresses);
+            localStorage.setItem(ADDR_KEY, JSON.stringify(data.addresses));
+          } else {
+            const saved = localStorage.getItem(ADDR_KEY);
+            if (saved) setAddresses(JSON.parse(saved));
+          }
+        })
+        .catch(err => {
+          const saved = localStorage.getItem(ADDR_KEY);
+          if (saved) setAddresses(JSON.parse(saved));
+        });
+    } else {
+      const saved = localStorage.getItem(ADDR_KEY);
+      setAddresses(saved ? JSON.parse(saved) : sampleAddresses);
+    }
+
     setWishlistCount(getWishlist().length);
     const handleWL = (e: any) => setWishlistCount((e.detail || getWishlist()).length);
     window.addEventListener("wishlist-updated", handleWL);
@@ -66,10 +92,27 @@ export default function AddressesPage() {
     localStorage.setItem(ADDR_KEY, JSON.stringify(list));
   };
 
-  const handleDelete = (id: string) => save(addresses.filter((a) => a.id !== id));
+  const handleDelete = async (id: string) => {
+    save(addresses.filter((a) => a.id !== id));
+    if (authUser) {
+      await fetch(`/api/admin/addresses?id=${id}&userId=${authUser.id}`, { method: "DELETE" });
+    }
+  };
 
-  const handleSetDefault = (id: string) =>
-    save(addresses.map((a) => ({ ...a, isDefault: a.id === id })));
+  const handleSetDefault = async (id: string) => {
+    const updated = addresses.map((a) => ({ ...a, isDefault: a.id === id }));
+    save(updated);
+    if (authUser) {
+      const target = updated.find(a => a.id === id);
+      if (target) {
+        await fetch("/api/admin/addresses", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...target, user_id: authUser.id, is_default: true }),
+        });
+      }
+    }
+  };
 
   const openAdd = () => {
     setEditingId(null);
@@ -83,13 +126,27 @@ export default function AddressesPage() {
     setShowForm(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingId) {
       save(addresses.map((a) => a.id === editingId ? { ...a, ...form } : a));
+      if (authUser) {
+        await fetch("/api/admin/addresses", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...form, id: editingId, user_id: authUser.id }),
+        });
+      }
     } else {
       const newAddr: Address = { ...form, id: `addr-${Date.now()}`, isDefault: addresses.length === 0 };
       save([...addresses, newAddr]);
+      if (authUser) {
+        await fetch("/api/admin/addresses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...newAddr, user_id: authUser.id, is_default: newAddr.isDefault }),
+        });
+      }
     }
     setShowForm(false);
   };

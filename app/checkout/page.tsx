@@ -126,25 +126,49 @@ export default function CheckoutPage() {
     window.addEventListener("cart-updated", handleCartUpdated);
     window.addEventListener("auth-updated", handleAuthUpdated);
 
-    // Sync Saved Addresses from localStorage
-    const savedAddr = localStorage.getItem("the_drop_addresses");
-    let addrList: Address[] = defaultAddresses;
-    if (savedAddr !== null) {
-      try {
-        const parsed = JSON.parse(savedAddr);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          addrList = parsed;
-        }
-      } catch (e) {}
+    // Sync Saved Addresses from localStorage or Backend
+    const user = getAuthUser();
+    if (user) {
+      fetch(`/api/admin/addresses?userId=${user.id}&t=${Date.now()}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.addresses.length > 0) {
+            setSavedAddresses(data.addresses);
+            localStorage.setItem("the_drop_addresses", JSON.stringify(data.addresses));
+            const defaultAddr = data.addresses.find((a: Address) => a.isDefault) || data.addresses[0];
+            if (defaultAddr) {
+              setSelectedAddressId(defaultAddr.id);
+              populateAddressForm(defaultAddr);
+            }
+          } else {
+            loadLocalAddresses();
+          }
+        })
+        .catch(() => loadLocalAddresses());
+    } else {
+      loadLocalAddresses();
     }
-    setSavedAddresses(addrList);
 
-    // Pick Default Address or 1st Address
-    const defaultAddr = addrList.find((a) => a.isDefault) || addrList[0];
-    if (defaultAddr) {
-      setSelectedAddressId(defaultAddr.id);
-      populateAddressForm(defaultAddr);
+    function loadLocalAddresses() {
+      const savedAddr = localStorage.getItem("the_drop_addresses");
+      let addrList: Address[] = defaultAddresses;
+      if (savedAddr !== null) {
+        try {
+          const parsed = JSON.parse(savedAddr);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            addrList = parsed;
+          }
+        } catch (e) {}
+      }
+      setSavedAddresses(addrList);
+      const defaultAddr = addrList.find((a) => a.isDefault) || addrList[0];
+      if (defaultAddr) {
+        setSelectedAddressId(defaultAddr.id);
+        populateAddressForm(defaultAddr);
+      }
     }
+
+
 
     return () => {
       window.removeEventListener("cart-updated", handleCartUpdated);

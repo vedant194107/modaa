@@ -86,7 +86,7 @@ function UserDetailContent() {
       }
       setUser(targetUser);
 
-      // 2. Fetch REAL Orders for this specific user from SQLite database
+      // 2. Fetch REAL Orders for this specific user from database
       const ordRes = await fetch(`/api/admin/orders?userId=${targetUser.id}`);
       const ordData = await ordRes.json();
 
@@ -96,7 +96,7 @@ function UserDetailContent() {
         setOrders([]);
       }
 
-      // 3. Fetch PARTICULAR Addresses for THIS specific user from SQLite database
+      // 3. Fetch PARTICULAR Addresses for THIS specific user from database
       const addrRes = await fetch(`/api/admin/addresses?userId=${targetUser.id}`);
       const addrData = await addrRes.json();
 
@@ -186,7 +186,7 @@ function UserDetailContent() {
       const res = await fetch(`/api/admin/users?id=${user.id}`, { method: "DELETE" });
       const data = await res.json();
       if (data.success) {
-        alert("User deleted from SQLite database.");
+        alert("User deleted from database.");
         router.push("/admin/users");
       }
     } catch (e) {}
@@ -387,14 +387,14 @@ function UserDetailContent() {
         
         {loading ? (
           <div className="p-8 border-2 border-on-surface bg-surface text-center font-label-bold uppercase">
-            Loading real orders from SQLite database...
+            Loading real orders from database...
           </div>
         ) : orders.length === 0 ? (
           <div className="border-2 border-on-surface p-8 bg-surface text-center">
             <span className="material-symbols-outlined text-4xl text-on-surface/40 mb-2">shopping_bag</span>
             <h4 className="font-display-xl text-lg uppercase">NO ORDERS RECORDED IN DATABASE</h4>
             <p className="font-body-md text-xs text-on-surface/60 mt-1 uppercase tracking-wider">
-              This user currently has 0 order records in the SQLite database table.
+              This user currently has 0 order records in the database table.
             </p>
           </div>
         ) : (

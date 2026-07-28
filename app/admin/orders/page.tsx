@@ -152,7 +152,7 @@ export default function AdminOrdersPage() {
               <div>
                 <h1 className="font-display-xl text-3xl sm:text-5xl uppercase">CUSTOMER ORDERS MANAGEMENT</h1>
                 <p className="font-body-md text-xs text-on-surface/70 uppercase tracking-wider mt-1">
-                  LIVE ORDERS SYNCHRONIZED DIRECTLY WITH SQLITE DATABASE TABLE.
+                  LIVE ORDERS SYNCHRONIZED DIRECTLY WITH THE DATABASE TABLE.
                 </p>
               </div>
               <div className="flex items-center gap-3">
@@ -177,7 +177,7 @@ export default function AdminOrdersPage() {
               <div className="border-2 border-on-surface p-8 bg-surface text-center">
                 <span className="material-symbols-outlined text-5xl text-milano-red mb-3">local_shipping</span>
                 <h3 className="font-display-xl text-xl uppercase mb-1">No Orders Recorded</h3>
-                <p className="font-body-md text-xs text-on-surface/70 uppercase tracking-wider">There are currently 0 order records in the SQLite database.</p>
+                <p className="font-body-md text-xs text-on-surface/70 uppercase tracking-wider">There are currently 0 order records in the database.</p>
               </div>
             ) : (
               <div className="overflow-x-auto border-2 border-on-surface bg-surface">

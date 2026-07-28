@@ -81,13 +81,31 @@ export default function AddressesPage() {
   });
 
   useEffect(() => {
-    const saved = localStorage.getItem(ADDR_KEY);
-    setAddresses(saved ? JSON.parse(saved) : sampleAddresses);
+    if (!authUser) return;
+    
+    // Fetch from backend
+    fetch(`/api/admin/addresses?userId=${authUser.id}&t=${Date.now()}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.addresses.length > 0) {
+          setAddresses(data.addresses);
+          localStorage.setItem(ADDR_KEY, JSON.stringify(data.addresses));
+        } else {
+          // Fallback to local storage if API fails or is empty, but we shouldn't really
+          const saved = localStorage.getItem(ADDR_KEY);
+          if (saved) setAddresses(JSON.parse(saved));
+        }
+      })
+      .catch(err => {
+        const saved = localStorage.getItem(ADDR_KEY);
+        if (saved) setAddresses(JSON.parse(saved));
+      });
+
     setWishlistCount(getWishlist().length);
     const handleWL = (e: any) => setWishlistCount((e.detail || getWishlist()).length);
     window.addEventListener("wishlist-updated", handleWL);
     return () => window.removeEventListener("wishlist-updated", handleWL);
-  }, []);
+  }, [authUser]);
 
   const saveToStorage = (updated: Address[]) => {
     setAddresses(updated);
@@ -126,24 +144,44 @@ export default function AddressesPage() {
     setShowForm(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     const updated = addresses.filter((a) => a.id !== id);
     if (updated.length > 0 && !updated.some((a) => a.isDefault)) {
       updated[0].isDefault = true;
     }
     saveToStorage(updated);
+    if (authUser) {
+      await fetch(`/api/admin/addresses?id=${id}&userId=${authUser.id}`, { method: "DELETE" });
+    }
   };
 
-  const handleSetDefault = (id: string) => {
+  const handleSetDefault = async (id: string) => {
     const updated = addresses.map((a) => ({ ...a, isDefault: a.id === id }));
     saveToStorage(updated);
+    if (authUser) {
+      const target = updated.find(a => a.id === id);
+      if (target) {
+        await fetch("/api/admin/addresses", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...target, user_id: authUser.id, is_default: true }),
+        });
+      }
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingId) {
       const updated = addresses.map((a) => (a.id === editingId ? { ...a, ...form } : a));
       saveToStorage(updated);
+      if (authUser) {
+        await fetch("/api/admin/addresses", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...form, id: editingId, user_id: authUser.id }),
+        });
+      }
     } else {
       const newAddr: Address = {
         ...form,
@@ -151,6 +189,13 @@ export default function AddressesPage() {
         isDefault: addresses.length === 0,
       };
       saveToStorage([...addresses, newAddr]);
+      if (authUser) {
+        await fetch("/api/admin/addresses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...newAddr, user_id: authUser.id, is_default: newAddr.isDefault }),
+        });
+      }
     }
     setShowForm(false);
   };

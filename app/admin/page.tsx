@@ -151,14 +151,14 @@ export default function AdminDashboardPage() {
   };
 
   const handleDeleteUser = async (userId: string) => {
-    if (!confirm("Are you sure you want to delete this user from SQLite database?")) return;
+    if (!confirm("Are you sure you want to delete this user from the database?")) return;
     try {
       const res = await fetch(`/api/admin/users?id=${userId}`, { method: "DELETE" });
       const data = await res.json();
       if (data.success) {
         setUsers(users.filter((u) => u.id !== userId));
         setSelectedUser(null);
-        showNotification("User deleted from SQLite database.");
+        showNotification("User deleted from database.");
       } else {
         alert(data.error || "Failed to delete user");
       }
@@ -439,7 +439,7 @@ export default function AdminDashboardPage() {
                       <Link href="/admin/users" className="text-milano-red hover:underline font-bold">
                         Manage Accounts →
                       </Link>
-                      <span className="opacity-60">SQLite Database</span>
+                      <span className="opacity-60">Live Database</span>
                     </div>
                   </div>
                 </div>
