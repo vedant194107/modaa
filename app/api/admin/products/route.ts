@@ -1,21 +1,21 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { query, queryOne } from "@/lib/db";
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
-    const db = getDb();
+    
     if (id) {
-      const product = db.prepare("SELECT * FROM products WHERE id = ?").get(id);
+      const product = await queryOne("SELECT * FROM products WHERE id = ?", [id]);
       if (!product) {
         return NextResponse.json({ success: false, error: "Product not found." }, { status: 404 });
       }
       return NextResponse.json({ success: true, product });
     }
 
-    const products = db.prepare("SELECT * FROM products ORDER BY created_at DESC").all();
+    const products = await query("SELECT * FROM products ORDER BY created_at DESC", []);
     return NextResponse.json({ success: true, products });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
@@ -43,14 +43,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Title, category, price, and primary image are required." }, { status: 400 });
     }
 
-    const db = getDb();
+    
     const prodId = `prod_${Date.now()}`;
-    const stmt = db.prepare(`
+    await query(`
       INSERT INTO products (id, title, category, price, image1, image2, description, stock, status, materials, fit_guide, shipping_info, sustainability)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', ?, ?, ?, ?)
-    `);
-
-    stmt.run(
+    `, [
       prodId,
       title.trim(),
       category.trim(),
@@ -63,7 +61,7 @@ export async function POST(request: Request) {
       fit_guide ? fit_guide.trim() : "",
       shipping_info ? shipping_info.trim() : "",
       sustainability ? sustainability.trim() : ""
-    );
+    ]);
 
     return NextResponse.json({ success: true, message: "Product created successfully in SQLite database.", id: prodId });
   } catch (error: any) {
@@ -94,14 +92,12 @@ export async function PUT(request: Request) {
       return NextResponse.json({ success: false, error: "Product ID, title, category, price, and primary image are required." }, { status: 400 });
     }
 
-    const db = getDb();
-    const stmt = db.prepare(`
+    
+    await query(`
       UPDATE products 
       SET title = ?, category = ?, price = ?, image1 = ?, image2 = ?, description = ?, stock = ?, status = ?, materials = ?, fit_guide = ?, shipping_info = ?, sustainability = ?
       WHERE id = ?
-    `);
-
-    stmt.run(
+    `, [
       title.trim(),
       category.trim(),
       parseFloat(price),
@@ -115,7 +111,7 @@ export async function PUT(request: Request) {
       shipping_info ? shipping_info.trim() : "",
       sustainability ? sustainability.trim() : "",
       id
-    );
+    ]);
 
     return NextResponse.json({ success: true, message: "Product updated successfully." });
   } catch (error: any) {
@@ -132,10 +128,9 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ success: false, error: "Product ID and stock count are required." }, { status: 400 });
     }
 
-    const db = getDb();
+    
     const newStock = Math.max(0, parseInt(stock));
-    const stmt = db.prepare("UPDATE products SET stock = ? WHERE id = ?");
-    stmt.run(newStock, id);
+    await query("UPDATE products SET stock = ? WHERE id = ?", [newStock, id]);
 
     return NextResponse.json({ success: true, message: "Live stock updated successfully.", stock: newStock });
   } catch (error: any) {
@@ -152,9 +147,8 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ success: false, error: "Product ID is required." }, { status: 400 });
     }
 
-    const db = getDb();
-    const stmt = db.prepare("DELETE FROM products WHERE id = ?");
-    stmt.run(id);
+    
+    await query("DELETE FROM products WHERE id = ?", [id]);
 
     return NextResponse.json({ success: true, message: "Product deleted successfully." });
   } catch (error: any) {

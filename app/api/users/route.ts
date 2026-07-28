@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { query, queryOne } from "@/lib/db";
 
 export async function GET() {
   try {
-    const db = getDb();
-    const stmt = db.prepare("SELECT id, name, email, role, member_since, created_at FROM users ORDER BY created_at DESC");
-    const users = stmt.all();
+    
+    const users = await query("SELECT id, name, email, role, member_since, created_at FROM users ORDER BY created_at DESC");
 
     return NextResponse.json({
       success: true,

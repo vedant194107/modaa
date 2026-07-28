@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { query, queryOne } from "@/lib/db";
 
 export async function GET(request: Request) {
   try {
@@ -7,11 +7,10 @@ export async function GET(request: Request) {
     const userId = searchParams.get("userId");
     const id = searchParams.get("id");
 
-    const db = getDb();
+    
 
     if (id) {
-      const stmt = db.prepare("SELECT * FROM orders WHERE id = ? OR order_number = ?");
-      const order = stmt.get(id, id);
+      const order = await queryOne("SELECT * FROM orders WHERE id = ? OR order_number = ?", [id, id]);
       if (!order) {
         return NextResponse.json({ success: false, error: "Order not found." }, { status: 404 });
       }
@@ -20,20 +19,17 @@ export async function GET(request: Request) {
 
     if (userId) {
       // Find user by ID or email first
-      const userStmt = db.prepare("SELECT * FROM users WHERE id = ? OR email = ?");
-      const user = userStmt.get(userId, userId) as { id: string } | undefined;
+      const user = await queryOne("SELECT * FROM users WHERE id = ? OR email = ?", [userId, userId]) as { id: string } | undefined;
 
       const targetId = user ? user.id : userId;
 
-      const stmt = db.prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC");
-      const orders = stmt.all(targetId);
+      const orders = await query("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC", [targetId]);
 
       return NextResponse.json({ success: true, orders });
     }
 
     // Fetch all orders
-    const stmt = db.prepare("SELECT * FROM orders ORDER BY created_at DESC");
-    const orders = stmt.all();
+    const orders = await query("SELECT * FROM orders ORDER BY created_at DESC");
 
     return NextResponse.json({ success: true, orders });
   } catch (error: any) {
@@ -50,9 +46,8 @@ export async function PUT(request: Request) {
       return NextResponse.json({ success: false, error: "Order ID and status are required." }, { status: 400 });
     }
 
-    const db = getDb();
-    const stmt = db.prepare("UPDATE orders SET status = ? WHERE id = ? OR order_number = ?");
-    stmt.run(status.toUpperCase(), id, id);
+    
+    await query("UPDATE orders SET status = ? WHERE id = ? OR order_number = ?", [status.toUpperCase(), id, id]);
 
     return NextResponse.json({ success: true, message: "Order status updated successfully." });
   } catch (error: any) {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { query, queryOne } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
@@ -20,12 +20,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const db = getDb();
+    
     const cleanEmail = email.toLowerCase().trim();
 
     // Query user strictly from SQLite database
-    const selectStmt = db.prepare("SELECT * FROM users WHERE email = ?");
-    const userRow = selectStmt.get(cleanEmail) as any;
+    const userRow = await queryOne("SELECT * FROM users WHERE email = ?", [cleanEmail]) as any;
 
     // Strict validation 1: User must exist in the database
     if (!userRow) {

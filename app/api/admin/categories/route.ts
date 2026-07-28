@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { query, queryOne } from "@/lib/db";
 
 // Helper to ensure categories table exists
-function initCategoriesTable(db: any) {
-  db.exec(`
+async function initCategoriesTable() {
+  await query(`
     CREATE TABLE IF NOT EXISTS categories (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
@@ -14,9 +14,9 @@ function initCategoriesTable(db: any) {
     );
   `);
 
-  const check = db.prepare("SELECT COUNT(*) as count FROM categories").get() as { count: number };
+  const check = await queryOne("SELECT COUNT(*) as count FROM categories", []) as { count: number };
   if (check.count === 0) {
-    const insert = db.prepare(`
+    await query(`
       INSERT INTO categories (id, name, slug, description, image)
       VALUES (?, ?, ?, ?, ?)
     `);
@@ -30,17 +30,17 @@ function initCategoriesTable(db: any) {
     ];
 
     for (const item of defaults) {
-      insert.run(item[0], item[1], item[2], item[3], item[4]);
+      await query(`INSERT INTO categories (id, name, slug, description, image) VALUES (?, ?, ?, ?, ?)`, [item[0], item[1], item[2], item[3], item[4]]);
     }
   }
 }
 
 export async function GET(request: Request) {
   try {
-    const db = getDb();
-    initCategoriesTable(db);
+    
+    await initCategoriesTable();
 
-    const categories = db.prepare("SELECT * FROM categories ORDER BY name ASC").all();
+    const categories = await query("SELECT * FROM categories ORDER BY name ASC", []);
     return NextResponse.json({ success: true, categories });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
@@ -56,25 +56,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Category name is required." }, { status: 400 });
     }
 
-    const db = getDb();
-    initCategoriesTable(db);
+    
+    await initCategoriesTable();
 
     const cleanName = name.trim();
     const slug = cleanName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     const catId = `cat_${Date.now()}`;
 
-    const stmt = db.prepare(`
+    await query(`
       INSERT INTO categories (id, name, slug, description, image)
       VALUES (?, ?, ?, ?, ?)
-    `);
-
-    stmt.run(
+    `, [
       catId,
       cleanName,
       slug,
       description ? description.trim() : "",
       image ? image.trim() : "https://lh3.googleusercontent.com/aida-public/AB6AXuArnnoDag-q0ElalEK4sqtvt6w91FtYcY9aGxycQpCOKInmR7cffSVuI_FVMLsBbFD4H4-poBZB7jOnp-_oOwFoavvZXTbPCJ8JAOxItFfA6KjQzry7IpE5ZJKWX7MZBpYzTNY1hHV3OvSkntY8nnBiYCWHXgKpw7c-b39YBevNkM2Ria2q6i_QhJuOwGjUBMfeBYwxjK7tKQ0eeqmCXMzo9IhrpkEzceLaj2VigECxB6AHYemp9n_QuiHvuQp2FkYWXH9IdB2za4M"
-    );
+    ]);
 
     return NextResponse.json({ success: true, message: "Category created successfully." });
   } catch (error: any) {
@@ -91,19 +89,17 @@ export async function PUT(request: Request) {
       return NextResponse.json({ success: false, error: "Category ID and name are required." }, { status: 400 });
     }
 
-    const db = getDb();
-    initCategoriesTable(db);
+    
+    await initCategoriesTable();
 
     const cleanName = name.trim();
     const slug = cleanName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-    const stmt = db.prepare(`
+    await query(`
       UPDATE categories
       SET name = ?, slug = ?, description = ?, image = ?
       WHERE id = ?
-    `);
-
-    stmt.run(cleanName, slug, description ? description.trim() : "", image ? image.trim() : "", id);
+    `, [cleanName, slug, description ? description.trim() : "", image ? image.trim() : "", id]);
 
     return NextResponse.json({ success: true, message: "Category updated successfully." });
   } catch (error: any) {
@@ -120,11 +116,10 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ success: false, error: "Category ID is required." }, { status: 400 });
     }
 
-    const db = getDb();
-    initCategoriesTable(db);
+    
+    await initCategoriesTable();
 
-    const stmt = db.prepare("DELETE FROM categories WHERE id = ?");
-    stmt.run(id);
+    await query("DELETE FROM categories WHERE id = ?", [id]);
 
     return NextResponse.json({ success: true, message: "Category deleted successfully." });
   } catch (error: any) {

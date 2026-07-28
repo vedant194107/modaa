@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { query, queryOne } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
@@ -20,11 +20,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const db = getDb();
+    
 
     // Check if email already registered
-    const checkStmt = db.prepare("SELECT * FROM users WHERE email = ?");
-    const existing = checkStmt.get(email.toLowerCase().trim());
+    const existing = await queryOne("SELECT * FROM users WHERE email = ?", [email.toLowerCase().trim()]);
 
     if (existing) {
       return NextResponse.json(
@@ -34,19 +33,17 @@ export async function POST(request: Request) {
     }
 
     const userId = `usr_${Date.now()}`;
-    const insertStmt = db.prepare(`
+    await query(`
       INSERT INTO users (id, name, email, password, role, member_since)
       VALUES (?, ?, ?, ?, ?, ?)
-    `);
-
-    insertStmt.run(
+    `, [
       userId,
       name.trim(),
       email.toLowerCase().trim(),
       password,
       "VIP Client",
       "JUL 2025"
-    );
+    ]);
 
     const user = {
       id: userId,

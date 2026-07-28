@@ -1,20 +1,20 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { query, queryOne } from "@/lib/db";
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("id");
 
-    const db = getDb();
+    
     if (userId) {
-      const u: any = db.prepare(`
+      const u: any = await queryOne(`
         SELECT u.id, u.name, u.email, u.role, COALESCE(u.status, 'active') as status, u.member_since, u.created_at,
                COALESCE(a.phone, '+91 98765 43210') as phone
         FROM users u
         LEFT JOIN addresses a ON a.user_id = u.id AND a.is_default = 1
         WHERE u.id = ?
-      `).get(userId);
+      `, [userId]);
 
       if (!u) {
         return NextResponse.json({ success: false, error: "User not found." }, { status: 404 });
@@ -24,15 +24,15 @@ export async function GET(request: Request) {
 
     let users: any[] = [];
     try {
-      users = db.prepare(`
+      users = await query(`
         SELECT u.id, u.name, u.email, u.role, COALESCE(u.status, 'active') as status, u.member_since, u.created_at,
                COALESCE(a.phone, '+91 98765 43210') as phone
         FROM users u
         LEFT JOIN addresses a ON a.user_id = u.id AND a.is_default = 1
         ORDER BY u.created_at ASC
-      `).all();
+      `);
     } catch (e) {
-      users = db.prepare("SELECT id, name, email, role, member_since, created_at FROM users ORDER BY created_at ASC").all().map((u: any) => ({
+      users = (await query("SELECT id, name, email, role, member_since, created_at FROM users ORDER BY created_at ASC", [])).map((u: any) => ({
         ...u,
         status: "active",
         phone: "+91 98765 43210"
@@ -53,17 +53,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Name, email, and password required." }, { status: 400 });
     }
 
-    const db = getDb();
+    
     const userId = `usr_${Date.now()}`;
     const nowIso = new Date().toISOString();
     const monthYear = new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" }).toUpperCase();
 
-    const stmt = db.prepare(`
+    await query(`
       INSERT INTO users (id, name, email, password, role, status, member_since, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    stmt.run(userId, name.trim(), email.toLowerCase().trim(), password, role || "VIP Client", "active", monthYear, nowIso);
+    `, [userId, name.trim(), email.toLowerCase().trim(), password, role || "VIP Client", "active", monthYear, nowIso]);
 
     return NextResponse.json({ success: true, message: "User added successfully." });
   } catch (error: any) {
@@ -80,12 +78,12 @@ export async function PUT(request: Request) {
       return NextResponse.json({ success: false, error: "User ID is required." }, { status: 400 });
     }
 
-    const db = getDb();
+    
     if (role !== undefined) {
-      db.prepare("UPDATE users SET role = ? WHERE id = ?").run(role, id);
+      await query("UPDATE users SET role = ? WHERE id = ?", [role, id]);
     }
     if (status !== undefined) {
-      db.prepare("UPDATE users SET status = ? WHERE id = ?").run(status, id);
+      await query("UPDATE users SET status = ? WHERE id = ?", [status, id]);
     }
 
     return NextResponse.json({ success: true, message: `User record updated in database.` });
@@ -103,8 +101,8 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ success: false, error: "User ID required." }, { status: 400 });
     }
 
-    const db = getDb();
-    db.prepare("DELETE FROM users WHERE id = ?").run(id);
+    
+    await query("DELETE FROM users WHERE id = ?", [id]);
 
     return NextResponse.json({ success: true, message: "User deleted successfully." });
   } catch (error: any) {
