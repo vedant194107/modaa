@@ -20,7 +20,8 @@ function AddProductContent() {
 
   // Form State
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("Denim");
+  const [category, setCategory] = useState("Outerwear");
+  const [categoriesList, setCategoriesList] = useState<any[]>([]);
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("50");
   const [description, setDescription] = useState("");
@@ -44,6 +45,23 @@ function AddProductContent() {
     setAuthUser(user);
     const handleAuth = () => setAuthUser(getAuthUser());
     window.addEventListener("auth-updated", handleAuth);
+
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/admin/categories");
+        const data = await res.json();
+        if (data.success && data.categories) {
+          setCategoriesList(data.categories);
+          if (data.categories.length > 0) {
+            setCategory(data.categories[0].name);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch categories", err);
+      }
+    };
+    fetchCategories();
+
     return () => window.removeEventListener("auth-updated", handleAuth);
   }, []);
 
@@ -242,12 +260,20 @@ function AddProductContent() {
                         onChange={(e) => setCategory(e.target.value)}
                         className={`${inputClass} cursor-pointer`}
                       >
-                        <option value="Outerwear">Outerwear</option>
-                        <option value="Denim">Denim</option>
-                        <option value="Tops">Tops</option>
-                        <option value="Pants">Pants</option>
-                        <option value="Accessories">Accessories</option>
-                        <option value="Footwear">Footwear</option>
+                        {categoriesList.length > 0 ? (
+                          categoriesList.map(cat => (
+                            <option key={cat.id} value={cat.name}>{cat.name}</option>
+                          ))
+                        ) : (
+                          <>
+                            <option value="Outerwear">Outerwear</option>
+                            <option value="Denim">Denim</option>
+                            <option value="Tops">Tops</option>
+                            <option value="Pants">Pants</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Footwear">Footwear</option>
+                          </>
+                        )}
                       </select>
                     </div>
 
