@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE DROP | Brand Story</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Hanken+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#fff8f6",
+                      "primary-container": "#a90e02",
+                      "on-tertiary-fixed": "#000f5d",
+                      "error": "#ba1a1a",
+                      "secondary": "#a03f30",
+                      "surface": "#fff8f6",
+                      "tertiary-fixed-dim": "#bbc3ff",
+                      "on-tertiary-container": "#bcc4ff",
+                      "on-secondary-fixed-variant": "#80281c",
+                      "on-primary": "#ffffff",
+                      "surface-dim": "#f1d3ce",
+                      "surface-container-low": "#fff0ee",
+                      "surface-container": "#ffe9e5",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#e4beb7",
+                      "on-secondary-fixed": "#400100",
+                      "surface-variant": "#fadcd7",
+                      "on-error-container": "#93000a",
+                      "on-surface": "#271815",
+                      "on-secondary-container": "#741f13",
+                      "surface-container-highest": "#fadcd7",
+                      "primary-fixed": "#ffdad4",
+                      "tertiary": "#0026b2",
+                      "on-error": "#ffffff",
+                      "on-background": "#271815",
+                      "primary-fixed-dim": "#ffb4a7",
+                      "primary": "#7e0500",
+                      "inverse-primary": "#ffb4a7",
+                      "on-primary-fixed": "#400100",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#ffedea",
+                      "on-surface-variant": "#5b403b",
+                      "tertiary-fixed": "#dee0ff",
+                      "tertiary-container": "#0036ed",
+                      "on-tertiary-fixed-variant": "#002dcc",
+                      "inverse-surface": "#3e2c29",
+                      "surface-container-high": "#ffe2dd",
+                      "secondary-fixed": "#ffdad4",
+                      "outline": "#906f6a",
+                      "on-primary-fixed-variant": "#920700",
+                      "surface-tint": "#b91d0d",
+                      "secondary-fixed-dim": "#ffb4a7",
+                      "on-tertiary": "#ffffff",
+                      "background": "#fff8f6",
+                      "secondary-container": "#fe8673",
+                      "on-primary-container": "#ffb6a9",
+                      "error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "section-gap": "120px",
+                      "gutter": "24px",
+                      "margin-desktop": "64px",
+                      "container-max": "1440px",
+                      "margin-mobile": "20px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "body-md": ["Hanken Grotesk"],
+                      "headline-lg-mobile": ["Bebas Neue"],
+                      "headline-lg": ["Bebas Neue"],
+                      "label-bold": ["Hanken Grotesk"],
+                      "label-sm": ["Hanken Grotesk"],
+                      "headline-md": ["Bebas Neue"],
+                      "body-lg": ["Hanken Grotesk"],
+                      "display-xl": ["Bebas Neue"],
+                      "display-xl-mobile": ["Bebas Neue"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["40px", {"lineHeight": "40px", "fontWeight": "400"}],
+                      "headline-lg": ["64px", {"lineHeight": "60px", "fontWeight": "400"}],
+                      "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-md": ["32px", {"lineHeight": "32px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-xl": ["120px", {"lineHeight": "100px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                      "display-xl-mobile": ["72px", {"lineHeight": "64px", "letterSpacing": "-0.01em", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .editorial-offset-right { transform: translateX(2rem); }
+        .editorial-offset-left { transform: translateX(-2rem); }
+        @media (max-width: 768px) {
+            .editorial-offset-right, .editorial-offset-left { transform: translateX(0); }
+        }
+        .instant-hover { transition: background-color 0s, color 0s; }
+        .custom-border { border: 2px solid #271815; }
+        .custom-border-heavy { border: 3px solid #271815; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary selection:text-white">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-50 bg-surface dark:bg-surface border-b-2 border-on-surface dark:border-on-surface">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-6 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<a class="font-display-xl text-headline-md tracking-tighter text-primary dark:text-primary" href="index.html">THE DROP</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-on-surface dark:text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="products.html">Shop</a>
+<a class="text-on-surface dark:text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="summer-sale.html">New Arrivals</a>
+<a class="text-on-surface dark:text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="summer-sale.html">Collections</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="our-story.html">About</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface text-[24px] hover:text-primary transition-colors duration-0 active:scale-95">search</button>
+<a class="inline-flex items-center justify-center" href="cart.html"><button class="material-symbols-outlined text-on-surface text-[24px] hover:text-primary transition-colors duration-0 active:scale-95">shopping_bag</button></a>
+<a class="inline-flex items-center justify-center" href="account.html"><button class="material-symbols-outlined text-on-surface text-[24px] hover:text-primary transition-colors duration-0 active:scale-95">person</button></a>
+</div>
+</nav>
+</header>
+<main class="w-full">
+<!-- Hero Section -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-12 md:pt-24 mb-section-gap">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-end">
+<div class="md:col-span-8">
+<h1 class="font-display-xl-mobile md:font-display-xl text-display-xl-mobile md:text-display-xl uppercase leading-none">
+                        Our Story:<br/>
+<span class="text-primary italic">Intentional</span><br/>
+                        Scarcity
+                    </h1>
+</div>
+<div class="md:col-span-4 pb-4">
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-sm">
+                        Founded on the principle that true value lies in the finite. We don't just sell products; we orchestrate moments in culture.
+                    </p>
+</div>
+</div>
+<div class="mt-12 md:mt-24 relative">
+<div class="aspect-[16/9] w-full bg-surface-variant overflow-hidden custom-border-heavy">
+<img class="w-full h-full object-cover grayscale" data-alt="A high-contrast cinematic shot of a modern streetwear design studio in a renovated industrial warehouse. The lighting is dramatic, with sharp shadows and bright highlights illuminating rolls of premium fabric, tech-wear sketches, and a minimalist desk with architectural tools. The color palette is strictly white, black, and deep Milano Red accents, emphasizing an editorial and professional aesthetic. The atmosphere is quiet, focused, and luxurious." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTdUQvxKKbzGZgNpK2ogopxVkpxkS16C1b5tR0eyGetqEQrsxTQktHj7tSPr4jYZBRld9V4EzZSTqZ0DfbT1f_TNPfwGnyu_-HwHqZj_WsYoUYuHqs6B_eDWwT8YDI-ygzH6lomLUD-Kszk5gg5WN8yvF3DImDWCB8NDTGnpjMBN0MZtADWO_3UqFmzLxr4XtdAZDG2n0iSLh6f7EsVB0hm077yNm8SnNeyaH7hOWnEaFIKC6QLU9aCGJruV-Zx1pbI-7yruwCt8k"/>
+</div>
+<div class="absolute -bottom-12 -right-4 md:right-12 bg-primary text-white p-8 md:p-12 max-w-xs custom-border-heavy">
+<p class="font-label-bold text-label-bold uppercase tracking-widest mb-4">Manifesto 01</p>
+<p class="font-headline-md text-headline-md leading-tight">WE REJECT THE ENDLESS CYCLE OF MASS CONSUMPTION.</p>
+</div>
+</div>
+</section>
+<!-- THE VISION -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-section-gap">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+<div class="md:col-span-5 order-2 md:order-1">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase mb-8">THE VISION</h2>
+<div class="space-y-6 text-on-surface-variant">
+<p class="font-body-lg text-body-lg">
+                            At THE DROP, we believe that abundance breeds indifference. When everything is available to everyone, at all times, nothing carries weight. Our vision is to return the soul to the objects we wear by limiting their existence.
+                        </p>
+<p class="font-body-lg text-body-lg">
+                            Each release is a singular event—a curated intersection of avant-garde design, premium craftsmanship, and cultural relevance. We don't restock. We don't discount. We only innovate.
+                        </p>
+</div>
+<div class="mt-12 p-8 border-l-8 border-primary bg-surface-container-low">
+<p class="font-headline-md text-headline-md text-primary italic leading-tight">
+                            "Scarcity is not a marketing tactic; it is our philosophy of respect for the material and the maker."
+                        </p>
+</div>
+</div>
+<div class="md:col-span-6 md:col-start-7 order-1 md:order-2 mb-12 md:mb-0">
+<div class="aspect-[4/5] bg-surface-variant custom-border-heavy overflow-hidden editorial-offset-right">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover" data-alt="A grainy, high-fashion black and white editorial photograph of a model standing in a brutalist concrete environment. The model is wearing an oversized, structured tactical vest with complex pocket details. The background is sharp and angular, casting long geometric shadows. The overall mood is cold, assertive, and highly stylistic, fitting a premium streetwear brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtJAwezCFqs8wQb6i6YrdedcI2VptaRb0XF4-WdI9Wxtw2bH6YAavaXRVvcgS2uFqk5DiqdhjG-xBN2IzMpDZ5djLPHhS9v9X-CHi9R2L9icNxcF2fbTUrHdkZnNzMmdJHFdFoPfcokzcMyXJp5tsnEksHKk0W9jI1wnuvkl88fDJbq9u8i26oofI2GF-F2Et4oKeytfSXgWjWZGPae_43KROpRpdW9VxPUuRlSBXlYKoCA58EjuWC-V95yp5qh1zWSqP87bI9RTY"/></a>
+</div>
+</div>
+</div>
+</section>
+<!-- THE PROCESS -->
+<section class="bg-on-surface py-section-gap">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-baseline mb-16 border-b border-surface/20 pb-4">
+<h2 class="font-display-xl-mobile md:font-display-xl text-display-xl-mobile md:text-display-xl text-surface uppercase">THE PROCESS</h2>
+<span class="text-primary font-label-bold tracking-widest">BEHIND THE CURTAIN</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Step 1 -->
+<div class="group">
+<div class="aspect-square bg-surface-dim mb-8 overflow-hidden">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-700" data-alt="A close-up, high-detail macro shot of industrial sewing machinery working on thick, heavy-duty black canvas fabric. Intense white studio lighting highlights the texture of the thread and the metallic gleam of the needle. The composition is tight and dynamic, focusing on the precision of luxury garment manufacturing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWsfvokgOhU6JwwXsElN78M-h9ZBIGAZTb_LP-LN61N24CO68TIK28ejNMERlMK-xN9ObsGhykguNnWX_R4ECGZkDfWSVOjo-IGMm7hKwt7czuNmvnaTkIRPRur0KBGR9mlBTZMt3n5Yt4fulrz2qGxVSj5hlJ9HuedrQgaTrGhWdCEarEslCbdcPtJXOnNDILCJL_vpR6O0qYRrcKF4zxU593mQLh8uCGwTdaKXeLNOwLUDSukYOYRl_Ovq4Hzc8pe-PKW1wbvgY"/></a>
+</div>
+<h3 class="font-headline-md text-headline-md text-surface uppercase mb-4">01. Conception</h3>
+<p class="text-surface/70 font-body-md">Months of research into architectural silhouettes and technical textiles culminate in a single, perfect prototype.</p>
+</div>
+<!-- Step 2 -->
+<div class="group md:mt-12">
+<div class="aspect-square bg-surface-dim mb-8 overflow-hidden">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-700" data-alt="A top-down flat lay of high-end design tools on a white surface: professional shears, a graphite pencil, a Pantone swatch book showing deep reds and blacks, and a strip of custom-woven branded webbing. The lighting is clean and bright, following a minimalist light-mode aesthetic with high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqEOVeW4uEyoX9l5GXVe7eyytgjovG7MmkOha2OipByPIVDHcBr7r2peiSfTBh6G89NkewONsRqLJB7O5Gdm-xW3SLRA3AAQl5-DNIGH1lOjaS9GpsDsO5J7ZqZfcItsJ5z39XoH9O1SHTjkpRigS0I_q0W-xNCAT7cgHQdBtB_sq9xzmwTT5T2rOA8KhnckjR8UMM-2l0Dlv62VdGw-GAS0_qHKBjsERUaztwxZP2Lmgbt79kyf6d2s5hp1pSIDrXjwmpSZ-MJYg"/></a>
+</div>
+<h3 class="font-headline-md text-headline-md text-surface uppercase mb-4">02. Destruction</h3>
+<p class="text-surface/70 font-body-md">We stress-test every design in urban environments. If it doesn't withstand the friction of the city, it doesn't make the cut.</p>
+</div>
+<!-- Step 3 -->
+<div class="group md:mt-24">
+<div class="aspect-square bg-surface-dim mb-8 overflow-hidden">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-700" data-alt="An abstract, high-contrast image of an urban skyline at dusk, shot through a distorted glass lens. The lights of the city create blurry, glowing streaks of red and white against a deep black sky. The mood is energetic, nocturnal, and perfectly aligned with a premium streetwear brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOt7Q7MJTy6SiK45mJZK4f2YZjF5xzfvoLQDeMzw_BkOzBQC2X28xd4B4syOLONacQjUSQ148cVQhzJL_S82qdsc-1vc6SQBuvkNWvB7im4mbXx4iZIiORr_RwQ15HPsD4rPaaJSABzEIGESrlfK21zuuEMYOlkcygxeAUaRMdr3DPzd2ZT-xTN1uPxZhzjzH9OoJDpW5zpbdM4dgNJF8NW8IuduhHh4TXrw-RBuSxqi62dT6zTydrpbOPVeowhOTB3vj6wA6x8fI"/></a>
+</div>
+<h3 class="font-headline-md text-headline-md text-surface uppercase mb-4">03. The Release</h3>
+<p class="text-surface/70 font-body-md">A synchronized global launch. Limited quantities. No warnings. Only the most attentive gain access.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- THE COMMUNITY -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<div class="md:col-span-7">
+<div class="aspect-video bg-surface-variant custom-border-heavy overflow-hidden editorial-offset-left mb-12">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover" data-alt="A candid, wide-angle shot of a crowd of stylish young people gathered in an underground art space. They are wearing modern, oversized tech-wear and minimalist fashion. The lighting is atmospheric, with red neon accents cutting through a dark, industrial interior. The scene conveys a sense of belonging and exclusive community culture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKwixd9kuEHoEtcliM7qKCaxZLLmYIHTXM2e_VQwlOvEtyWWjjSw5id-XkvoIsyXel0iQLA9WleXu8NRaykYzXIGFXlQH990DgYyo-oHD-dJF-BEgA3qPstBPp2iszVarwGaOVJ-Ns-SeCFYvSSNDUh6Ik4oT5YCOuSwn-WD-5XxkJtaANx3eqMpW1KqVMu8kmgprmezLNjBkp_WiKet02zVK5ljmqRlAnRNdDa6i1O4e8ZEHgkPBDXGDvPNWPwBEzF8kccLmaJr0"/></a>
+</div>
+<div class="max-w-xl">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase mb-8 leading-none">THE COMMUNITY</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-6">
+                            We don't have customers; we have a collective. Our community is built of individuals who seek depth over trends. They are the architects, the artists, and the outcasts who define the next era of street culture.
+                        </p>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                            Engagement with THE DROP is a badge of intentionality. It's a signal that you value the story as much as the stitch.
+                        </p>
+<div class="mt-12">
+<button class="bg-on-surface text-surface font-headline-md px-12 py-4 uppercase custom-border-heavy instant-hover hover:bg-primary hover:text-white transition-none active:scale-95">Join the Collective</button>
+</div>
+</div>
+</div>
+<div class="md:col-span-4 md:col-start-9 flex flex-col justify-center">
+<div class="space-y-12">
+<div>
+<p class="font-display-xl text-headline-lg text-primary leading-none">42</p>
+<p class="font-label-bold text-label-bold uppercase tracking-widest text-on-surface-variant">Drops Released</p>
+</div>
+<div class="border-t-2 border-on-surface pt-8">
+<p class="font-display-xl text-headline-lg text-primary leading-none">12K</p>
+<p class="font-label-bold text-label-bold uppercase tracking-widest text-on-surface-variant">Global Archive Members</p>
+</div>
+<div class="border-t-2 border-on-surface pt-8">
+<p class="font-display-xl text-headline-lg text-primary leading-none">0</p>
+<p class="font-label-bold text-label-bold uppercase tracking-widest text-on-surface-variant">Restocks Ever Permitted</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / CTA -->
+<section class="bg-primary-container text-white py-24">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
+<h2 class="font-display-xl-mobile md:font-display-xl text-display-xl-mobile md:text-display-xl uppercase mb-8">Stay Ahead of the Curve</h2>
+<p class="font-headline-md text-headline-md mb-12 max-w-2xl mx-auto opacity-90">SECURE YOUR ACCESS TO THE NEXT ARCHIVAL RELEASE. SIGN UP FOR ENCRYPTED ALERTS.</p>
+<form class="max-w-lg mx-auto flex flex-col md:flex-row gap-4">
+<input class="flex-grow bg-transparent border-b-2 border-white focus:border-white focus:ring-0 text-white placeholder:text-white/50 font-headline-md py-4" placeholder="EMAIL ADDRESS" type="email"/>
+<button class="bg-white text-primary font-headline-md px-12 py-4 uppercase hover:bg-on-surface hover:text-white transition-colors duration-200" type="submit">Subscribe</button>
+</form>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-on-surface dark:bg-on-surface">
+<div class="flex flex-col md:flex-row justify-between items-start w-full px-margin-mobile md:px-margin-desktop py-section-gap max-w-container-max mx-auto">
+<div class="mb-12 md:mb-0">
+<h2 class="font-display-xl text-headline-lg text-surface dark:text-surface mb-4">THE DROP</h2>
+<p class="text-surface/60 font-body-md max-w-xs uppercase tracking-tight">Editorial excellence in limited apparel.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-12 w-full md:w-auto">
+<div>
+<p class="text-surface font-label-bold uppercase mb-6">Internal</p>
+<ul class="space-y-3">
+<li><a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="products.html">Shop</a></li>
+<li><a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="summer-sale.html">New Arrivals</a></li>
+<li><a class="text-surface underline font-body-md" href="our-story.html">About</a></li>
+</ul>
+</div>
+<div>
+<p class="text-surface font-label-bold uppercase mb-6">Service</p>
+<ul class="space-y-3">
+<li><a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="#">Shipping</a></li>
+<li><a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="#">Returns</a></li>
+<li><a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="#">Contact</a></li>
+</ul>
+</div>
+<div class="col-span-2 md:col-span-1">
+<p class="text-surface font-label-bold uppercase mb-6">Social</p>
+<ul class="flex gap-4">
+<li><a class="text-surface/80 hover:text-primary-container" href="#"><span class="material-symbols-outlined">share</span></a></li>
+<li><a class="text-surface/80 hover:text-primary-container" href="#"><span class="material-symbols-outlined">camera</span></a></li>
+<li><a class="text-surface/80 hover:text-primary-container" href="#"><span class="material-symbols-outlined">alternate_email</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 border-t border-surface/10 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-surface/40 font-label-sm uppercase tracking-widest text-center md:text-left">© 2024 THE DROP EDITORIAL. ALL RIGHTS RESERVED.</p>
+<div class="flex gap-6">
+<a class="text-surface/40 font-label-sm uppercase hover:text-surface" href="#">Terms</a>
+<a class="text-surface/40 font-label-sm uppercase hover:text-surface" href="#">Privacy</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for scroll reveal or simple atmospheric effects
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const observerOptions = {
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100');
+                        entry.target.classList.remove('opacity-0');
+                    }
+                });
+            }, observerOptions);
+
+            // Simple reveal logic
+            sections.forEach(section => {
+                section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-4');
+                observer.observe(section);
+            });
+            
+            // Add a slight delay for hero
+            setTimeout(() => {
+                document.querySelector('section').classList.remove('opacity-0', 'translate-y-4');
+                document.querySelector('section').classList.add('opacity-100', 'translate-y-0');
+            }, 100);
+        });
+
+        // Toggle active class on nav links
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.textContent === 'About') return; // Keep active
+                navLinks.forEach(l => l.classList.remove('text-primary', 'font-bold', 'border-b-2', 'border-primary', 'pb-1'));
+                link.classList.add('text-primary', 'font-bold', 'border-b-2', 'border-primary', 'pb-1');
+            });
+        });
+    </script>
+</body></html>

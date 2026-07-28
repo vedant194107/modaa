@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE DROP | Editorial Streetwear</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Hanken+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#3e2c29",
+                        "primary-fixed": "#ffdad4",
+                        "on-primary-fixed": "#400100",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#f1d3ce",
+                        "outline-variant": "#e4beb7",
+                        "primary-fixed-dim": "#ffb4a7",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#002dcc",
+                        "inverse-primary": "#ffb4a7",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#400100",
+                        "surface": "#fff8f6",
+                        "tertiary": "#0026b2",
+                        "surface-container": "#ffe9e5",
+                        "background": "#fff8f6",
+                        "on-secondary-fixed-variant": "#80281c",
+                        "inverse-on-surface": "#ffedea",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#bbc3ff",
+                        "surface-container-low": "#fff0ee",
+                        "secondary-fixed-dim": "#ffb4a7",
+                        "surface-bright": "#fff8f6",
+                        "on-surface": "#271815",
+                        "secondary": "#a03f30",
+                        "on-background": "#271815",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#fadcd7",
+                        "outline": "#906f6a",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#bcc4ff",
+                        "surface-container-high": "#ffe2dd",
+                        "secondary-container": "#fe8673",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#5b403b",
+                        "primary-container": "#a90e02", // Milano Red
+                        "on-primary-container": "#ffb6a9",
+                        "primary": "#7e0500",
+                        "on-primary-fixed-variant": "#920700",
+                        "surface-tint": "#b91d0d",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdad4",
+                        "tertiary-container": "#0036ed",
+                        "tertiary-fixed": "#dee0ff",
+                        "surface-container-highest": "#fadcd7",
+                        "on-tertiary-fixed": "#000f5d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0rem", // Force sharp corners as per style guidance
+                        "lg": "0rem",
+                        "xl": "0rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-mobile": "20px",
+                        "unit": "4px",
+                        "section-gap": "120px",
+                        "container-max": "1440px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Bebas Neue"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Bebas Neue"],
+                        "label-bold": ["Hanken Grotesk"],
+                        "headline-lg": ["Bebas Neue"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "display-xl-mobile": ["Bebas Neue"],
+                        "display-xl": ["Bebas Neue"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", {"lineHeight": "32px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["40px", {"lineHeight": "40px", "fontWeight": "400"}],
+                        "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "headline-lg": ["64px", {"lineHeight": "60px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-xl-mobile": ["72px", {"lineHeight": "64px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "display-xl": ["120px", {"lineHeight": "100px", "letterSpacing": "-0.02em", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 8px 8px 0px 0px #271815;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .image-zoom:hover img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-surface border-b-2 border-on-surface">
+<div class="flex justify-between items-center w-full px-4 md:px-margin-desktop py-6 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<a class="font-display-xl text-headline-md tracking-tighter text-primary" href="index.html">THE DROP</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="products.html">Shop</a>
+<a class="text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="summer-sale.html">New Arrivals</a>
+<a class="text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="summer-sale.html">Collections</a>
+<a class="text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="our-story.html">About</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface hover:text-primary transition-colors duration-0 active:scale-95">search</button>
+<a class="inline-flex items-center justify-center" href="account.html"><button class="material-symbols-outlined text-on-surface hover:text-primary transition-colors duration-0 active:scale-95">person</button></a>
+<a class="inline-flex items-center justify-center" href="cart.html">
+<button class="relative material-symbols-outlined text-on-surface hover:text-primary transition-colors duration-0 active:scale-95">
+                    shopping_bag
+                    <span class="absolute -top-1 -right-1 bg-primary text-surface text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+</button>
+</a>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative bg-primary-container min-h-[921px] flex items-center overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+</div>
+<div class="relative z-10 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter items-center py-16">
+<div class="md:col-span-7">
+<h1 class="font-display-xl text-display-xl-mobile md:text-display-xl text-primary-fixed uppercase leading-none mb-8">
+                    RARE<br/>ESSENTIALS<br/>004/24
+                </h1>
+<p class="font-body-lg text-body-lg text-on-primary-container max-w-md mb-10">
+                    High-performance streetwear engineered for the modern landscape. Limited quantities. Uncompromising quality.
+                </p>
+<button class="bg-on-surface text-surface py-4 px-12 font-headline-md text-headline-md hover:bg-primary transition-all duration-0">
+                    SHOP THE DROP
+                </button>
+</div>
+<!-- Asymmetric Collage -->
+<div class="md:col-span-5 relative h-[500px] md:h-[700px]">
+<div class="absolute top-0 right-0 w-2/3 h-2/3 z-20 border-2 border-on-surface overflow-hidden">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" data-alt="A high-fashion studio shot of a model wearing an oversized Milano Red puffer jacket and black techwear trousers. The lighting is harsh and editorial, casting deep shadows against a Lemon Chiffon background. The overall aesthetic is avant-garde streetwear, focusing on texture and silhouette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6VkH8nooirJnN2OH0SPitwY0p6wAty_ThByoyBlfp0sarheVj7Xb-w9YbA6Pq7EsWxGSl-xCukOJC7_0-H-m1qphanZJqm3E0ghW7R_yvYZ8jzvShGI8WM2iai_Z-W0xjLP939T917IhPtTvJkH1E7DNgtT9chGd8l-Qgg9pln3DybHRp5rxlY4IaHFc-BM5pNtghB-VtpP3rZblsFoYs0zrOaw2oYiLAL-Js2dPKS6M1-fUJ4pVJYRbj3nwmM7R1P1h1kOzNiek"/></a>
+</div>
+<div class="absolute bottom-10 left-0 w-1/2 h-1/2 z-10 border-2 border-on-surface overflow-hidden">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" data-alt="Close-up detail shot of a premium black leather sneaker with silver hardware accents. The shoe sits on a textured concrete surface under dramatic, cinematic lighting. The color palette is strictly black, silver, and muted gray, reflecting the luxury minimalist identity of The Drop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0sY6o7IELOHsG_m8Trq_E7MF9jxpz-kzEh4RhmFKDuzric2INh_a8VxaFVeu0QUw7D8jU2FviK3yIL0n4naSz1jidQS7YJcYVzDG9thXI2ablpLPwwxurtKBcLfThcX-GKDbtduOOVMqQ--Y0JQcf52FSfYBrWhS0jTbj6SX4O9rUetr0wG27nhIj-c1X70HqfpdK0Fno6GCYfIFisDMF6hZkXyaXttqRC36vq4eGoekKqXsZ3wPBppSKNvxnYYAkDEzP2U_n6oA"/></a>
+</div>
+<div class="absolute top-1/4 -left-10 w-1/3 h-1/3 z-30 border-2 border-on-surface hidden md:block overflow-hidden">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" data-alt="A gritty urban landscape at dusk with glowing neon signs reflecting in puddles. The mood is moody and atmospheric, perfectly capturing the midnight street culture vibe. The composition is off-center with a focus on geometric architectural lines in shades of deep red and obsidian black." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsMDZv4pbf5z1U1ejOWhzOz6p9nY83Ro6TkOl4o11pMeQaFfOCV_xXwJK5DgnsCSyYMThxIE4up12gBM8QtBCVCfXW4CHYP3DFPM1H3gH206PXC6ZXU9W4rZiBL48ykMvmpf51WzaV7DLRXQDO-XSwh0bOf8wSHatqa2OlAh2Mbq9-1U2mPAlq5Hv1DGW3JAXfioI-ToIXzeC5XKGux0JEElJDzOLKNpK3ZXeoJh_-76kgnYalnokdM4SBK7EnnQLQciGhps5omtY"/></a>
+</div>
+</div>
+</div>
+</section>
+<!-- New Arrivals Carousel -->
+<section class="py-section-gap bg-background">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-12 flex justify-between items-end">
+<div>
+<span class="font-label-bold text-label-bold text-primary uppercase tracking-widest">JUST ARRIVED</span>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase">NEW ARRIVALS</h2>
+</div>
+<a class="font-label-bold text-label-bold underline hover:text-primary transition-colors" href="products.html">VIEW ALL</a>
+</div>
+<div class="hide-scrollbar flex overflow-x-auto snap-x snap-mandatory gap-gutter px-margin-mobile md:px-margin-desktop pb-12">
+<!-- Product Card 1 -->
+<div class="snap-start flex-none w-[300px] md:w-[400px] group cursor-pointer">
+<div class="relative aspect-[3/4] overflow-hidden mb-4 border-2 border-on-surface">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A minimalist studio product photograph of a heavy-weight black cotton hoodie with a subtle embossed logo on the chest. The lighting is clean and balanced, highlighting the fabric's rich texture. The aesthetic is premium and understated, fitting into a high-contrast editorial layout." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMnaLnndF_wvRegzRbqWvrUQZ470GWCkFs_iCTTyXU-zATGX5IOJl2yKSgAa8Q6s78IrzlaPcNWYJW37ImRj8wONeKwjOPKaiGXCyx9yJsrq4qhhXAD_P-VUV-XFcIF1cTCLyNQ88sKtK0vCXe4RQScs2AByo2wUa2tmhlX_CnQcpeRZDUGVIQkW6X7e1iXkCrv69P4cQg5HQUaA671PeJLB7OyRda-E2-Cdi7lF6QGGraPhIqluhCD3PKGeU0mQH_whyw3HOD7ro"/></a>
+<div class="absolute top-4 left-4 bg-primary text-white px-3 py-1 font-label-bold text-label-sm">SOLD OUT</div>
+</div>
+<div class="pt-2 border-t-2 border-on-surface">
+<h3 class="font-label-bold text-label-bold uppercase">ARCHIVE HOODIE / BLK</h3>
+<p class="font-body-md text-body-md opacity-70">$185.00</p>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="snap-start flex-none w-[300px] md:w-[400px] group cursor-pointer">
+<div class="relative aspect-[3/4] overflow-hidden mb-4 border-2 border-on-surface">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A lifestyle product shot of a pair of utility cargo pants in a muted olive tone, featuring multiple tactical pockets and metallic zippers. The pants are shown against a minimal off-white studio background with soft directional lighting. The design is functional yet fashionable streetwear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDttnpXadaa46-oxQNQSH17C1Mf46Pdm_xTRrTCufhocwbzysLEJAMwaktgNSequZEN0IAM36LmZdW-mhJj4y_2ZkmvsaAnw2K1Qq3HXRHVQfMy1NjqxI26G7n3jaQWrQvZvxXAIxX-nadn4mJGHj6Xzbfp6lwiUS8fGN_N1MfB3cHUKS5qQTZ0soX8540QCjOEFEpzGudvIgP7_RhzbkvYLtuY7mlK_2Xg3V4j5dtTmdPfNJgnDrqbJI_ZOELGwWGCd5VcdZmuHLI"/></a>
+</div>
+<div class="pt-2 border-t-2 border-on-surface">
+<h3 class="font-label-bold text-label-bold uppercase">TACTICAL PANT 02</h3>
+<p class="font-body-md text-body-md opacity-70">$240.00</p>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="snap-start flex-none w-[300px] md:w-[400px] group cursor-pointer">
+<div class="relative aspect-[3/4] overflow-hidden mb-4 border-2 border-on-surface">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A close-up shot of a high-quality white t-shirt with a bold Milano Red graphic print on the back. The model is standing in a brightly lit industrial space with metal beams and concrete floors. The composition is dynamic and youthful, emphasizing the brand's bold color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqBXdrJO3-EFMJCE6sbxxP41wzr3xX7pN6BKhteHRo31X-0oOV6PjO2iDitxmHh132-dZQ0rE-Pf-aGtuhsVogJSfE3GYjuCHhOf57uDv6h06-NKhkwg8_-8_BTNo5axg6dX1iu-CKYY65esVx36vtQJ8u7b2IjaWimtABgQE6gz0aHOziSiIBLrzG0MP1-oAN_Jx9XzLEReWYrFLZwwmqGGSMbzbR8qQULP8P3iygBSWRjaTJT5K9ZwfkgSynfPbr0qFZ69BebJs"/></a>
+</div>
+<div class="pt-2 border-t-2 border-on-surface">
+<h3 class="font-label-bold text-label-bold uppercase">GRAPHIC TEE / RED</h3>
+<p class="font-body-md text-body-md opacity-70">$75.00</p>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="snap-start flex-none w-[300px] md:w-[400px] group cursor-pointer">
+<div class="relative aspect-[3/4] overflow-hidden mb-4 border-2 border-on-surface">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sleek, structured black messenger bag made from technical waterproof nylon. The bag is shown floating in a minimalist Lemon Chiffon space, creating a surreal and modern product presentation. Subtle shadows define its geometric form and high-end construction." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYZY7z2ZrxeLdlhYfAoaTtUm-tsH2pQ6C65MW36Q_Dny63WBlpUgSs7N-sZA_CnCsv0Xzgct-8rxBbquXRrJiVOJxRQ4KujwoqMXEoPlTKCxxGEXrvsVMoing9XBPiMhUpcYjgyxhmSPvC8mXqeslzyGyr-WOI6O0UlD0Wl64LyILJ8HOIetR_C6FmGdD3PIHPwBx37Rs0hXeLkDuXxNkP8KbOICK042ADdBCHl9-tGhefIBUqImwFumqQ5JAwc--ZXDWU_xzLAXo"/></a>
+</div>
+<div class="pt-2 border-t-2 border-on-surface">
+<h3 class="font-label-bold text-label-bold uppercase">TECH SLING / 01</h3>
+<p class="font-body-md text-body-md opacity-70">$130.00</p>
+</div>
+</div>
+</div>
+<!-- Progress Bar Indicator -->
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="w-full h-[2px] bg-surface-variant relative">
+<div class="absolute left-0 top-0 h-full bg-on-surface w-1/4 transition-all duration-300" id="carousel-progress"></div>
+</div>
+</div>
+</section>
+<!-- Category Grid -->
+<section class="py-section-gap bg-surface-container">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter h-[800px]">
+<a class="md:col-span-8 group relative overflow-hidden border-2 border-on-surface" href="product-detail.html">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="An editorial lifestyle photograph of a group of diverse models walking through a modern glass-and-steel building. They are wearing cohesive black and red streetwear looks. The sun is setting, creating long, dramatic shadows and a high-contrast cinematic atmosphere. The focus is on movement and style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHx3vBVf17o2brWQeW81OeaXsoWtiPZO86beqJrrMpIygPBI_BcWeITDNH11zzRpxiayScS4mlOsuPvqOpQ_iG4sEoC2ov2o3EVS7PmEO495yg4WZkJdOVP6dweokb533Vq1JqF9u54RIqUuPnUMP5NZgBx2h3MTEiJjtmJQWt7-iHH8HJTQ2ndT7xTidl9UGMetHmRpZ6D5GbgyWS2Revn7xDxp_cy4nTftE8szkPMh2JPmMXhZdpUq6DnIwA9vmPTFu9yOaN700"/>
+<div class="absolute inset-0 bg-on-surface/20 group-hover:bg-transparent transition-colors duration-500"></div>
+<div class="absolute bottom-10 left-10">
+<h3 class="font-display-xl text-display-xl-mobile md:text-headline-lg text-white uppercase drop-shadow-lg">MEN</h3>
+<p class="font-label-bold text-label-bold text-white underline">EXPLORE COLLECTION</p>
+</div>
+</a>
+<div class="md:col-span-4 grid grid-rows-2 gap-gutter">
+<a class="group relative overflow-hidden border-2 border-on-surface" href="product-detail.html">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A vertical portrait of a model with sharp features, wearing a minimalist cream-colored oversized blazer. The background is a flat Milano Red wall. The lighting is high-key and direct, highlighting the sharp tailoring and premium fabric. The mood is sophisticated and fashion-forward." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC60DvjPAvtJNwZUB6gvVVVkOmUOyk3SgGFQYSu0pr0MaB5e2HtXQCDO0Yr-j2gy034HdSfX4jdv3uxSFqnNS9kAikAmLmDlmvwyefAA27JsL7zHcerksXsCBit7rgCqv0fAGi2Pt8-ZbgH0_S0_0niX8t3qkeNL6pAf6MNnDC4jRsqRtIF3BctxpUaq3YSTvFI2cl146f0A6EK3Guo-_cgukPAUFTKWk2aXhPOr_Kl5fFVWzMBoduQk6nas4iQonhAE3mnYuSUg0I"/>
+<div class="absolute inset-0 bg-on-surface/10 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute bottom-6 left-6">
+<h3 class="font-headline-lg text-headline-lg-mobile text-white uppercase">WOMEN</h3>
+</div>
+</a>
+<a class="group relative overflow-hidden border-2 border-on-surface" href="summer-sale.html">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A conceptual flat lay of various high-end accessories including chunky silver jewelry, dark sunglasses, and a leather wallet. The items are arranged on a textured black marble surface with sharp, dramatic lighting. The overall feel is one of luxury, exclusivity, and modern design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBXADes8DBK4Q1sJEwY6ID4VviZPvBEzEXV-5c4F66IdrRxaf0dad_ufd5wdvnlCwrg9X8Bm2lUX3hq1xdvHGF-w7dSsGAgsPdvvHLSxRqFLLn9XOL5PCTMYBIyBWB1waHB5z3xpz8Y8MXGlWEzLxU62d08eCLKNxFxJc9X5I7zAbGQEpSna4W3E4Nc3MdhnDstVp2BRd-ehENt8TEjJeChn0-yUgfmvqtjlklyFpcIZDiT6UpeC6sECNuiBJCKRM6Y-Eo-5HDOrA"/>
+<div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors"></div>
+<div class="absolute bottom-6 left-6">
+<h3 class="font-headline-lg text-headline-lg-mobile text-white uppercase">SALE</h3>
+</div>
+</a>
+</div>
+</div>
+</section>
+<!-- Featured Collection Split Layout -->
+<section class="flex flex-col md:flex-row min-h-[819px]">
+<div class="md:w-1/2 bg-on-surface flex flex-col justify-center px-margin-mobile md:px-margin-desktop py-20">
+<span class="font-label-bold text-label-bold text-primary-fixed uppercase mb-4">THE EDITORIAL SERIES</span>
+<h2 class="font-display-xl text-display-xl-mobile md:text-headline-lg text-surface uppercase mb-8 leading-tight">CHRONICLES OF THE CONCRETE</h2>
+<p class="font-body-lg text-body-lg text-surface opacity-80 mb-10 max-w-lg">
+                Our latest collection explores the intersection of raw urban environments and precision luxury tailoring. Every piece is a testament to the chaos and beauty of city life.
+            </p>
+<button class="w-fit bg-primary text-white py-4 px-12 font-headline-md text-headline-md hover:bg-white hover:text-on-surface transition-all duration-0">
+                READ THE FEATURE
+            </button>
+</div>
+<div class="md:w-1/2 relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A wide-angle landscape shot of a model standing on the rooftop of a skyscraper at night, with the sprawling city lights of Tokyo blurred in the background. The model wears a long, flowing black trench coat that catches the wind. The lighting is cinematic, dominated by deep blues and vibrant red highlights from neon signs." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-ybPowjH9-5SO4FX2Ic3FvO3Pd5HTuB65moyGJvulvdX6Xkm-v1D7gOO7QSH2aMlEDnIz1EOhAahLNsLx4Kb7TjMzAcIkODsxROPQg_SPRjNRFYSnZtxiNd5n7GcjFM8G2LACAY2cq8WDt0CF0YlNH79TV6reNPlOp4BlRZFY9PgoF5THBQ07Hh-cxXpMNDX8X-SJgplxel4gYZ0Vsh0YCUGIW2GQrUyQVTuY-YYdGTN-hOleKcZYxZiRXzKaUpRyvVcrURW-e8o"/>
+</div>
+</section>
+<!-- Testimonials Section -->
+<section class="py-section-gap bg-background border-y-2 border-on-surface">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+<div class="editorial-shadow border-2 border-on-surface overflow-hidden aspect-square md:aspect-auto h-[600px]">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover" data-alt="A black and white portrait of a renowned fashion photographer or influencer with a contemplative expression. The lighting is low-key, dramatic, and high-contrast, emphasizing texture and mood. The background is a simple studio gray, keeping the focus entirely on the subject's persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLgZ5jkYFco26GRNx0qV5JnhANMmszujRsLkdAyHzF-tCYOZ6bbPl9rdEHbXPWzJY9IEWvl2yp8SSHBbwrTmPpTvTAmYgdhEzGflzuHnNSYX0BYeMs9R35wBWqi37sKiq8abOo78meGJPAPreY7c8p4AA6udi2RvM33mDEtUZSTMg8IiG0QCikMHvZAbaccexWSKP-9Q4k64Lt4zZSZClz62lwkiZ-V3fWUWY97za3hndqRIjZ-I2L9-3WIWVizEH3pGpMzlAoRhQ"/></a>
+</div>
+<div class="flex flex-col justify-center py-12 md:pl-20">
+<span class="material-symbols-outlined text-primary text-6xl mb-8">format_quote</span>
+<blockquote class="font-headline-md text-headline-md md:text-headline-lg uppercase mb-8 leading-tight">
+                        "THE DROP CAPTURES THE URGENCY OF THE STREET UNLIKE ANY OTHER BRAND. IT'S NOT JUST CLOTHES; IT'S A CULTURAL MOMENT CAPTURED IN FABRIC."
+                    </blockquote>
+<cite class="font-label-bold text-label-bold uppercase text-primary">— MARCUS CHEN, CREATIVE DIRECTOR</cite>
+</div>
+</div>
+</div>
+</section>
+<!-- USP / Trust Bar -->
+<section class="py-12 bg-on-surface text-surface">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-3 gap-12 divide-y md:divide-y-0 md:divide-x divide-surface/20">
+<div class="flex flex-col items-center text-center p-4">
+<span class="material-symbols-outlined text-primary-fixed text-4xl mb-4">local_shipping</span>
+<h4 class="font-label-bold text-label-bold uppercase">GLOBAL SHIPPING</h4>
+<p class="font-body-md text-sm opacity-60">Expedited delivery to 45+ countries.</p>
+</div>
+<div class="flex flex-col items-center text-center p-4">
+<span class="material-symbols-outlined text-primary-fixed text-4xl mb-4">published_with_changes</span>
+<h4 class="font-label-bold text-label-bold uppercase">EASY RETURNS</h4>
+<p class="font-body-md text-sm opacity-60">14-day window for all archive pieces.</p>
+</div>
+<div class="flex flex-col items-center text-center p-4">
+<span class="material-symbols-outlined text-primary-fixed text-4xl mb-4">support_agent</span>
+<h4 class="font-label-bold text-label-bold uppercase">CONCIERGE SUPPORT</h4>
+<p class="font-body-md text-sm opacity-60">24/7 dedicated service for all members.</p>
+</div>
+</div>
+</section>
+<!-- Instagram Strip -->
+<section class="overflow-hidden border-t-2 border-on-surface">
+<div class="flex whitespace-nowrap animate-marquee py-0">
+<div class="flex">
+<div class="w-64 h-64 border-r-2 border-on-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A gritty close-up of a model's boots on a rain-slicked asphalt street, reflecting city lights. High contrast, dark mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA07J_2FUjDSAr8Ong9j_aJm10GmJfA7kiHn8H52qoV049Cp4cUDLQrcg4j2EyKfiLgyvM_fxq-HLUhJPrHxLrJKaPBD-fm-yB2fC3SB7o8hTmQdM2l4xlE5HVam-M6xQLHa_qBrLoTMMN2L8B-framkb4OaahaS_rLKhCSj01YR-Df51NcafA3o8wJCVN9mGSMa2FWxYckwLR4EjO3VSi8QTofJRPT6jM30Qws5va-yIZkn6uV9ePj6VGW-FguXNSBpb5igGQuIc"/>
+</div>
+<div class="w-64 h-64 border-r-2 border-on-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A minimalist architectural shot of a brutalist concrete building with a single red light in a window. Editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhVD7S3TWD39nHMhizSVSIk4tKDbiqnDWfQcqyCXAYMN7IkPpDnseAGY6g_1tj3MPnudcN9nHntWSCrmL4MirbRNtDkKUGJNHRVL3hxd18EjTzL_b9yt4MXUWqWottlZsO6AD7ndTc1SyyyC25O7LJMHWxYFwUoY9pc28t92ct3GITvklT7VwH7yrw0SEDxVZyF8hLJhoLvCMsTqKfFt3QWJUUe_CxQ5AImNlLNbq7j62u5xWp0ovqas0jvb93rwRYSCwJNAYDlKY"/>
+</div>
+<div class="w-64 h-64 border-r-2 border-on-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A model wearing a black beanie and technical jacket, looking away from the camera in a foggy forest. Moody atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYZsODTRszE4nbhpbvjZun9zGKwm0V_Gl9TkD4HQTu82mbM3ovd0_En4VAGo9dZoLd4u94yryjvRT2gQkH7F-rv5a6cJUqt_khINZ7d5OrI4uYi3jvVP9bfWrBkDimOi6-Xw-LeS-b849_4IdlQgdcYQilMos1sxqK_wRixKT6hZkqnKo2299IRoW4ZjTidMXpkLsU3yBKhlLF-hdVK40FKWxHjU04acai80oaeF0CCmpvKgkmtxGTed14AFmzMWhEkg8AMYaTwq0"/>
+</div>
+<div class="w-64 h-64 border-r-2 border-on-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up of a silver watch with a minimalist face on a tattooed wrist. Luxury streetwear accessory aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC97cHDuj_eDdtmoZ804FGJ2sjRKxUBKu_3A0u0sb72t9jqylSy-6jOOh7hcJMamYhyId0rmtMfKIaVSF2GyMSqCSKbolPlD33w4JJc63M9eF0KM4Y6DQrv_SaSjJl5_R2kQGMwoiQ91NwU2Pn7V4nVUdXvy_dACvE5p7OO2Su2wCNlMchSbvJzn3HNLdneXD1nJCc5r_MPP6DjxB_QUGPRSNDOPBORSlRbM2-mxqgMi1ikWd8yXphiYay9oSfZ-YhPBjXziJ1RhE0"/>
+</div>
+<div class="w-64 h-64 border-r-2 border-on-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A blurry shot of a subway train moving fast through a station at night. Neon streaks of light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZFSD5tRw8bOukjiHvOA6CssDxjeEDOl4qpQV70MuNecyYXytx5cLiw0OIaQaZA2FQw8shTCysL7Ou35iCwArLS3CCNu3vu16KBc-KAJ04MBE_DYnJNP9lEamW8DNAtqU2FTOR-J6nKP4InRvG-L1TEebjeNLBMrLM1CxuMJ88nS36maGO9I2Owo-3kCvAGUzx8aXLv9XebOVOOb9IENsPz1irMhXr1nkhsWRNDJDUyPbM7jiINqUNGpZfG_-juv_2eaGyB_COAqc"/>
+</div>
+<div class="w-64 h-64 border-r-2 border-on-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A model standing in front of a wall of vintage televisions showing static. Red and black color scheme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkRmontXazkMTyLIHteCpV_oDLRr9WcQ3EGwmmfjp_6KXA1p4fvrrVbXDGaTKvXRMg2dZkrBD51NDEWzuZdu5ZuV-u-FQSuhWpUJATdykqll27SgA_OeTU8kJ_T7A46J4S-plVxt2qudyf1wHeI9YAokMlX8rwNBVnu9PWxWtv0yKZQtX74b9npoOL8kYa5UpRKUy7YIbWPfnTOEPOSFRn5THbuTUEcbqUvMFb2gowb0Y6m4sKAE68BaQQPY8XWk4Y2ejvJ2d-W4M"/>
+</div>
+</div>
+<!-- Repeat for seamless loop -->
+<div class="flex">
+<div class="w-64 h-64 border-r-2 border-on-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A gritty close-up of a model's boots on a rain-slicked asphalt street, reflecting city lights. High contrast, dark mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu5eX2QVmyXsiJ7GJQhXuQxLMDK9SjY2b9f7TzT9zTN1yTWNkG-H-qD9zIWPS-eadqqmGDSdJcpuQe_nsDQawSLi566QTq-d8whT6C8g5etoVv4GhFpTQBtVe48ZFoqQvVlvAJfjomt5s4f0nOAHTJbSi3XzuhVVxfTZK45AlvrBbZGtvzpNjaFgNBwDkqwg2hfVMcHxx0uz_Cf_pIDt4tcdD9TGm2RxY9K-0O_VC5aWZWFauVzQ-cHVJArTizkBPY_EtTSzoUs34"/>
+</div>
+<div class="w-64 h-64 border-r-2 border-on-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A minimalist architectural shot of a brutalist concrete building with a single red light in a window. Editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxn7LkQhDTci2j0-X53g78DjUzzDGo_VQRHCKAre5BRUIxw_7MkivYrIJEouKMu88-dkFj8Ng17XdgBtjOLH0bk2hMFWReJ9RE8CsiOwGM-QNrRmJLe_sQ_v69i0OZ4By_EvbGYmYUOtDnRRf8tlR6vbqaZADr_5DEajwWy9ZNHjPSgEpdXlawLDKRRPyFsZ7HDwAYl-UhisohR_1oqMuVMBGKOujPsqwL6Npdiqi72teRyJ8Yy6khmZV7QzRoCmCCC9mC6eQHeBg"/>
+</div>
+<div class="w-64 h-64 border-r-2 border-on-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A model wearing a black beanie and technical jacket, looking away from the camera in a foggy forest. Moody atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO4vKAGchJwBdxxAPnFRYKUXvtu-iOfK87kFqT9LBU-0eDGzV_10ZiBMHuXtLDQDxZOhg8cC9EFjXHAKdIQpJ90yxpaGS4Sc5W5AIRClWdFOYzWfgO_MPZ3bZIOVHMB2NT5csM1cmOWskYVBYPdbMGhHj9HoGiIh0QYvpjkzNC2Tyc_kBpQ2C6DDEGAvG3vA3vTIsCNB_ykQ0MZyFWBtZWALcZl8DySVXO4oy4rzkqLR2aPZl0JPeb2xkLwnNXC25BYGmyUHsakZI"/>
+</div>
+<div class="w-64 h-64 border-r-2 border-on-surface flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up of a silver watch with a minimalist face on a tattooed wrist. Luxury streetwear accessory aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnPZBs8AaEVfJv8cBib721wL4VW4Syny3JBDmsBzZt5-7VP5gH37iufrcLkIpStfQdB0dRYls7Wy-vsf8VUo8O8Im--X0qXjoBt28wUEL2cD8Z9f-hpyl0u281l-tSblptGQYgeEwaJeLV4fm_MSmrVNOMAHb3IX1zcbWcYlHMn4Mig60nzHvvjh9nyDCMnwrcpLMHbrTycI39cnshr__UnMdpk5VDDFyEzVCh-rdWzd_nT0P5MtvAHrgRadwIE6k4eUNqdL1IbRA"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter -->
+<section class="py-section-gap bg-background px-margin-mobile md:px-margin-desktop">
+<div class="max-w-[1000px] mx-auto bg-primary text-white p-12 md:p-24 editorial-shadow relative overflow-hidden">
+<div class="absolute top-0 right-0 opacity-20 pointer-events-none">
+<span class="font-display-xl text-[200px] leading-none uppercase">DROP</span>
+</div>
+<div class="relative z-10 text-center">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase mb-6">NEVER MISS A DROP</h2>
+<p class="font-body-lg mb-10 max-w-lg mx-auto opacity-90">Sign up for exclusive early access to new collections and limited-edition archival releases.</p>
+<form class="flex flex-col md:flex-row gap-4 max-w-xl mx-auto">
+<input class="flex-1 bg-transparent border-b-2 border-white text-white placeholder:text-white/50 py-4 focus:outline-none font-label-bold" placeholder="YOUR EMAIL ADDRESS" type="email"/>
+<button class="bg-white text-on-surface py-4 px-10 font-headline-md text-headline-md hover:bg-on-surface hover:text-white transition-all duration-0" type="submit">JOIN THE LIST</button>
+</form>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-inverse-surface border-t-2 border-on-surface">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop py-section-gap max-w-container-max mx-auto">
+<div class="md:col-span-1">
+<h2 class="font-headline-md text-headline-md text-primary-fixed mb-6">THE DROP</h2>
+<p class="text-on-primary-fixed opacity-70 font-body-md">Redefining streetwear through exclusive releases and editorial storytelling.</p>
+</div>
+<div class="flex flex-col gap-4">
+<h3 class="font-label-bold text-label-bold text-primary-fixed uppercase mb-2">QUICK LINKS</h3>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="products.html">SHOP ALL</a>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="summer-sale.html">NEW ARRIVALS</a>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="summer-sale.html">ARCHIVE</a>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="our-story.html">EDITORIAL</a>
+</div>
+<div class="flex flex-col gap-4">
+<h3 class="font-label-bold text-label-bold text-primary-fixed uppercase mb-2">SUPPORT</h3>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="#">SHIPPING &amp; RETURNS</a>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="#">CONTACT US</a>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="#">STORE LOCATOR</a>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="#">FAQ</a>
+</div>
+<div class="flex flex-col gap-4">
+<h3 class="font-label-bold text-label-bold text-primary-fixed uppercase mb-2">LEGAL</h3>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="#">PRIVACY POLICY</a>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="#">TERMS OF SERVICE</a>
+<a class="font-label-bold text-label-bold text-on-primary-fixed opacity-80 hover:opacity-100 hover:text-primary-fixed-dim transition-opacity duration-0" href="#">ACCESSIBILITY</a>
+</div>
+</div>
+<div class="border-t border-on-primary-fixed/20 py-8 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="text-on-primary-fixed opacity-60 font-label-bold text-label-sm">© 2024 THE DROP. ALL RIGHTS RESERVED.</span>
+<div class="flex gap-6">
+<span class="material-symbols-outlined text-primary-fixed cursor-pointer hover:opacity-80">share</span>
+<span class="material-symbols-outlined text-primary-fixed cursor-pointer hover:opacity-80">public</span>
+<span class="material-symbols-outlined text-primary-fixed cursor-pointer hover:opacity-80">mail</span>
+</div>
+</div>
+</footer>
+<script>
+        // Simple Carousel Progress Logic
+        const carousel = document.querySelector('.hide-scrollbar');
+        const progressBar = document.getElementById('carousel-progress');
+
+        if (carousel && progressBar) {
+            carousel.addEventListener('scroll', () => {
+                const scrollPercentage = (carousel.scrollLeft / (carousel.scrollWidth - carousel.clientWidth)) * 100;
+                progressBar.style.width = `${Math.max(10, scrollPercentage)}%`;
+            });
+        }
+
+        // Marquee Animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes marquee {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+            }
+            .animate-marquee {
+                display: flex;
+                width: 200%;
+                animation: marquee 30s linear infinite;
+            }
+            .animate-marquee:hover {
+                animation-play-state: paused;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+    </script>
+</body></html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Hanken+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for editorial feel */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff8f6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #271815;
+        }
+        /* Hide arrows on number inputs */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#fff8f6",
+                      "primary-container": "#a90e02",
+                      "on-tertiary-fixed": "#000f5d",
+                      "error": "#ba1a1a",
+                      "secondary": "#a03f30",
+                      "surface": "#fff8f6",
+                      "tertiary-fixed-dim": "#bbc3ff",
+                      "on-tertiary-container": "#bcc4ff",
+                      "on-secondary-fixed-variant": "#80281c",
+                      "on-primary": "#ffffff",
+                      "surface-dim": "#f1d3ce",
+                      "surface-container-low": "#fff0ee",
+                      "surface-container": "#ffe9e5",
+                      "surface-container-lowest": "#ffffff",
+                      "outline-variant": "#e4beb7",
+                      "on-secondary-fixed": "#400100",
+                      "surface-variant": "#fadcd7",
+                      "on-error-container": "#93000a",
+                      "on-surface": "#271815",
+                      "on-secondary-container": "#741f13",
+                      "surface-container-highest": "#fadcd7",
+                      "primary-fixed": "#ffdad4",
+                      "tertiary": "#0026b2",
+                      "on-error": "#ffffff",
+                      "on-background": "#271815",
+                      "primary-fixed-dim": "#ffb4a7",
+                      "primary": "#7e0500",
+                      "inverse-primary": "#ffb4a7",
+                      "on-primary-fixed": "#400100",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#ffedea",
+                      "on-surface-variant": "#5b403b",
+                      "tertiary-fixed": "#dee0ff",
+                      "tertiary-container": "#0036ed",
+                      "on-tertiary-fixed-variant": "#002dcc",
+                      "inverse-surface": "#3e2c29",
+                      "surface-container-high": "#ffe2dd",
+                      "secondary-fixed": "#ffdad4",
+                      "outline": "#906f6a",
+                      "on-primary-fixed-variant": "#920700",
+                      "surface-tint": "#b91d0d",
+                      "secondary-fixed-dim": "#ffb4a7",
+                      "on-tertiary": "#ffffff",
+                      "background": "#fff8f6",
+                      "secondary-container": "#fe8673",
+                      "on-primary-container": "#ffb6a9",
+                      "error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "section-gap": "120px",
+                      "gutter": "24px",
+                      "margin-desktop": "64px",
+                      "container-max": "1440px",
+                      "margin-mobile": "20px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "body-md": ["Hanken Grotesk"],
+                      "headline-lg-mobile": ["Bebas Neue"],
+                      "headline-lg": ["Bebas Neue"],
+                      "label-bold": ["Hanken Grotesk"],
+                      "label-sm": ["Hanken Grotesk"],
+                      "headline-md": ["Bebas Neue"],
+                      "body-lg": ["Hanken Grotesk"],
+                      "display-xl": ["Bebas Neue"],
+                      "display-xl-mobile": ["Bebas Neue"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["40px", {"lineHeight": "40px", "fontWeight": "400"}],
+                      "headline-lg": ["64px", {"lineHeight": "60px", "fontWeight": "400"}],
+                      "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-md": ["32px", {"lineHeight": "32px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-xl": ["120px", {"lineHeight": "100px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                      "display-xl-mobile": ["72px", {"lineHeight": "64px", "letterSpacing": "-0.01em", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased">
+<!-- Top Navigation Bar (Shared Component Strategy) -->
+<header class="sticky top-0 w-full z-50 bg-surface border-b-2 border-on-surface">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-6 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<a class="font-display-xl text-headline-md tracking-tighter text-primary" href="index.html">THE DROP</a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="products.html">Shop</a>
+<a class="text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="summer-sale.html">New Arrivals</a>
+<a class="text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="summer-sale.html">Collections</a>
+<a class="text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="our-story.html">About</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface hover:text-primary transition-colors active:scale-95">search</button>
+<a class="inline-flex items-center justify-center" href="cart.html"><button class="material-symbols-outlined text-on-surface hover:text-primary transition-colors active:scale-95">shopping_bag</button></a>
+<a class="inline-flex items-center justify-center" href="account.html"><button class="material-symbols-outlined text-on-surface hover:text-primary transition-colors active:scale-95">person</button></a>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-section-gap">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter md:gap-16 items-start">
+<!-- Left Side: Forms -->
+<div class="lg:col-span-7 space-y-16">
+<!-- Section Header -->
+<div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg uppercase mb-4">Checkout</h1>
+<p class="font-body-lg text-body-lg text-on-surface/60 max-w-lg">Complete your order. All items are limited edition and secured only upon successful payment.</p>
+</div>
+<!-- Shipping Details -->
+<section class="space-y-8">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md">01</span>
+<h2 class="font-headline-md text-headline-md uppercase">Shipping Details</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+<div class="relative group">
+<label class="font-label-sm text-label-sm uppercase text-on-surface/50 block mb-1">First Name</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-on-surface focus:border-primary focus:ring-0 px-0 py-2 text-body-md placeholder-on-surface/20" placeholder="e.g. Alex" type="text"/>
+</div>
+<div class="relative group">
+<label class="font-label-sm text-label-sm uppercase text-on-surface/50 block mb-1">Last Name</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-on-surface focus:border-primary focus:ring-0 px-0 py-2 text-body-md placeholder-on-surface/20" placeholder="e.g. Smith" type="text"/>
+</div>
+<div class="md:col-span-2 relative group">
+<label class="font-label-sm text-label-sm uppercase text-on-surface/50 block mb-1">Address Line 1</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-on-surface focus:border-primary focus:ring-0 px-0 py-2 text-body-md placeholder-on-surface/20" placeholder="Street name and house number" type="text"/>
+</div>
+<div class="relative group">
+<label class="font-label-sm text-label-sm uppercase text-on-surface/50 block mb-1">City</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-on-surface focus:border-primary focus:ring-0 px-0 py-2 text-body-md placeholder-on-surface/20" type="text"/>
+</div>
+<div class="relative group">
+<label class="font-label-sm text-label-sm uppercase text-on-surface/50 block mb-1">Postal Code</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-on-surface focus:border-primary focus:ring-0 px-0 py-2 text-body-md placeholder-on-surface/20" type="text"/>
+</div>
+</div>
+</section>
+<!-- Delivery Method -->
+<section class="space-y-8">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md">02</span>
+<h2 class="font-headline-md text-headline-md uppercase">Delivery Method</h2>
+</div>
+<div class="space-y-4">
+<label class="group flex items-center justify-between p-6 border-2 border-on-surface cursor-pointer hover:bg-on-surface hover:text-surface transition-all duration-100">
+<div class="flex items-center gap-4">
+<input checked="" class="w-5 h-5 text-primary border-2 border-on-surface focus:ring-0" name="delivery" type="radio"/>
+<div>
+<span class="font-label-bold text-label-bold block">EXPRESS COURIER</span>
+<span class="font-label-sm text-label-sm opacity-70">1-2 Business Days</span>
+</div>
+</div>
+<span class="font-headline-md text-headline-md">$25.00</span>
+</label>
+<label class="group flex items-center justify-between p-6 border-2 border-on-surface cursor-pointer hover:bg-on-surface hover:text-surface transition-all duration-100">
+<div class="flex items-center gap-4">
+<input class="w-5 h-5 text-primary border-2 border-on-surface focus:ring-0" name="delivery" type="radio"/>
+<div>
+<span class="font-label-bold text-label-bold block">STANDARD SHIPPING</span>
+<span class="font-label-sm text-label-sm opacity-70">5-7 Business Days</span>
+</div>
+</div>
+<span class="font-headline-md text-headline-md">FREE</span>
+</label>
+</div>
+</section>
+<!-- Payment Information -->
+<section class="space-y-8">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md">03</span>
+<h2 class="font-headline-md text-headline-md uppercase">Payment Information</h2>
+</div>
+<div class="space-y-10">
+<div class="relative group">
+<label class="font-label-sm text-label-sm uppercase text-on-surface/50 block mb-1">Card Number</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-on-surface focus:border-primary focus:ring-0 px-0 py-2 text-body-md" placeholder="0000 0000 0000 0000" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="relative group">
+<label class="font-label-sm text-label-sm uppercase text-on-surface/50 block mb-1">Expiry Date</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-on-surface focus:border-primary focus:ring-0 px-0 py-2 text-body-md" placeholder="MM/YY" type="text"/>
+</div>
+<div class="relative group">
+<label class="font-label-sm text-label-sm uppercase text-on-surface/50 block mb-1">CVC</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-on-surface focus:border-primary focus:ring-0 px-0 py-2 text-body-md" placeholder="123" type="text"/>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Side: Order Summary Sticky Sidebar -->
+<aside class="lg:col-span-5 sticky top-32">
+<div class="border-2 border-primary-container p-8 space-y-8 bg-surface-container-low shadow-[8px_8px_0px_0px_#a90e02]">
+<h2 class="font-headline-md text-headline-md uppercase">Order Summary</h2>
+<!-- Items List -->
+<div class="space-y-6 max-h-[300px] overflow-y-auto pr-2">
+<div class="flex gap-4 items-start">
+<div class="w-24 h-24 bg-surface-variant flex-shrink-0">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover" data-alt="A high-fashion luxury streetwear hoodie in deep charcoal gray, featuring heavy-weight cotton texture and a boxy editorial fit. The studio lighting is dramatic with high contrast shadows against a clean lemon chiffon background. The aesthetic is minimal, premium, and focused on the garment's architectural silhouette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaUQBwpuoHmM84rSFCEQn2CfRcyXvDzPpmCY0NSPyZmaq2w5M-IOpgKQG3SNhhYjWXxZcE910I-G494egsUI9OCAuLp9TPo2KJmXuX-5BMHrMNgLIZyDA6trKPwbx9HKIVdvAdHkvh25WcW0Vs1FGuoNx7V88bvLCDysyS7mUOVphdDWHmmubqx4o8id1rjng1hOF_gD51ji6G891lST5_uC12eYZ4J0szLV_UJeUQXjZ7qr_ut6rT9wz4CUa-LQUmc3T7BHU0EA8"/></a>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h3 class="font-label-bold text-label-bold uppercase">ARCHIVE HOODIE - 01</h3>
+<span class="font-label-bold text-label-bold">$240.00</span>
+</div>
+<p class="text-label-sm text-on-surface/60 mt-1">Size: Large</p>
+<p class="text-label-sm text-on-surface/60">Color: Charcoal</p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="w-24 h-24 bg-surface-variant flex-shrink-0">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover" data-alt="A pair of premium limited edition sneakers with architectural leather paneling in shades of off-white and Milano red. The image is a sharp editorial product shot with vibrant lighting that emphasizes the leather's grain and the shoe's sleek design. Set against a minimalist gallery backdrop with high-key lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA46fVTxd9y7Pta5AV1OHRERJUhhnZFrme0mrMIuJcKCrP7ON-dtW8oqXn4f_BAZn2SPvSY0dw5Y-Ziv7QMMdOWfqDYIvJkAbWGColMZ-DnEJ_jbmIAkQsShMAfGAvbb1PxhhFsFxSZDaFID3bZfwJHmDbCXluwUugWyq9x0VeaBzsoKZuHRvD3MkM2qo0Z4TMvPlHUZDZ99en3A235aYFmc_8ivUXiSPwy4HkBJhKacI9-55TOvP9eSIqgrKQveA0cwMSpkbU39uk"/></a>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h3 class="font-label-bold text-label-bold uppercase">DROP-08 SNEAKER</h3>
+<span class="font-label-bold text-label-bold">$450.00</span>
+</div>
+<p class="text-label-sm text-on-surface/60 mt-1">Size: 42 EU</p>
+<p class="text-label-sm text-on-surface/60">Color: Bone/Red</p>
+</div>
+</div>
+</div>
+<!-- Totals -->
+<div class="space-y-4 pt-6 border-t border-on-surface/10">
+<div class="flex justify-between font-body-md text-body-md">
+<span>SUBTOTAL</span>
+<span>$690.00</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md">
+<span>SHIPPING</span>
+<span>$25.00</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md">
+<span>TAX (8%)</span>
+<span>$55.20</span>
+</div>
+<div class="flex justify-between font-headline-md text-headline-md pt-4 border-t-2 border-on-surface">
+<span>TOTAL</span>
+<span>$770.20</span>
+</div>
+</div>
+<!-- CTA Button -->
+<a class="block w-full" href="thank-you.html"><button class="w-full bg-on-surface text-surface py-6 font-headline-lg text-headline-md uppercase tracking-widest hover:bg-primary-container transition-all duration-0 active:scale-[0.98]">
+                        PAY NOW
+                    </button></a>
+<div class="flex items-center justify-center gap-4 text-on-surface/40 pt-4">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+<span class="font-label-sm text-label-sm uppercase tracking-tighter">SECURED BY THE DROP ENCRYPTION</span>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer (Shared Component Strategy) -->
+<footer class="bg-on-surface text-surface w-full">
+<div class="flex flex-col md:flex-row justify-between items-start w-full px-margin-mobile md:px-margin-desktop py-section-gap max-w-container-max mx-auto">
+<div class="space-y-8 mb-12 md:mb-0">
+<span class="font-display-xl text-headline-lg text-surface tracking-tighter">THE DROP</span>
+<p class="font-body-md text-body-md max-w-xs opacity-60">Curated excellence. Limited availability. High-contrast living.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-6">
+<div class="space-y-4">
+<h4 class="font-label-bold text-label-bold uppercase">Shop</h4>
+<ul class="space-y-2">
+<li><a class="text-surface/80 hover:text-primary-container transition-colors font-body-md" href="summer-sale.html">Collections</a></li>
+<li><a class="text-surface/80 hover:text-primary-container transition-colors font-body-md" href="#">Accessories</a></li>
+<li><a class="text-surface/80 hover:text-primary-container transition-colors font-body-md" href="#">Footwear</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-label-bold text-label-bold uppercase">Help</h4>
+<ul class="space-y-2">
+<li><a class="text-surface/80 hover:text-primary-container transition-colors font-body-md" href="#">Shipping</a></li>
+<li><a class="text-surface/80 hover:text-primary-container transition-colors font-body-md" href="#">Returns</a></li>
+<li><a class="text-surface/80 hover:text-primary-container transition-colors font-body-md" href="#">Contact</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-label-bold text-label-bold uppercase">Legal</h4>
+<ul class="space-y-2">
+<li><a class="text-surface/80 hover:text-primary-container transition-colors font-body-md" href="#">Terms</a></li>
+<li><a class="text-surface/80 hover:text-primary-container transition-colors font-body-md" href="#">Privacy</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pb-12">
+<p class="font-body-md text-body-md opacity-40 uppercase tracking-widest text-center md:text-left">© 2024 THE DROP EDITORIAL. ALL RIGHTS RESERVED.</p>
+</div>
+</footer>
+<script>
+        // Simple interaction for input fields
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label').classList.replace('text-on-surface/50', 'text-primary');
+            });
+            input.addEventListener('blur', () => {
+                if(!input.value) {
+                    input.parentElement.querySelector('label').classList.replace('text-primary', 'text-on-surface/50');
+                }
+            });
+        });
+
+        // Toggle Delivery options
+        const deliveryRadios = document.querySelectorAll('input[name="delivery"]');
+        deliveryRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                deliveryRadios.forEach(r => {
+                    r.closest('label').classList.remove('bg-on-surface', 'text-surface');
+                });
+                if(e.target.checked) {
+                    e.target.closest('label').classList.add('bg-on-surface', 'text-surface');
+                }
+            });
+        });
+    </script>
+</body></html>

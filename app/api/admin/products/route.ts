@@ -1,0 +1,163 @@
+import { NextResponse } from "next/server";
+import { getDb } from "@/lib/db";
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    const db = getDb();
+    if (id) {
+      const product = db.prepare("SELECT * FROM products WHERE id = ?").get(id);
+      if (!product) {
+        return NextResponse.json({ success: false, error: "Product not found." }, { status: 404 });
+      }
+      return NextResponse.json({ success: true, product });
+    }
+
+    const products = db.prepare("SELECT * FROM products ORDER BY created_at DESC").all();
+    return NextResponse.json({ success: true, products });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      title,
+      category,
+      price,
+      image1,
+      image2,
+      description,
+      stock,
+      materials,
+      fit_guide,
+      shipping_info,
+      sustainability,
+    } = body;
+
+    if (!title || !category || price === undefined || !image1) {
+      return NextResponse.json({ success: false, error: "Title, category, price, and primary image are required." }, { status: 400 });
+    }
+
+    const db = getDb();
+    const prodId = `prod_${Date.now()}`;
+    const stmt = db.prepare(`
+      INSERT INTO products (id, title, category, price, image1, image2, description, stock, status, materials, fit_guide, shipping_info, sustainability)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', ?, ?, ?, ?)
+    `);
+
+    stmt.run(
+      prodId,
+      title.trim(),
+      category.trim(),
+      parseFloat(price),
+      image1.trim(),
+      image2 ? image2.trim() : image1.trim(),
+      description ? description.trim() : "",
+      stock ? parseInt(stock) : 50,
+      materials ? materials.trim() : "",
+      fit_guide ? fit_guide.trim() : "",
+      shipping_info ? shipping_info.trim() : "",
+      sustainability ? sustainability.trim() : ""
+    );
+
+    return NextResponse.json({ success: true, message: "Product created successfully in SQLite database.", id: prodId });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      id,
+      title,
+      category,
+      price,
+      image1,
+      image2,
+      description,
+      stock,
+      status,
+      materials,
+      fit_guide,
+      shipping_info,
+      sustainability,
+    } = body;
+
+    if (!id || !title || !category || price === undefined || !image1) {
+      return NextResponse.json({ success: false, error: "Product ID, title, category, price, and primary image are required." }, { status: 400 });
+    }
+
+    const db = getDb();
+    const stmt = db.prepare(`
+      UPDATE products 
+      SET title = ?, category = ?, price = ?, image1 = ?, image2 = ?, description = ?, stock = ?, status = ?, materials = ?, fit_guide = ?, shipping_info = ?, sustainability = ?
+      WHERE id = ?
+    `);
+
+    stmt.run(
+      title.trim(),
+      category.trim(),
+      parseFloat(price),
+      image1.trim(),
+      image2 ? image2.trim() : image1.trim(),
+      description ? description.trim() : "",
+      stock !== undefined ? parseInt(stock) : 50,
+      status || "ACTIVE",
+      materials ? materials.trim() : "",
+      fit_guide ? fit_guide.trim() : "",
+      shipping_info ? shipping_info.trim() : "",
+      sustainability ? sustainability.trim() : "",
+      id
+    );
+
+    return NextResponse.json({ success: true, message: "Product updated successfully." });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const body = await request.json();
+    const { id, stock } = body;
+
+    if (!id || stock === undefined) {
+      return NextResponse.json({ success: false, error: "Product ID and stock count are required." }, { status: 400 });
+    }
+
+    const db = getDb();
+    const newStock = Math.max(0, parseInt(stock));
+    const stmt = db.prepare("UPDATE products SET stock = ? WHERE id = ?");
+    stmt.run(newStock, id);
+
+    return NextResponse.json({ success: true, message: "Live stock updated successfully.", stock: newStock });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ success: false, error: "Product ID is required." }, { status: 400 });
+    }
+
+    const db = getDb();
+    const stmt = db.prepare("DELETE FROM products WHERE id = ?");
+    stmt.run(id);
+
+    return NextResponse.json({ success: true, message: "Product deleted successfully." });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}

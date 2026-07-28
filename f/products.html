@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE DROP | All Collections</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Hanken+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#dee0ff",
+                    "surface-tint": "#b91d0d",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#f1d3ce",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#ffe2dd",
+                    "secondary-fixed": "#ffdad4",
+                    "primary-fixed-dim": "#ffb4a7",
+                    "on-primary-fixed": "#400100",
+                    "tertiary": "#0026b2",
+                    "surface-container-low": "#fff0ee",
+                    "on-surface": "#271815",
+                    "surface-container-highest": "#fadcd7",
+                    "on-tertiary-fixed-variant": "#002dcc",
+                    "on-background": "#271815",
+                    "outline-variant": "#e4beb7",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#fe8673",
+                    "on-secondary-fixed-variant": "#80281c",
+                    "surface": "#fff8f6",
+                    "primary": "#7e0500",
+                    "primary-container": "#a90e02",
+                    "surface-bright": "#fff8f6",
+                    "inverse-primary": "#ffb4a7",
+                    "tertiary-fixed-dim": "#bbc3ff",
+                    "secondary": "#a03f30",
+                    "inverse-on-surface": "#ffedea",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#ffe9e5",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#ffb6a9",
+                    "primary-fixed": "#ffdad4",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#000f5d",
+                    "on-surface-variant": "#5b403b",
+                    "on-error-container": "#93000a",
+                    "on-secondary-container": "#741f13",
+                    "inverse-surface": "#3e2c29",
+                    "outline": "#906f6a",
+                    "on-secondary-fixed": "#400100",
+                    "secondary-fixed-dim": "#ffb4a7",
+                    "on-primary-fixed-variant": "#920700",
+                    "on-tertiary-container": "#bcc4ff",
+                    "error": "#ba1a1a",
+                    "tertiary-container": "#0036ed",
+                    "background": "#fff8f6",
+                    "surface-variant": "#fadcd7",
+                    "lemon-chiffon": "#FFFBD4",
+                    "milano-red": "#A90E02"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1440px",
+                    "section-gap": "120px",
+                    "unit": "4px",
+                    "margin-desktop": "64px",
+                    "gutter": "24px",
+                    "margin-mobile": "20px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Bebas Neue"],
+                    "headline-lg-mobile": ["Bebas Neue"],
+                    "body-lg": ["Hanken Grotesk"],
+                    "label-sm": ["Hanken Grotesk"],
+                    "headline-lg": ["Bebas Neue"],
+                    "display-xl-mobile": ["Bebas Neue"],
+                    "body-md": ["Hanken Grotesk"],
+                    "label-bold": ["Hanken Grotesk"],
+                    "display-xl": ["Bebas Neue"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["40px", {"lineHeight": "40px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-lg": ["64px", {"lineHeight": "60px", "fontWeight": "400"}],
+                    "display-xl-mobile": ["72px", {"lineHeight": "64px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "display-xl": ["120px", {"lineHeight": "100px", "letterSpacing": "-0.02em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #FFFBD4;
+            color: #271815;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .product-card-overlay {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .product-card:hover .product-card-overlay {
+            transform: translateY(0);
+        }
+        .product-card:hover .hover-image {
+            opacity: 1;
+        }
+        .filter-drawer {
+            transition: transform 0.4s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+        .filter-drawer.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="font-body-md">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-50 bg-surface dark:bg-surface border-b-2 border-on-surface dark:border-on-surface">
+<nav class="flex justify-between items-center w-full px-margin-desktop py-6 max-w-container-max mx-auto">
+<div class="flex items-center gap-12">
+<a class="font-display-xl text-headline-md tracking-tighter text-primary dark:text-primary" href="index.html">THE DROP</a>
+<div class="hidden md:flex gap-8">
+<a class="text-on-surface dark:text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="products.html">Shop</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="summer-sale.html">New Arrivals</a>
+<a class="text-on-surface dark:text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="summer-sale.html">Collections</a>
+<a class="text-on-surface dark:text-on-surface font-headline-md hover:text-primary transition-colors duration-0 active:scale-95" href="our-story.html">About</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-primary hover:text-primary-container transition-colors active:scale-95" data-icon="search">search</button>
+<a class="inline-flex items-center justify-center" href="cart.html"><button class="material-symbols-outlined text-primary hover:text-primary-container transition-colors active:scale-95" data-icon="shopping_bag">shopping_bag</button></a>
+<a class="inline-flex items-center justify-center" href="account.html"><button class="material-symbols-outlined text-primary hover:text-primary-container transition-colors active:scale-95" data-icon="person">person</button></a>
+</div>
+</nav>
+</header>
+<main>
+<!-- Page Banner -->
+<section class="bg-milano-red py-16 px-margin-desktop">
+<div class="max-w-container-max mx-auto">
+<nav class="mb-4 flex items-center gap-2 font-label-bold text-lemon-chiffon/70 uppercase tracking-widest">
+<a class="hover:text-lemon-chiffon" href="index.html">Home</a>
+<span class="text-lemon-chiffon/30">/</span>
+<a class="hover:text-lemon-chiffon" href="products.html">Shop</a>
+<span class="text-lemon-chiffon/30">/</span>
+<span class="text-lemon-chiffon">All</span>
+</nav>
+<h1 class="font-display-xl text-display-xl-mobile md:text-display-xl text-lemon-chiffon leading-none uppercase">Collections / All Products</h1>
+</div>
+</section>
+<!-- Filter & Sort Bar -->
+<div class="sticky top-[84px] z-40 bg-lemon-chiffon border-b-2 border-on-surface px-margin-desktop py-4">
+<div class="max-w-container-max mx-auto flex flex-wrap justify-between items-center gap-4">
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-2 font-label-bold uppercase border-2 border-on-surface px-6 py-2 hover:bg-on-surface hover:text-lemon-chiffon transition-all duration-75" onclick="toggleFilterDrawer()">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+                        Filter
+                    </button>
+<div class="hidden md:flex items-center gap-2">
+<span class="bg-milano-red text-lemon-chiffon px-3 py-1 font-label-bold text-xs uppercase flex items-center gap-2">
+                            Denim <button class="material-symbols-outlined text-xs" data-icon="close">close</button>
+</span>
+<span class="bg-milano-red text-lemon-chiffon px-3 py-1 font-label-bold text-xs uppercase flex items-center gap-2">
+                            Black <button class="material-symbols-outlined text-xs" data-icon="close">close</button>
+</span>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<span class="font-label-bold uppercase text-on-surface/50">24 PRODUCTS</span>
+<div class="flex items-center gap-4 border-l-2 border-on-surface pl-8">
+<select class="bg-transparent font-label-bold uppercase border-none focus:ring-0 cursor-pointer">
+<option>Sort By: Featured</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Newest</option>
+</select>
+<div class="hidden lg:flex items-center gap-2">
+<button class="material-symbols-outlined opacity-100" data-icon="grid_view" style="font-variation-settings: 'FILL' 1;">grid_view</button>
+<button class="material-symbols-outlined opacity-30" data-icon="view_agenda">view_agenda</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Product Section -->
+<div class="max-w-container-max mx-auto px-margin-desktop py-12 flex flex-col md:flex-row gap-12">
+<!-- Sidebar Filters (Desktop) -->
+<aside class="hidden lg:block w-64 shrink-0 space-y-12">
+<div>
+<h3 class="font-headline-md uppercase mb-6 border-b-2 border-on-surface pb-2">Category</h3>
+<ul class="space-y-3 font-body-md uppercase text-sm tracking-wide">
+<li><label class="flex items-center gap-3 cursor-pointer"><input class="rounded-none border-2 border-on-surface text-milano-red focus:ring-milano-red" type="checkbox"/> Outerwear</label></li>
+<li><label class="flex items-center gap-3 cursor-pointer"><input checked="" class="rounded-none border-2 border-on-surface text-milano-red focus:ring-milano-red" type="checkbox"/> Denim</label></li>
+<li><label class="flex items-center gap-3 cursor-pointer"><input class="rounded-none border-2 border-on-surface text-milano-red focus:ring-milano-red" type="checkbox"/> Tops</label></li>
+<li><label class="flex items-center gap-3 cursor-pointer"><input class="rounded-none border-2 border-on-surface text-milano-red focus:ring-milano-red" type="checkbox"/> Accessories</label></li>
+</ul>
+</div>
+<div>
+<h3 class="font-headline-md uppercase mb-6 border-b-2 border-on-surface pb-2">Size</h3>
+<div class="grid grid-cols-3 gap-2">
+<button class="border-2 border-on-surface py-2 font-label-bold text-xs hover:bg-on-surface hover:text-lemon-chiffon transition-colors">XS</button>
+<button class="border-2 border-on-surface py-2 font-label-bold text-xs bg-on-surface text-lemon-chiffon">S</button>
+<button class="border-2 border-on-surface py-2 font-label-bold text-xs hover:bg-on-surface hover:text-lemon-chiffon transition-colors">M</button>
+<button class="border-2 border-on-surface py-2 font-label-bold text-xs hover:bg-on-surface hover:text-lemon-chiffon transition-colors">L</button>
+<button class="border-2 border-on-surface py-2 font-label-bold text-xs hover:bg-on-surface hover:text-lemon-chiffon transition-colors">XL</button>
+<button class="border-2 border-on-surface py-2 font-label-bold text-xs hover:bg-on-surface hover:text-lemon-chiffon transition-colors">XXL</button>
+</div>
+</div>
+<div>
+<h3 class="font-headline-md uppercase mb-6 border-b-2 border-on-surface pb-2">Price Range</h3>
+<input class="w-full accent-milano-red" type="range"/>
+<div class="flex justify-between font-label-bold text-xs mt-2">
+<span>$0</span>
+<span>$1000+</span>
+</div>
+</div>
+</aside>
+<!-- Product Grid -->
+<div class="flex-grow">
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-16 gap-x-gutter">
+<!-- Product Card 1 -->
+<div class="product-card group relative flex flex-col">
+<div class="relative aspect-[3/4] overflow-hidden bg-white mb-4">
+<a class="block cursor-pointer" href="product-detail.html"><img class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" data-alt="High-fashion editorial streetwear shot of a model wearing a heavy distressed black denim jacket with red contrast stitching, minimalist studio setting with sharp dramatic lighting, high contrast photography in the style of a luxury brand lookbook, pristine white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArnnoDag-q0ElalEK4sqtvt6w91FtYcY9aGxycQpCOKInmR7cffSVuI_FVMLsBbFD4H4-poBZB7jOnp-_oOwFoavvZXTbPCJ8JAOxItFfA6KjQzry7IpE5ZJKWX7MZBpYzTNY1hHV3OvSkntY8nnBiYCWHXgKpw7c-b39YBevNkM2Ria2q6i_QhJuOwGjUBMfeBYwxjK7tKQ0eeqmCXMzo9IhrpkEzceLaj2VigECxB6AHYemp9n_QuiHvuQp2FkYWXH9IdB2za4M"/></a>
+<a class="block cursor-pointer" href="product-detail.html"><img class="hover-image absolute inset-0 object-cover w-full h-full opacity-0 transition-opacity duration-500" data-alt="Model from the back showing detail of a luxury distressed black denim jacket, featuring a bold milano red embroidered logo at the neck, high contrast editorial style, cinematic fashion lighting, deep shadows and crisp highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrX94UfLWWL9WuQ9OhVFbUE-YQfjbuEcvd_AahspPE-C8s8VavYeXSvovcyTnFlSD1nzUrkFC3ALnxBDiz3jkQ_J2Mn3nmsuwya27j3HOj7-PH-VEup4ahSJvV3mnsnoF5Vaus9Q5LNOhfYoP0xWhpi8aHq27dVKDznUJPE6Np8HWpOoZU2EDMi52pVrZ2c_MtJSxHXPpv_ySEc5o4aEbWXVfU43ZyNygYUutPcsxPtCg4KdjM1XecFSk1nqPwq8zRLI04pPbaO-k"/></a>
+<button class="absolute top-4 right-4 w-10 h-10 bg-lemon-chiffon border-2 border-on-surface flex items-center justify-center hover:bg-milano-red hover:text-lemon-chiffon transition-colors active:scale-90">
+<span class="material-symbols-outlined text-xl" data-icon="favorite">favorite</span>
+</button>
+<div class="product-card-overlay absolute bottom-0 left-0 w-full translate-y-full p-4 bg-on-surface/90 backdrop-blur-sm">
+<button class="w-full bg-milano-red text-lemon-chiffon font-headline-md py-3 uppercase tracking-wider hover:bg-white hover:text-milano-red transition-colors">ADD TO BAG</button>
+</div>
+</div>
+<div class="border-b-2 border-on-surface pb-3">
+<h4 class="font-label-bold text-lg uppercase leading-tight mb-1">RAVEN DISTRESSED DENIM</h4>
+<div class="flex justify-between items-baseline">
+<span class="text-milano-red font-headline-md">$245.00</span>
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-black ring-1 ring-offset-2 ring-black cursor-pointer"></div>
+<div class="w-3 h-3 rounded-full bg-neutral-400 cursor-pointer"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="product-card group relative flex flex-col">
+<div class="relative aspect-[3/4] overflow-hidden bg-white mb-4">
+<a class="block cursor-pointer" href="product-detail.html"><img class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" data-alt="Editorial fashion photography of a model in oversized architectural cream cargo pants, sharp creases, heavy textile texture visible, milano red accent straps, avant-garde streetwear aesthetic, bright studio lighting, bold high-contrast composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzVdjayF_lzJBVbPYqMV2nBjlzjQqclMmgAF6FyqTau4MAbCGCUfhAGssWRs6ms-axVrRO65YMrU--lPHNw_ypgnrlMZKQ3-TQuY0jn7xSWpR7hG9EAJSc9gZ-B3-INb_F_nxvcc8BpRiuNz1i6i44_YNy_ru8iiDhCvyT6CD5g4abVkQJ6M-fzQle_MmiqRQrsEGo2z1AAkZWEbcbwprfkbCg6uPWmwOx0sp-Qqh6GL0-ehNoVGxsaOz7C4_znAVpl2fkI2fvWUk"/></a>
+<a class="block cursor-pointer" href="product-detail.html"><img class="hover-image absolute inset-0 object-cover w-full h-full opacity-0 transition-opacity duration-500" data-alt="Detailed close-up of heavy cotton cargo pants pockets with milano red hardware and branding, premium textile focus, editorial fashion style, crisp focus, minimalist lemon chiffon background vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMwdwbB1GoiwOKzPfar62-7DqVDtWKyn6EOM2V_q2Bdmei-XlSlAgbaGcK_PksvB6EdF8u_bkN7yg_wymO2v2snGhSkkVUo0GA8c7DeQFe1D5lqq0fH0wzGGq7b-dWTbYtjsnUqv5391GqKs8iPy74KbMRK7LmcEiqTQZb3kPnopT05H5TQMntQ24GswmmdX7zuk3H4fdKiLDftjsiDXDdsEXp6CNJKBGpLN95BUvmeYqk95SwnwsbieMi5ejgz5SS_xogyab27x0"/></a>
+<button class="absolute top-4 right-4 w-10 h-10 bg-lemon-chiffon border-2 border-on-surface flex items-center justify-center hover:bg-milano-red hover:text-lemon-chiffon transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="favorite">favorite</span>
+</button>
+<div class="product-card-overlay absolute bottom-0 left-0 w-full translate-y-full p-4 bg-on-surface/90 backdrop-blur-sm">
+<button class="w-full bg-milano-red text-lemon-chiffon font-headline-md py-3 uppercase tracking-wider hover:bg-white hover:text-milano-red transition-colors">ADD TO BAG</button>
+</div>
+</div>
+<div class="border-b-2 border-on-surface pb-3">
+<h4 class="font-label-bold text-lg uppercase leading-tight mb-1">ARCHITECT CARGO SYSTEM</h4>
+<div class="flex justify-between items-baseline">
+<span class="text-milano-red font-headline-md">$180.00</span>
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-stone-200 ring-1 ring-offset-2 ring-black cursor-pointer"></div>
+<div class="w-3 h-3 rounded-full bg-milano-red cursor-pointer"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="product-card group relative flex flex-col">
+<div class="relative aspect-[3/4] overflow-hidden bg-white mb-4">
+<a class="block cursor-pointer" href="product-detail.html"><img class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" data-alt="Modern streetwear model wearing a heavy boxy-cut black hoodie with massive typography printed on the front, editorial luxury streetwear vibe, moody high contrast lighting, black and white dominant palette with a splash of milano red light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmM3dFYFdmbfG8iyYU1FdgUgiWIXoAbojb-UTfat8oLcmGbNgbwKoAgxqjMQUdZRMT-EPGAjtIo27Ze6dnms3MQv8cqNqVYimWK8aEmEJwBxqnQeMej_Ks-hdp4AIrPXhNjp6W9dRCvDWNF5Qwjkyqqbj8bQrU9ENQZxP7LbibxLP4kAWs8tCOiZO5ldpUsGjs9ycmLt-glI-0aZusmDv6BWypRdxLicFBsRQmHbhVtd8g6mXb-w57CSm2Kf5osP7PYARA83fRE7M"/></a>
+<a class="block cursor-pointer" href="product-detail.html"><img class="hover-image absolute inset-0 object-cover w-full h-full opacity-0 transition-opacity duration-500" data-alt="Action shot of a model walking in a heavy black hoodie, fabric movement caught in high-speed photography, editorial fashion context, high-key lighting, professional studio setup." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHZZW0lq9cr6kdJRrIf44jj46zPq6amsbeliD9Vrtqre-IoaXCVQcyy11I3sri9zUMmuvzOU-N9RHWCkIXHvpMANY7U_wCWYKxthoU-29QVElLb7m8njsVbJR2lPQ8Dy-FbbRlgPZXRl0KgMyrAwLft3Vkl1Kyx-FeJ-ux4jTY09Vz7j9cFbGpW3wwqyMhS4avxagQcNTUP2zK90oMqMG79MJZpbXzypNkV_fHN4-FP7fvLgBdCtVc3JiBlcy78vcLCRWxJ7HM4pY"/></a>
+<button class="absolute top-4 right-4 w-10 h-10 bg-lemon-chiffon border-2 border-on-surface flex items-center justify-center hover:bg-milano-red hover:text-lemon-chiffon transition-colors">
+<span class="material-symbols-outlined text-xl" data-icon="favorite">favorite</span>
+</button>
+<div class="product-card-overlay absolute bottom-0 left-0 w-full translate-y-full p-4 bg-on-surface/90 backdrop-blur-sm">
+<button class="w-full bg-milano-red text-lemon-chiffon font-headline-md py-3 uppercase tracking-wider hover:bg-white hover:text-milano-red transition-colors">ADD TO BAG</button>
+</div>
+</div>
+<div class="border-b-2 border-on-surface pb-3">
+<h4 class="font-label-bold text-lg uppercase leading-tight mb-1">CORE 500GSM HOODIE</h4>
+<div class="flex justify-between items-baseline">
+<span class="text-milano-red font-headline-md">$155.00</span>
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-black ring-1 ring-offset-2 ring-black cursor-pointer"></div>
+<div class="w-3 h-3 rounded-full bg-milano-red cursor-pointer"></div>
+<div class="w-3 h-3 rounded-full bg-white border border-neutral-200 cursor-pointer"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Repeat Products for Grid -->
+<!-- Product Card 4 -->
+<div class="product-card group relative flex flex-col">
+<div class="relative aspect-[3/4] overflow-hidden bg-white mb-4">
+<a class="block cursor-pointer" href="product-detail.html"><img class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" data-alt="Fashion editorial shot of a sleek technical vest in milano red, complex pocket structure, high-tech fabric with subtle sheen, model in a minimalist pose, sharp shadows, high-end luxury streetwear feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrsfzMMAc4AsPLC2kiQ-KJsQQhq2LtlUPizDxjwYMq4JjUnOmN4Z0sEFBGU96ZHttvj7wO2v6PwVByUKqaIaIC-AScypD1VxHeaZZr_shSJHWbVKL0qnVPguPxkZUZOpaGSRTgpfcCb_X3JIN1NlYBJHPdXwaDj92yaTzwOal-RNCYTiytmJHxL97b2VrMocPVblMBZerunLeiSh8NqrYfoOx-Nhv95q18Tak4hhQuey_LyWpSuWwYQnEP18eoFvyhLlbu_a_5lok"/></a>
+<div class="product-card-overlay absolute bottom-0 left-0 w-full translate-y-full p-4 bg-on-surface/90 backdrop-blur-sm">
+<button class="w-full bg-milano-red text-lemon-chiffon font-headline-md py-3 uppercase tracking-wider hover:bg-white hover:text-milano-red transition-colors">ADD TO BAG</button>
+</div>
+</div>
+<div class="border-b-2 border-on-surface pb-3">
+<h4 class="font-label-bold text-lg uppercase leading-tight mb-1">TACTICAL VEST - RED</h4>
+<div class="flex justify-between items-baseline">
+<span class="text-milano-red font-headline-md">$210.00</span>
+</div>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="product-card group relative flex flex-col">
+<div class="relative aspect-[3/4] overflow-hidden bg-white mb-4">
+<a class="block cursor-pointer" href="product-detail.html"><img class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" data-alt="Model wearing premium black tailored trousers with a split hem, editorial fashion composition, emphasis on footwear and drape, high contrast lighting, luxury editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqi2F8P9NDi5gTUY3VeIUxDLfmsVXF6QAwZVYSg5cLwYd9FGDs4CMLAc8f-KxMulLbfwOUsA7GDnWNsBkX7pl7855UQKwDPmd-buyjMkewMW6kUtQUrTymR5LAJOYe9rdcxAkK3P8jh1rScRKr88naZGd6KcM8nIm-i6bVF1m-S6NgvKNJTRY592ihZf4Y46mUh6bGSYjYEF90Sfd3T2BjVN2nWDNUkW8-LAfIQbRxH3PjVBwkMO8mbVrezAqAa5x0BY8_cbQyUGU"/></a>
+<div class="product-card-overlay absolute bottom-0 left-0 w-full translate-y-full p-4 bg-on-surface/90 backdrop-blur-sm">
+<button class="w-full bg-milano-red text-lemon-chiffon font-headline-md py-3 uppercase tracking-wider hover:bg-white hover:text-milano-red transition-colors">ADD TO BAG</button>
+</div>
+</div>
+<div class="border-b-2 border-on-surface pb-3">
+<h4 class="font-label-bold text-lg uppercase leading-tight mb-1">SPLIT HEM TROUSERS</h4>
+<div class="flex justify-between items-baseline">
+<span class="text-milano-red font-headline-md">$195.00</span>
+</div>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="product-card group relative flex flex-col">
+<div class="relative aspect-[3/4] overflow-hidden bg-white mb-4">
+<a class="block cursor-pointer" href="product-detail.html"><img class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" data-alt="Close up of a premium accessories shot, a heavy chain necklace with a red industrial pendant, editorial fashion lighting, sharp detail, high contrast, clean lemon chiffon background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtRttUHNJwG3jTta8xDbbwd8on5fhcQKRrq3Vzdepg3IpN86xFjP2u-kSCioo0Dk-M-YydHB4cc19r-lOKLOnRJTmeM1BZLvqK_wYiqY5YzqMClY7R9wS6Q-KKO8X6h8A6bFeEwTzb1z8gdd_fIFDuTbtUkMV9sGzVZwTxtYVTGmTzZGPruMKVJSLKIQfX_D8D1mSZx4KKpsVRdQj5YRxzdXDjo2yjJtcR_iQ4Of8ciacywnsORNBMxr40MxNR7MQ8SEdGgN5VeHw"/></a>
+<div class="product-card-overlay absolute bottom-0 left-0 w-full translate-y-full p-4 bg-on-surface/90 backdrop-blur-sm">
+<button class="w-full bg-milano-red text-lemon-chiffon font-headline-md py-3 uppercase tracking-wider hover:bg-white hover:text-milano-red transition-colors">ADD TO BAG</button>
+</div>
+</div>
+<div class="border-b-2 border-on-surface pb-3">
+<h4 class="font-label-bold text-lg uppercase leading-tight mb-1">INDUSTRIAL CHAIN NO.2</h4>
+<div class="flex justify-between items-baseline">
+<span class="text-milano-red font-headline-md">$85.00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Load More -->
+<div class="mt-section-gap flex justify-center">
+<button class="bg-milano-red text-lemon-chiffon font-display-xl-mobile md:text-headline-lg py-8 px-24 uppercase tracking-tighter hover:bg-black transition-all active:scale-95">
+                        LOAD MORE
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Sidebar Filter Drawer (Mobile/Tablet Side Drawer) -->
+<div class="filter-drawer fixed inset-y-0 left-0 w-full max-w-sm bg-lemon-chiffon z-[100] translate-x-[-100%] shadow-2xl p-margin-desktop overflow-y-auto" id="filterDrawer">
+<div class="flex justify-between items-center mb-12">
+<h2 class="font-display-xl-mobile text-headline-lg uppercase">FILTERS</h2>
+<button class="material-symbols-outlined text-4xl" data-icon="close" onclick="toggleFilterDrawer()">close</button>
+</div>
+<div class="space-y-12">
+<div>
+<h3 class="font-headline-md uppercase mb-6 border-b-2 border-on-surface pb-2">Category</h3>
+<ul class="space-y-4 font-body-lg uppercase tracking-wide">
+<li><label class="flex items-center gap-4 cursor-pointer"><input class="w-5 h-5 rounded-none border-2 border-on-surface text-milano-red focus:ring-milano-red" type="checkbox"/> Outerwear</label></li>
+<li><label class="flex items-center gap-4 cursor-pointer"><input checked="" class="w-5 h-5 rounded-none border-2 border-on-surface text-milano-red focus:ring-milano-red" type="checkbox"/> Denim</label></li>
+<li><label class="flex items-center gap-4 cursor-pointer"><input class="w-5 h-5 rounded-none border-2 border-on-surface text-milano-red focus:ring-milano-red" type="checkbox"/> Tops</label></li>
+<li><label class="flex items-center gap-4 cursor-pointer"><input class="w-5 h-5 rounded-none border-2 border-on-surface text-milano-red focus:ring-milano-red" type="checkbox"/> Accessories</label></li>
+</ul>
+</div>
+<div>
+<h3 class="font-headline-md uppercase mb-6 border-b-2 border-on-surface pb-2">Price</h3>
+<div class="flex gap-4 items-center">
+<input class="w-full bg-transparent border-2 border-on-surface p-3 font-label-bold" placeholder="MIN" type="text"/>
+<span class="font-headline-md">TO</span>
+<input class="w-full bg-transparent border-2 border-on-surface p-3 font-label-bold" placeholder="MAX" type="text"/>
+</div>
+</div>
+<button class="w-full bg-on-surface text-lemon-chiffon font-headline-md py-6 uppercase hover:bg-milano-red transition-colors">APPLY FILTERS</button>
+</div>
+</div>
+<div class="fixed inset-0 bg-black/50 z-[90] hidden" id="drawerOverlay" onclick="toggleFilterDrawer()"></div>
+<!-- Footer -->
+<footer class="w-full bg-on-surface dark:bg-on-surface mt-section-gap">
+<div class="flex flex-col md:flex-row justify-between items-start w-full px-margin-desktop py-section-gap max-w-container-max mx-auto">
+<div class="mb-12 md:mb-0">
+<a class="font-display-xl text-headline-lg text-surface dark:text-surface" href="index.html">THE DROP</a>
+<p class="font-body-md text-surface/80 max-w-xs mt-4">Defining the intersection of street culture and luxury editorial through intentional scarcity.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-x-16 gap-y-8">
+<div class="flex flex-col gap-4">
+<h4 class="font-label-bold text-surface uppercase">Shop</h4>
+<a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="products.html">All Products</a>
+<a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="#">Best Sellers</a>
+<a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="#">Accessories</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-bold text-surface uppercase">Help</h4>
+<a class="text-surface underline font-body-md hover:text-primary-container transition-colors duration-100" href="#">Shipping</a>
+<a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="#">Returns</a>
+<a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="#">Contact</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-bold text-surface uppercase">Legal</h4>
+<a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="#">Terms</a>
+<a class="text-surface/80 font-body-md hover:text-primary-container transition-colors duration-100" href="#">Privacy</a>
+</div>
+</div>
+</div>
+<div class="px-margin-desktop py-8 border-t border-surface/10 max-w-container-max mx-auto">
+<span class="font-body-md text-surface/50 text-body-md">© 2024 THE DROP EDITORIAL. ALL RIGHTS RESERVED.</span>
+</div>
+</footer>
+<script>
+        function toggleFilterDrawer() {
+            const drawer = document.getElementById('filterDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        // Simple zoom effect listener for micro-interaction feedback
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+                card.style.transition = 'transform 0.2s ease-out';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

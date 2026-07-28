@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THE DROP | TACTICAL VEST - MK1</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Hanken+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#0036ed",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#f1d3ce",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#002dcc",
+                    "background": "#fff8f6",
+                    "surface-tint": "#b91d0d",
+                    "surface-container-high": "#ffe2dd",
+                    "tertiary": "#0026b2",
+                    "surface-container": "#ffe9e5",
+                    "primary": "#7e0500",
+                    "inverse-primary": "#ffb4a7",
+                    "inverse-on-surface": "#ffedea",
+                    "on-secondary-fixed": "#400100",
+                    "surface-container-highest": "#fadcd7",
+                    "on-primary-fixed": "#400100",
+                    "on-secondary-fixed-variant": "#80281c",
+                    "on-primary-container": "#ffb6a9",
+                    "on-background": "#271815",
+                    "surface-variant": "#fadcd7",
+                    "outline-variant": "#e4beb7",
+                    "on-surface": "#271815",
+                    "outline": "#906f6a",
+                    "primary-container": "#a90e02",
+                    "surface-bright": "#fff8f6",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#ffdad4",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed": "#000f5d",
+                    "surface": "#fff8f6",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#dee0ff",
+                    "secondary-fixed-dim": "#ffb4a7",
+                    "surface-container-low": "#fff0ee",
+                    "primary-fixed-dim": "#ffb4a7",
+                    "tertiary-fixed-dim": "#bbc3ff",
+                    "on-surface-variant": "#5b403b",
+                    "secondary-fixed": "#ffdad4",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#920700",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-container": "#bcc4ff",
+                    "secondary-container": "#fe8673",
+                    "secondary": "#a03f30",
+                    "inverse-surface": "#3e2c29",
+                    "on-secondary-container": "#741f13"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-mobile": "20px",
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "section-gap": "120px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Bebas Neue"],
+                    "headline-lg-mobile": ["Bebas Neue"],
+                    "display-xl": ["Bebas Neue"],
+                    "headline-lg": ["Bebas Neue"],
+                    "display-xl-mobile": ["Bebas Neue"],
+                    "body-md": ["Hanken Grotesk"],
+                    "label-sm": ["Hanken Grotesk"],
+                    "label-bold": ["Hanken Grotesk"],
+                    "body-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-md": ["32px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["40px", {"lineHeight": "40px", "fontWeight": "400"}],
+                    "display-xl": ["120px", {"lineHeight": "100px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "headline-lg": ["64px", {"lineHeight": "60px", "fontWeight": "400"}],
+                    "display-xl-mobile": ["72px", {"lineHeight": "64px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .snap-x {
+            scroll-snap-type: x mandatory;
+        }
+        .snap-start {
+            scroll-snap-align: start;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-50 bg-surface border-b-2 border-on-surface">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-6 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<a class="font-display-xl text-headline-md tracking-tighter text-primary" href="index.html">THE DROP</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-headline-md text-headline-md uppercase" href="products.html">Shop</a>
+<a class="text-on-surface font-headline-md text-headline-md uppercase hover:text-primary transition-colors duration-0" href="summer-sale.html">New Arrivals</a>
+<a class="text-on-surface font-headline-md text-headline-md uppercase hover:text-primary transition-colors duration-0" href="summer-sale.html">Collections</a>
+<a class="text-on-surface font-headline-md text-headline-md uppercase hover:text-primary transition-colors duration-0" href="our-story.html">About</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface hover:text-primary active:scale-95 transition-all">search</button>
+<a class="inline-flex items-center justify-center" href="cart.html"><button class="material-symbols-outlined text-on-surface hover:text-primary active:scale-95 transition-all">shopping_bag</button></a>
+<a class="inline-flex items-center justify-center" href="account.html"><button class="material-symbols-outlined text-on-surface hover:text-primary active:scale-95 transition-all">person</button></a>
+</div>
+</nav>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 mb-12 font-label-bold text-label-bold uppercase tracking-widest text-on-surface/60">
+<a class="hover:text-primary transition-colors" href="index.html">Home</a>
+<span class="text-xs">/</span>
+<a class="hover:text-primary transition-colors" href="products.html">Shop</a>
+<span class="text-xs">/</span>
+<a class="hover:text-primary transition-colors" href="#">Outerwear</a>
+<span class="text-xs">/</span>
+<span class="text-on-surface">Tactical Vest</span>
+</nav>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter lg:gap-16">
+<!-- Left: Product Images -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<div class="border-2 border-on-surface aspect-[4/5] relative overflow-hidden bg-surface-container">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover grayscale-0 hover:scale-105 transition-transform duration-700" data-alt="A high-fashion editorial studio shot of a tactical technical vest in a vibrant Milano Red. The vest features multiple asymmetrical pockets, heavy-duty webbing, and matte black utility clips. The lighting is harsh and high-contrast, casting sharp shadows against a soft lemon-tinted background. The aesthetic is raw, modern streetwear with premium tailoring details visible in the stitching." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMOOtcuHRV61KG0L9rtal2PL2jvQOp1ULIYAHxinTJFQzQvPj-rkylCOgVd8lYLQEd0eWs_tz7shvxztz2r4oZor-lTxhTNICCLlu3H75Znozt6Jx74NtwbzE13Jboua3bXx2_tAO9qfwolHV7R90gj7W_cYEJmBnENM6UqPQT6uiRsrIYlhD7CRMXFowE2NpEze1SpiiXD1NabPCbvM9ye1Lji7-Rn0o1vCL58lQHaS1HBhu0xp2KlU8pnIRGn_nnY02HXSGcCIw"/></a>
+<div class="absolute top-4 left-4 bg-primary text-on-primary font-label-bold px-3 py-1 text-[10px] uppercase tracking-tighter">Limited Edition</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="border-2 border-on-surface aspect-square overflow-hidden bg-surface-container">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover" data-alt="Detailed close-up shot of the Milano Red tactical vest hardware. Focus is on a heavy-duty industrial matte black buckle and reinforced nylon webbing. The texture of the high-tech water-resistant fabric is sharp and tactile. Lighting is editorial and moody, highlighting the premium craftsmanship and aggressive design language." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsLfYNpAT4IH5P3mMJgROBBndIPcVeHG-a7lnb6SXQXmgO3t8KVMcvjKSLt8_nkrjkC8_ayQ2nE_bfJOxmgxEvojqOW-KgHuo3MaQYkgs_o-Fh_spkj_kcrMiuIc5Pvj3XJy5Wqg3MLBFc5SnAyPuwUjLknEvuA9_HmkyHMjXiLuFhkMwJUNefvkLOWQCLQmsGL0Oe4gsOpFj5oHU_dtEPF4mTrpViGQI2-0ywxdy370x5gc5FCs9gdc-bzZ8hhlCWzH4x05b3vBA"/></a>
+</div>
+<div class="border-2 border-on-surface aspect-square overflow-hidden bg-surface-container">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover" data-alt="Back view of a tactical technical vest in Milano Red, shown on a minimalist mannequin. The back features a modular laser-cut attachment system and a large zipped storage pocket. The composition is clean and geometric, emphasizing the architectural silhouette of the garment against a bright, modern studio background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtP_DIlXrVVIaVJO7vgBR9pozKpi4qXd9aL30y3pSoy2-mlbDoXxoBD97CNDQlx5VGHHn-jx2lHbdl_-z3wcm1bBw1Rgp9QLrpccYY0jSH_oVMXSfb9bvcCayQlQQ2DH_ZEyBOnRT1YRQZDDktrHzqyh-mBQ4v_9nh2pfLEO4hZvTsD_GMwKV124-SjZ7QmVsHgMLIKNvgACpxWLrhdLRLrBpOhWAF9eWK-jnC9uSZtqmiI1d7_uBQeBNeb0C0LTHeG5VvrgnliIw"/></a>
+</div>
+</div>
+</div>
+<!-- Right: Product Info -->
+<div class="lg:col-span-5 flex flex-col">
+<div class="sticky top-32">
+<div class="mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-bold text-[10px] ml-2 text-on-surface/50">(48 REVIEWS)</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary uppercase mb-2">TACTICAL VEST - MK1</h1>
+<p class="font-headline-md text-headline-md text-on-surface mb-8">$450.00</p>
+<!-- Selectors -->
+<div class="space-y-8 mb-12">
+<!-- Color Selector -->
+<div>
+<span class="font-label-bold text-label-bold uppercase block mb-4">Color: Milano Red</span>
+<div class="flex gap-4">
+<button class="w-10 h-10 bg-primary border-2 border-on-surface ring-2 ring-primary ring-offset-2"></button>
+<button class="w-10 h-10 bg-on-background border-2 border-on-surface hover:ring-2 hover:ring-on-background hover:ring-offset-2 transition-all"></button>
+<button class="w-10 h-10 bg-outline border-2 border-on-surface hover:ring-2 hover:ring-outline hover:ring-offset-2 transition-all"></button>
+</div>
+</div>
+<!-- Size Selector -->
+<div>
+<div class="flex justify-between mb-4">
+<span class="font-label-bold text-label-bold uppercase">Size</span>
+<button class="font-label-bold text-[10px] uppercase underline hover:text-primary">Size Guide</button>
+</div>
+<div class="grid grid-cols-4 gap-2">
+<button class="h-14 border-2 border-on-surface flex items-center justify-center font-headline-md text-headline-md hover:bg-on-surface hover:text-surface transition-colors">S</button>
+<button class="h-14 border-2 border-on-surface bg-on-surface text-surface flex items-center justify-center font-headline-md text-headline-md">M</button>
+<button class="h-14 border-2 border-on-surface flex items-center justify-center font-headline-md text-headline-md hover:bg-on-surface hover:text-surface transition-colors">L</button>
+<button class="h-14 border-2 border-on-surface flex items-center justify-center font-headline-md text-headline-md hover:bg-on-surface hover:text-surface transition-colors">XL</button>
+</div>
+</div>
+</div>
+<!-- CTA -->
+<button class="w-full py-6 bg-primary text-on-primary font-headline-md text-3xl uppercase tracking-wider mb-12 active:scale-[0.98] transition-transform">
+                        ADD TO BAG
+                    </button>
+<!-- Accordions -->
+<div class="border-t-2 border-on-surface">
+<details class="group border-b-2 border-on-surface open:pb-6" open="">
+<summary class="flex justify-between items-center py-6 cursor-pointer list-none">
+<span class="font-headline-md text-headline-md uppercase">Description</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="font-body-md text-on-surface-variant max-w-md">
+                                Engineered for high-mobility environments. The MK1 Tactical Vest combines utilitarian heritage with avant-garde technical construction. Water-repellent ripstop body with modular webbing system.
+                            </div>
+</details>
+<details class="group border-b-2 border-on-surface open:pb-6">
+<summary class="flex justify-between items-center py-6 cursor-pointer list-none">
+<span class="font-headline-md text-headline-md uppercase">Technical Specs</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="font-body-md text-on-surface-variant space-y-2">
+<p>• 100% Recycled Technical Polyester</p>
+<p>• DWR (Durable Water Repellent) Coating</p>
+<p>• 8-Pocket Modular System</p>
+<p>• Laser-cut MOLLE panels</p>
+<p>• Adjustable magnetic side-release buckles</p>
+</div>
+</details>
+<details class="group border-b-2 border-on-surface open:pb-6">
+<summary class="flex justify-between items-center py-6 cursor-pointer list-none">
+<span class="font-headline-md text-headline-md uppercase">Shipping &amp; Returns</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="font-body-md text-on-surface-variant">
+                                Worldwide express shipping via DHL. Free returns within 14 days of delivery. All items must be in original condition with tags attached.
+                            </div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<!-- Complete The Look -->
+<section class="mt-section-gap">
+<h2 class="font-headline-lg text-headline-lg uppercase mb-12">COMPLETE THE LOOK</h2>
+<div class="relative">
+<div class="flex gap-gutter overflow-x-auto hide-scrollbar snap-x pb-8">
+<!-- Product Card 1 -->
+<div class="min-w-[300px] md:min-w-[340px] snap-start group cursor-pointer">
+<div class="aspect-[3/4] mb-4 overflow-hidden bg-surface-container relative">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Front view of matte black technical cargo pants with oversized 3D utility pockets and tapered ankles. The fabric is a high-tech nylon blend with a subtle sheen. Photographed in an editorial high-contrast style on a light background, emphasizing the silhouette and hardware details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAzKQRyMDSPJph5Hm2oMDL2k8qp-AkheOXlycsAu-60Gd9ASUehLmp-Fmln-H3Jyx_HzPg3B3Z6hgnDFqm4y8ZxG9_R0JwNBaJ_3WWx8EY33wjKantJ7mX75arJS2OZfC5UWLgzplVD5hChZuic4Tdf0VxEcJJ0qfP3pQnK4FDg3Kwn7XhpkDFeo3Ky1oauAswzLGO9LNRGCBi0LwfyYhsUi1EJ6YxUYysF6VYsTi4Wm81CjMbxsxpGKAKSzAYqyQOc5xCaqTdueo"/></a>
+<div class="absolute bottom-0 left-0 p-4 bg-on-surface text-surface font-label-bold text-[10px] opacity-0 group-hover:opacity-100 transition-opacity uppercase">Quick Add</div>
+</div>
+<div class="flex justify-between items-start border-t border-on-surface pt-4">
+<div>
+<h3 class="font-label-bold text-label-bold uppercase">CARGO SYSTEMS V2</h3>
+<p class="text-on-surface/60 font-body-md">Black</p>
+</div>
+<span class="font-label-bold text-label-bold">$280.00</span>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="min-w-[300px] md:min-w-[340px] snap-start group cursor-pointer">
+<div class="aspect-[3/4] mb-4 overflow-hidden bg-surface-container relative">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A minimalist charcoal technical hoodie with an asymmetrical zip closure and a high-coverage hood. The design is sleek and futuristic, utilizing a bonded jersey fabric. Editorial lighting creates a bold interplay of light and shadow, highlighting the architectural seams of the garment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMKb9djGsE4XUSmN0_tbwU7hhXCyrL_Ec_06WBb67nobB8_yg9kxuTQUUGYTFkZ5aymKNxT3lsFcRdpRi0_TjsEhhYMA2MJejdUihkHzTci0wlg568H665_enTkdnb6JwAPYUQ86xFmkFhoIUTvJHOJdBgxHjgr-saIr1qhDZ08YVp6I6ZQBuygvidI0Bi_JSvsWY5vb1R17lDUs8Xk3g5vCPBtgeWM44Z9T0eUwcvQeU-llbvR8pM4iJIH1-kpX7Fyhx13LV3DFI"/></a>
+</div>
+<div class="flex justify-between items-start border-t border-on-surface pt-4">
+<div>
+<h3 class="font-label-bold text-label-bold uppercase">ASYMMETRIC HOODIE</h3>
+<p class="text-on-surface/60 font-body-md">Charcoal</p>
+</div>
+<span class="font-label-bold text-label-bold">$195.00</span>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="min-w-[300px] md:min-w-[340px] snap-start group cursor-pointer">
+<div class="aspect-[3/4] mb-4 overflow-hidden bg-surface-container relative">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A heavy-duty technical sling bag in black with milano red accent stitching and oversized metallic clips. The bag is shown floating in a minimalist studio setting, capturing its industrial aesthetic and various utility compartments from a dynamic angle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzM2DodVGV8bvW4wsl4MzRV0r-7MleoN6cK35QzZtx16rgiWneGOL1KUv5dt49X94yGv_NCI5r94p_guNA9CHQp26Y5JaukpnntlAHUiRVhWW75PPIZQ7E8EYQNpxeoWmU9O02RfoCl29fxDLhNNxKV33ec99ZbAuU3SQ0u3YvXVsyqXrSZmHylP0qXw-0JvJYknMrHBoxFIx5LNf25NUk_FejsyopvHh66HbxUj_9uAseF8K4vGOukhynFXCp6IwSQA_rDkcB-7M"/></a>
+</div>
+<div class="flex justify-between items-start border-t border-on-surface pt-4">
+<div>
+<h3 class="font-label-bold text-label-bold uppercase">TACTICAL SLING</h3>
+<p class="text-on-surface/60 font-body-md">Black/Red</p>
+</div>
+<span class="font-label-bold text-label-bold">$110.00</span>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="min-w-[300px] md:min-w-[340px] snap-start group cursor-pointer">
+<div class="aspect-[3/4] mb-4 overflow-hidden bg-surface-container relative">
+<a class="block cursor-pointer" href="product-detail.html"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A pair of high-top technical sneakers featuring a multi-layered panel design in shades of grey, black, and a pop of milano red on the heel. The sole is chunky and aggressive with a futuristic tread pattern. Editorial high-key lighting highlights the technical mesh and premium leather textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGaBFvawgK87cHhdxb1xRetKAnJo31D7PeMTIcYzDS5Q9pdD8qY7dOYpyG1BSslvgP5-VRhTT_3zsH1rXwHaN8pxspgYMfJoRg3xvzCehMW0ZRPg_-FCeONiohhVKSqcRfh4HpDXJVe_VTRUP5inCDyAQwyaonsOucgQcy4X7jfGfWIPlaR0TZaawbhaf0TerjXnXcsQM9vUO3ZNc7RxJ-anhXR1XNoTxW0kCnApL6uk1ztwSQup1T_E4Us_ArTZysr9GMhvprNgE"/></a>
+</div>
+<div class="flex justify-between items-start border-t border-on-surface pt-4">
+<div>
+<h3 class="font-label-bold text-label-bold uppercase">DROP RUNNER-01</h3>
+<p class="text-on-surface/60 font-body-md">Multi</p>
+</div>
+<span class="font-label-bold text-label-bold">$340.00</span>
+</div>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-0.5 bg-on-surface/10 mt-8 relative">
+<div class="absolute top-0 left-0 h-full bg-on-surface transition-all duration-300" id="carousel-progress" style="width: 25%"></div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-on-surface text-surface mt-section-gap">
+<div class="flex flex-col md:flex-row justify-between items-start w-full px-margin-mobile md:px-margin-desktop py-section-gap max-w-container-max mx-auto gap-12">
+<div class="flex flex-col gap-6 max-w-sm">
+<span class="font-display-xl text-headline-lg text-surface tracking-tighter">THE DROP</span>
+<p class="font-body-md opacity-70">A limited-run editorial project exploring the intersection of tactical utility and luxury tailoring.</p>
+<div class="flex gap-4">
+<a class="hover:text-primary-container transition-colors" href="#">INSTAGRAM</a>
+<a class="hover:text-primary-container transition-colors" href="#">TWITTER</a>
+<a class="hover:text-primary-container transition-colors" href="#">YOUTUBE</a>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-12 w-full md:w-auto">
+<div class="flex flex-col gap-4">
+<span class="font-label-bold uppercase text-[10px] tracking-widest opacity-40">Support</span>
+<a class="font-body-md hover:text-primary-container transition-all" href="#">Contact</a>
+<a class="font-body-md hover:text-primary-container transition-all" href="#">Shipping</a>
+<a class="font-body-md hover:text-primary-container transition-all" href="#">Returns</a>
+</div>
+<div class="flex flex-col gap-4">
+<span class="font-label-bold uppercase text-[10px] tracking-widest opacity-40">Legal</span>
+<a class="font-body-md hover:text-primary-container transition-all" href="#">Terms</a>
+<a class="font-body-md hover:text-primary-container transition-all" href="#">Privacy</a>
+<a class="font-body-md hover:text-primary-container transition-all" href="#">Cookies</a>
+</div>
+<div class="flex flex-col gap-6 col-span-2 md:col-span-1">
+<span class="font-label-bold uppercase text-[10px] tracking-widest opacity-40">Newsletter</span>
+<div class="flex flex-col gap-2">
+<input class="bg-transparent border-b-2 border-surface/30 focus:border-surface outline-none py-2 font-label-bold text-xs uppercase transition-colors" placeholder="EMAIL ADDRESS" type="email"/>
+<button class="bg-surface text-on-surface font-label-bold py-2 px-4 uppercase text-[10px] hover:bg-primary-container hover:text-on-primary-container transition-all">Join</button>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full px-margin-mobile md:px-margin-desktop py-8 border-t border-surface/10 max-w-container-max mx-auto flex justify-between items-center opacity-40">
+<p class="font-label-bold text-[10px] uppercase">© 2024 THE DROP EDITORIAL. ALL RIGHTS RESERVED.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-sm">payments</span>
+<span class="material-symbols-outlined text-sm">credit_card</span>
+</div>
+</div>
+</footer>
+<script>
+        // Carousel Progress Bar Logic
+        const carousel = document.querySelector('.overflow-x-auto');
+        const progressBar = document.getElementById('carousel-progress');
+
+        if (carousel && progressBar) {
+            carousel.addEventListener('scroll', () => {
+                const scrollPercentage = (carousel.scrollLeft / (carousel.scrollWidth - carousel.clientWidth)) * 100;
+                progressBar.style.width = `${Math.max(25, scrollPercentage)}%`;
+            });
+        }
+
+        // Add to Bag Micro-interaction
+        const addToBagBtn = document.querySelector('button.bg-primary');
+        if (addToBagBtn) {
+            addToBagBtn.addEventListener('click', () => {
+                const originalText = addToBagBtn.innerText;
+                addToBagBtn.innerText = 'ADDING...';
+                addToBagBtn.classList.add('bg-on-surface');
+                
+                setTimeout(() => {
+                    addToBagBtn.innerText = 'ADDED TO BAG';
+                    setTimeout(() => {
+                        addToBagBtn.innerText = originalText;
+                        addToBagBtn.classList.remove('bg-on-surface');
+                    }, 2000);
+                }, 800);
+            });
+        }
+    </script>
+</body></html>

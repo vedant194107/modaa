@@ -1,0 +1,570 @@
+@import "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Hanken+Grotesk:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap";
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #7e0500;
+  --color-primary-container: #a90e02;
+  --color-primary-fixed: #ffdad4;
+  --color-primary-fixed-dim: #ffb4a7;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #ffb6a9;
+  --color-on-primary-fixed: #400100;
+  --color-on-primary-fixed-variant: #920700;
+
+  --color-secondary: #a03f30;
+  --color-secondary-container: #fe8673;
+  --color-secondary-fixed: #ffdad4;
+  --color-secondary-fixed-dim: #ffb4a7;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #741f13;
+  --color-on-secondary-fixed: #400100;
+  --color-on-secondary-fixed-variant: #80281c;
+
+  --color-tertiary: #0026b2;
+  --color-tertiary-container: #0036ed;
+  --color-tertiary-fixed: #dee0ff;
+  --color-tertiary-fixed-dim: #bbc3ff;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #bcc4ff;
+  --color-on-tertiary-fixed: #000f5d;
+  --color-on-tertiary-fixed-variant: #002dcc;
+
+  --color-surface: #fff8f6;
+  --color-surface-dim: #f1d3ce;
+  --color-surface-bright: #fff8f6;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fff0ee;
+  --color-surface-container: #ffe9e5;
+  --color-surface-container-high: #ffe2dd;
+  --color-surface-container-highest: #fadcd7;
+  --color-surface-tint: #b91d0d;
+  --color-surface-variant: #fadcd7;
+
+  --color-on-surface: #271815;
+  --color-on-surface-variant: #5b403b;
+  --color-background: #FFFBD4;
+  --color-on-background: #271815;
+  --color-inverse-surface: #3e2c29;
+  --color-inverse-on-surface: #ffedea;
+  --color-inverse-primary: #ffb4a7;
+
+  --color-outline: #906f6a;
+  --color-outline-variant: #e4beb7;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --color-lemon-chiffon: #FFFBD4;
+  --color-milano-red: #A90E02;
+
+  --font-display-xl: 'Bebas Neue', sans-serif;
+  --font-headline-lg: 'Bebas Neue', sans-serif;
+  --font-headline-md: 'Bebas Neue', sans-serif;
+  --font-body-lg: 'Hanken Grotesk', sans-serif;
+  --font-body-md: 'Hanken Grotesk', sans-serif;
+  --font-label-bold: 'Hanken Grotesk', sans-serif;
+  --font-label-sm: 'Hanken Grotesk', sans-serif;
+
+  --spacing-container-max: 1440px;
+  --spacing-gutter: 24px;
+  --spacing-margin-desktop: 64px;
+  --spacing-margin-mobile: 20px;
+  --spacing-section-gap: 120px;
+  --spacing-unit: 4px;
+}
+
+/* 1. Product Card Hover Effects from f/products.html */
+.product-card {
+  position: relative;
+}
+
+.product-card:hover .hover-image,
+.group:hover .hover-image {
+  opacity: 1 !important;
+}
+
+.product-card-overlay {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transform: translateY(100%);
+  z-index: 30;
+}
+
+.product-card:hover .product-card-overlay,
+.group:hover .product-card-overlay {
+  transform: translateY(0) !important;
+}
+
+/* 2. Cart Grid & Stepper Button Definitions from f/cart.html */
+.cart-item-grid {
+  display: grid !important;
+  grid-template-columns: 180px 1fr !important;
+  gap: 24px !important;
+}
+
+@media (max-width: 768px) {
+  .cart-item-grid {
+    grid-template-columns: 120px 1fr !important;
+  }
+}
+
+.stepper-btn {
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid #271815 !important;
+  transition: all 0.1s !important;
+}
+
+.stepper-btn:active {
+  transform: scale(0.9) !important;
+  background-color: #7e0500 !important;
+  color: white !important;
+  border-color: #7e0500 !important;
+}
+
+/* 3. Strict Category Grid & Hero Image Bounds */
+div[class*="absolute"] > a {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.grid > a.md\:col-span-8 {
+  position: relative !important;
+  display: block !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+.grid > a.md\:col-span-8 > img {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* 4. Material Symbols Outlined Icon Definition */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* 5. Container & Spacing Utilities from f/ HTML tailwind config */
+.max-w-container-max {
+  max-width: 1440px !important;
+}
+
+.px-margin-desktop {
+  padding-left: 64px !important;
+  padding-right: 64px !important;
+}
+
+.px-margin-mobile {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+.py-section-gap {
+  padding-top: 120px !important;
+  padding-bottom: 120px !important;
+}
+
+.gap-gutter {
+  gap: 24px !important;
+}
+
+/* 6. Font Family & Size Classes from f/index.html */
+.font-display-xl {
+  font-family: 'Bebas Neue', sans-serif !important;
+}
+
+.font-headline-lg {
+  font-family: 'Bebas Neue', sans-serif !important;
+}
+
+.font-headline-md {
+  font-family: 'Bebas Neue', sans-serif !important;
+}
+
+.font-body-lg {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+}
+
+.font-body-md {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+}
+
+.font-label-bold {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-weight: 700 !important;
+}
+
+.font-label-sm {
+  font-family: 'Hanken Grotesk', sans-serif !important;
+  font-weight: 500 !important;
+}
+
+/* Base font sizes (Mobile first) */
+.text-display-xl-mobile {
+  font-size: 72px;
+  line-height: 64px;
+  letter-spacing: -0.01em;
+}
+
+.text-headline-lg-mobile {
+  font-size: 40px;
+  line-height: 40px;
+}
+
+.text-display-xl {
+  font-size: 120px;
+  line-height: 100px;
+  letter-spacing: -0.02em;
+}
+
+.text-headline-lg {
+  font-size: 64px;
+  line-height: 60px;
+}
+
+.text-headline-md {
+  font-size: 32px;
+  line-height: 32px;
+}
+
+.text-body-lg {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.text-body-md {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.text-label-bold {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1em;
+}
+
+.text-label-sm {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+/* Desktop Breakpoints (min-width: 768px) */
+@media (min-width: 768px) {
+  .md\:text-display-xl {
+    font-size: 120px !important;
+    line-height: 100px !important;
+    letter-spacing: -0.02em !important;
+  }
+  .md\:text-headline-lg {
+    font-size: 64px !important;
+    line-height: 60px !important;
+  }
+  .md\:px-margin-desktop {
+    padding-left: 64px !important;
+    padding-right: 64px !important;
+  }
+  .md\:h-\[700px\] {
+    height: 700px !important;
+  }
+  .md\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  }
+  .md\:col-span-7 {
+    grid-column: span 7 / span 7 !important;
+  }
+  .md\:col-span-5 {
+    grid-column: span 5 / span 5 !important;
+  }
+  .md\:col-span-8 {
+    grid-column: span 8 / span 8 !important;
+  }
+  .md\:col-span-4 {
+    grid-column: span 4 / span 4 !important;
+  }
+  .md\:w-1\/2 {
+    width: 50% !important;
+  }
+}
+
+/* 7. Theme Colors from f/ index.html tailwind.config */
+:root {
+  --color-primary: #7e0500;
+  --color-primary-container: #a90e02;
+  --color-primary-fixed: #ffdad4;
+  --color-primary-fixed-dim: #ffb4a7;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #ffb6a9;
+  --color-on-primary-fixed: #400100;
+  --color-on-primary-fixed-variant: #920700;
+
+  --color-secondary: #a03f30;
+  --color-secondary-container: #fe8673;
+  --color-secondary-fixed: #ffdad4;
+  --color-secondary-fixed-dim: #ffb4a7;
+  --color-on-secondary: #ffffff;
+
+  --color-surface: #fff8f6;
+  --color-surface-dim: #f1d3ce;
+  --color-surface-bright: #fff8f6;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fff0ee;
+  --color-surface-container: #ffe9e5;
+  --color-surface-container-high: #ffe2dd;
+  --color-surface-container-highest: #fadcd7;
+  --color-surface-tint: #b91d0d;
+  --color-surface-variant: #fadcd7;
+
+  --color-on-surface: #271815;
+  --color-on-surface-variant: #5b403b;
+  --color-background: #FFFBD4;
+  --color-on-background: #271815;
+  --color-inverse-surface: #3e2c29;
+  --color-inverse-on-surface: #ffedea;
+
+  --color-outline: #906f6a;
+  --color-outline-variant: #e4beb7;
+
+  --color-lemon-chiffon: #FFFBD4;
+  --color-milano-red: #A90E02;
+}
+
+/* Utility Color Classes */
+.bg-surface { background-color: var(--color-surface) !important; }
+.bg-background { background-color: var(--color-background) !important; }
+.bg-primary { background-color: var(--color-primary) !important; }
+.bg-primary-container { background-color: #a90e02 !important; }
+.bg-inverse-surface { background-color: var(--color-inverse-surface) !important; }
+.bg-on-surface { background-color: #271815 !important; }
+.bg-surface-container { background-color: var(--color-surface-container) !important; }
+.bg-surface-container-low { background-color: var(--color-surface-container-low) !important; }
+
+.text-primary { color: var(--color-primary) !important; }
+.text-primary-fixed { color: #ffdad4 !important; }
+.text-on-primary-fixed { color: var(--color-on-primary-fixed) !important; }
+.text-on-primary-container { color: #ffb6a9 !important; }
+.text-on-surface { color: #271815 !important; }
+.text-on-surface-variant { color: var(--color-on-surface-variant) !important; }
+.text-on-background { color: var(--color-on-background) !important; }
+.text-surface { color: #fff8f6 !important; }
+
+.border-on-surface { border-color: #271815 !important; }
+.border-outline { border-color: var(--color-outline) !important; }
+.border-outline-variant { border-color: var(--color-outline-variant) !important; }
+
+/* 8. Shadows & Animations */
+.editorial-shadow {
+  box-shadow: 8px 8px 0px 0px #271815 !important;
+}
+
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.image-zoom:hover img {
+  transform: scale(1.05);
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+body {
+  background-color: #fff8f6;
+  color: #271815;
+  font-family: 'Hanken Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Dropdown Styling */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23271815'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1em;
+  padding-right: 2.25rem !important;
+}
+
+select option {
+  background-color: #271815 !important;
+  color: #FFFBD4 !important;
+  font-weight: 700 !important;
+  padding: 12px !important;
+}
+
+/* Mini Cart Drawer Keyframe Animations */
+@keyframes slideDrawerIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInBackdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes miniCartItemSlide {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-drawer {
+  animation: slideDrawerIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-drawer-out {
+  animation: slideDrawerOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-backdrop {
+  animation: fadeInBackdrop 0.3s ease-out forwards;
+}
+
+.animate-fade-out-backdrop {
+  animation: fadeOutBackdrop 0.3s ease-in forwards;
+}
+
+.animate-cart-item {
+  animation: miniCartItemSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideDrawerOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOutBackdrop {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Search Bar Slide Open & Close Keyframe Animations */
+@keyframes searchHUDOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-24px) scaleY(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+@keyframes searchHUDClose {
+  from {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px) scaleY(0.92);
+  }
+}
+
+.animate-search-open {
+  animation: searchHUDOpen 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top center;
+}
+
+.animate-search-close {
+  animation: searchHUDClose 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top center;
+}
+
+/* ── EDITORIAL PRINT INVOICE STYLING ── */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: 'Hanken Grotesk', sans-serif !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide main page layout, navigation, footers, and web cards */
+  header, footer, nav, main, .no-print, .no-print-area {
+    display: none !important;
+  }
+
+  /* Force display ONLY the printable invoice */
+  .print-only,
+  .printable-invoice-container {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 20px !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+    z-index: 99999 !important;
+  }
+}
+
+.print-only {
+  display: none;
+}
