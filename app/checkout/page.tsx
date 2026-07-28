@@ -264,8 +264,11 @@ export default function CheckoutPage() {
   const shippingFee = subtotal >= 500 ? 0 : subtotal > 0 ? 15 : 0;
   const grandTotal = Math.max(0, subtotal - discountAmount + shippingFee);
 
-  const handlePlaceOrder = () => {
-    if (cartItems.length === 0) return;
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
+  const handlePlaceOrder = async () => {
+    if (cartItems.length === 0 || !authUser || isPlacingOrder) return;
+    setIsPlacingOrder(true);
 
     const newOrder = {
       id: `ORDER-${Math.floor(8000 + Math.random() * 1000)}`,
@@ -279,6 +282,23 @@ export default function CheckoutPage() {
       total: grandTotal,
       shippingAddress: shippingForm,
     };
+
+    try {
+      await fetch("/api/admin/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: newOrder.id,
+          user_id: authUser.id,
+          order_number: newOrder.orderNumber,
+          total: newOrder.total,
+          status: "PROCESSING",
+          items_json: JSON.stringify(newOrder.items),
+        }),
+      });
+    } catch (e) {
+      console.error(e);
+    }
 
     const savedOrders = localStorage.getItem("the_drop_recent_orders");
     let ordersList: any[] = [];
@@ -294,6 +314,7 @@ export default function CheckoutPage() {
     // Clear active cart after placing order
     saveActiveCartItems([]);
 
+    setIsPlacingOrder(false);
     router.push("/thank-you");
   };
 
@@ -632,9 +653,10 @@ export default function CheckoutPage() {
               {/* Action Button */}
               <button
                 onClick={handlePlaceOrder}
-                className="w-full bg-milano-red text-lemon-chiffon font-headline-md text-lg sm:text-xl uppercase py-4 sm:py-5 border-2 border-on-surface hover:bg-on-surface hover:text-lemon-chiffon transition-colors shadow-[6px_6px_0px_0px_#050505] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[4px_4px_0px_0px_#050505]"
+                disabled={isPlacingOrder}
+                className={`w-full text-lemon-chiffon font-headline-md text-lg sm:text-xl uppercase py-4 sm:py-5 border-2 border-on-surface transition-colors shadow-[6px_6px_0px_0px_#050505] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[4px_4px_0px_0px_#050505] ${isPlacingOrder ? 'bg-on-surface cursor-not-allowed opacity-80' : 'bg-milano-red hover:bg-on-surface hover:text-lemon-chiffon'}`}
               >
-                Place Order — {formatPrice(grandTotal, currency)}
+                {isPlacingOrder ? "PROCESSING..." : `Place Order — ${formatPrice(grandTotal, currency)}`}
               </button>
 
               <div className="text-center font-label-bold text-[10px] opacity-60 uppercase tracking-widest space-y-1">

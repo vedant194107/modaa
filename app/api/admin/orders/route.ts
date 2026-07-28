@@ -54,3 +54,23 @@ export async function PUT(request: Request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { id, user_id, order_number, total, status, items_json } = body;
+
+    if (!id || !user_id || !order_number || total === undefined || !items_json) {
+      return NextResponse.json({ success: false, error: "Missing required fields." }, { status: 400 });
+    }
+
+    await query(
+      "INSERT INTO orders (id, user_id, order_number, total, status, items_json) VALUES (?, ?, ?, ?, ?, ?)",
+      [id, user_id, order_number, total, status || 'PROCESSING', items_json]
+    );
+
+    return NextResponse.json({ success: true, message: "Order created successfully." });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
