@@ -16,11 +16,6 @@ async function initCategoriesTable() {
 
   const check = await queryOne("SELECT COUNT(*) as count FROM categories", []) as { count: number };
   if (check.count === 0) {
-    await query(`
-      INSERT INTO categories (id, name, slug, description, image)
-      VALUES (?, ?, ?, ?, ?)
-    `);
-
     const defaults = [
       ["cat_denim", "Denim", "denim", "Hand-finished raw and distressed heavyweight denim jackets and jeans.", "https://lh3.googleusercontent.com/aida-public/AB6AXuArnnoDag-q0ElalEK4sqtvt6w91FtYcY9aGxycQpCOKInmR7cffSVuI_FVMLsBbFD4H4-poBZB7jOnp-_oOwFoavvZXTbPCJ8JAOxItFfA6KjQzry7IpE5ZJKWX7MZBpYzTNY1hHV3OvSkntY8nnBiYCWHXgKpw7c-b39YBevNkM2Ria2q6i_QhJuOwGjUBMfeBYwxjK7tKQ0eeqmCXMzo9IhrpkEzceLaj2VigECxB6AHYemp9n_QuiHvuQp2FkYWXH9IdB2za4M"],
       ["cat_outerwear", "Outerwear", "outerwear", "Technical utility vests, architectural jackets, and waterproof outer layers.", "https://lh3.googleusercontent.com/aida-public/AB6AXuCrsfzMMAc4AsPLC2kiQ-KJsQQhq2LtlUPizDxjwYMq4JjUnOmN4Z0sEFBGU96ZHttvj7wO2v6PwVByUKqaIaIC-AScypD1VxHeaZZr_shSJHWbVKL0qnVPguPxkZUZOpaGSRTgpfcCb_X3JIN1NlYBJHPdXwaDj92yaTzwOal-RNCYTiytmJHxL97b2VrMocPVblMBZerunLeiSh8NqrYfoOx-Nhv95q18Tak4hhQuey_LyWpSuWwYQnEP18eoFvyhLlbu_a_5lok"],
