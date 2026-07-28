@@ -48,7 +48,7 @@ function AddProductContent() {
 
     const fetchCategories = async () => {
       try {
-        const res = await fetch("/api/admin/categories");
+        const res = await fetch(`/api/admin/categories?t=${Date.now()}`);
         const data = await res.json();
         if (data.success && data.categories) {
           setCategoriesList(data.categories);
