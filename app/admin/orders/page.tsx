@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getAuthUser, loginUserAsync, logoutUser, UserSession } from "@/lib/authHelper";
+import { formatPrice, getActiveCurrency, CurrencyCode } from "@/lib/currencyHelper";
 import AdminHeader from "@/components/AdminHeader";
 
 interface OrderRecord {
@@ -20,6 +21,7 @@ export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<OrderRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [toastMsg, setToastMsg] = useState("");
+  const [currency, setCurrency] = useState<CurrencyCode>("INR");
 
   // Admin Login Gate Form State
   const [adminEmail, setAdminEmail] = useState("");
@@ -33,7 +35,15 @@ export default function AdminOrdersPage() {
 
     const handleAuth = () => setAuthUser(getAuthUser());
     window.addEventListener("auth-updated", handleAuth);
-    return () => window.removeEventListener("auth-updated", handleAuth);
+
+    setCurrency(getActiveCurrency());
+    const handleCurr = (e: any) => setCurrency(e.detail || getActiveCurrency());
+    window.addEventListener("currency-updated", handleCurr);
+
+    return () => {
+      window.removeEventListener("auth-updated", handleAuth);
+      window.removeEventListener("currency-updated", handleCurr);
+    };
   }, []);
 
   const fetchOrders = async () => {
@@ -208,7 +218,7 @@ export default function AdminOrdersPage() {
                         </td>
                         <td className="p-4 font-label-bold text-xs text-on-surface/60">{ord.created_at}</td>
                         <td className="p-4 font-headline-md uppercase">{parseItemsSummary(ord.items_json)}</td>
-                        <td className="p-4 font-headline-md text-milano-red">₹{Number(ord.total).toFixed(2)}</td>
+                        <td className="p-4 font-headline-md text-milano-red">{formatPrice(ord.total, currency)}</td>
                         <td className="p-4">
                           <span className={`px-2.5 py-1 font-label-bold text-[10px] uppercase ${
                             ord.status === "DELIVERED" ? "bg-green-700 text-lemon-chiffon" : "bg-milano-red text-lemon-chiffon"

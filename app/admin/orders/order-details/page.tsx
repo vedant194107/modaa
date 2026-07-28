@@ -6,6 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { getAuthUser, loginUserAsync, UserSession } from "@/lib/authHelper";
 import AdminHeader from "@/components/AdminHeader";
 import PrintInvoice from "@/components/PrintInvoice";
+import { formatPrice, getActiveCurrency, CurrencyCode } from "@/lib/currencyHelper";
 
 function AdminOrderDetailsContent() {
   const router = useRouter();
@@ -20,6 +21,7 @@ function AdminOrderDetailsContent() {
   const [updating, setUpdating] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
   const [error, setError] = useState("");
+  const [currency, setCurrency] = useState<CurrencyCode>("INR");
 
   // Admin Login Gate State
   const [adminEmail, setAdminEmail] = useState("");
@@ -32,7 +34,15 @@ function AdminOrderDetailsContent() {
 
     const handleAuth = () => setAuthUser(getAuthUser());
     window.addEventListener("auth-updated", handleAuth);
-    return () => window.removeEventListener("auth-updated", handleAuth);
+
+    setCurrency(getActiveCurrency());
+    const handleCurr = (e: any) => setCurrency(e.detail || getActiveCurrency());
+    window.addEventListener("currency-updated", handleCurr);
+
+    return () => {
+      window.removeEventListener("auth-updated", handleAuth);
+      window.removeEventListener("currency-updated", handleCurr);
+    };
   }, []);
 
   const handleAdminAuthSubmit = async (e: React.FormEvent) => {
@@ -354,14 +364,14 @@ function AdminOrderDetailsContent() {
                             <span>COLOR: {item.color || "BLACK"}</span>
                           </div>
                           <p className="font-label-bold text-xs text-milano-red uppercase mt-1">
-                            QTY: {item.quantity || item.qty || 1} × ₹{Number(item.price || 0).toFixed(2)}
+                            QTY: {item.quantity || item.qty || 1} × {formatPrice(Number(item.price || 0), currency)}
                           </p>
                         </div>
                       </div>
 
                       <div className="text-right sm:self-center">
                         <span className="font-headline-md text-lg text-on-surface">
-                          ₹{((Number(item.price) || 0) * (item.quantity || item.qty || 1)).toFixed(2)}
+                          {formatPrice((Number(item.price) || 0) * (item.quantity || item.qty || 1), currency)}
                         </span>
                       </div>
                     </div>
@@ -436,17 +446,17 @@ function AdminOrderDetailsContent() {
                   <div className="space-y-2 font-label-bold text-xs uppercase border-b-2 border-on-surface/20 pb-4">
                     <div className="flex justify-between">
                       <span className="opacity-60">Subtotal</span>
-                      <span>₹{subtotal.toFixed(2)}</span>
+                      <span>{formatPrice(subtotal, currency)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="opacity-60">Shipping Charges</span>
-                      <span>{shippingFee === 0 ? "FREE" : `₹${shippingFee.toFixed(2)}`}</span>
+                      <span>{shippingFee === 0 ? "FREE" : formatPrice(shippingFee, currency)}</span>
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-baseline pt-1">
+                  <div className="flex justify-between items-end mt-4 pt-4 border-t border-on-surface">
                     <span className="font-headline-md text-base uppercase">GRAND TOTAL</span>
-                    <span className="font-headline-md text-2xl text-milano-red">₹{grandTotal.toFixed(2)}</span>
+                    <span className="font-headline-md text-2xl text-milano-red">{formatPrice(grandTotal, currency)}</span>
                   </div>
                 </div>
               </div>
