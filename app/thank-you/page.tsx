@@ -48,15 +48,17 @@ export default function ThankYouPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-lemon-chiffon text-on-surface">
+    <div className="w-full min-h-screen bg-lemon-chiffon text-on-surface print:bg-white print:text-black">
       {/* TopNavBar */}
-      <Navbar />
+      <div className="print:hidden">
+        <Navbar />
+      </div>
       
-      <main className="min-h-screen max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop py-8 sm:py-12 md:py-16 overflow-hidden">
+      <main className="min-h-screen max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop py-8 sm:py-12 md:py-16">
         
         {/* Hero Section */}
         <section className="text-center mb-8 sm:mb-16 relative">
-          <div className="absolute -top-8 sm:-top-16 left-1/2 -translate-x-1/2 opacity-5 pointer-events-none select-none">
+          <div className="absolute -top-8 sm:-top-16 left-1/2 -translate-x-1/2 opacity-5 pointer-events-none select-none print:hidden">
             <span className="font-display-xl text-[100px] sm:text-[150px] md:text-[200px] leading-none whitespace-nowrap text-on-surface">SUCCESS</span>
           </div>
           <h1 className="font-display-xl text-4xl sm:text-5xl md:text-7xl text-milano-red mb-2 sm:mb-4 uppercase tracking-tighter drop-shadow-md">
@@ -68,7 +70,7 @@ export default function ThankYouPage() {
         </section>
 
         {/* Action Bar (Invoice & Support) */}
-        <div className="flex justify-center gap-4 mb-12">
+        <div className="flex justify-center gap-4 mb-12 print:hidden">
           <button 
             onClick={handlePrint}
             className="flex items-center gap-2 bg-on-surface text-lemon-chiffon font-label-bold uppercase py-2 px-6 hover:bg-milano-red transition-colors shadow-[4px_4px_0px_0px_#a90e02] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_#a90e02]"
@@ -131,7 +133,7 @@ export default function ThankYouPage() {
                 <h2 className="font-headline-lg text-2xl sm:text-3xl uppercase">Order Summary</h2>
               </div>
               
-              <div className="max-h-[60vh] overflow-y-auto">
+              <div className="max-h-[60vh] overflow-y-auto print:max-h-none print:overflow-visible">
                 {order.items.map((item: any, i: number) => (
                   <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center p-6 gap-6 border-b-2 border-on-surface/20 hover:bg-on-surface/5 transition-colors">
                     <div className="w-24 h-32 flex-shrink-0 border-2 border-on-surface bg-white overflow-hidden relative">
@@ -178,7 +180,7 @@ export default function ThankYouPage() {
               </div>
             </div>
             
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 print:hidden">
               <Link className="flex-1 text-center bg-on-surface text-lemon-chiffon py-4 px-8 uppercase font-headline-md hover:bg-milano-red transition-colors shadow-[4px_4px_0px_0px_#a90e02]" href="/products">
                 Continue Shopping
               </Link>
