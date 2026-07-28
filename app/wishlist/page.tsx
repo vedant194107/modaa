@@ -6,10 +6,19 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import { getWishlist, toggleWishlistItem, WishlistItem } from "@/lib/wishlistHelper";
 import { addItemToCart } from "@/lib/cartHelper";
+import { formatPrice, getActiveCurrency, CurrencyCode } from "@/lib/currencyHelper";
 
 export default function WishlistPage() {
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
   const [wishlistCount, setWishlistCount] = useState(0);
+  const [currency, setCurrency] = useState<CurrencyCode>("INR");
+
+  useEffect(() => {
+    setCurrency(getActiveCurrency());
+    const handleCurr = (e: any) => setCurrency(e.detail || getActiveCurrency());
+    window.addEventListener("currency-updated", handleCurr);
+    return () => window.removeEventListener("currency-updated", handleCurr);
+  }, []);
 
   useEffect(() => {
     const items = getWishlist();
@@ -164,7 +173,7 @@ export default function WishlistPage() {
                         <h3 className="font-label-bold text-xs sm:text-sm uppercase leading-tight truncate">{item.title}</h3>
                         <div className="flex justify-between items-center">
                           <span className="font-headline-md text-xs sm:text-base text-milano-red">
-                            {typeof item.price === "number" ? `$${item.price.toFixed(2)}` : item.price}
+                            {typeof item.price === "number" ? formatPrice(item.price, currency) : formatPrice(parseFloat(String(item.price).replace(/[^0-9.]/g, '')), currency)}
                           </span>
                           <button
                             onClick={() => handleMoveToBag(item)}

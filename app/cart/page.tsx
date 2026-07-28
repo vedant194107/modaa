@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { addItemToCart, getActiveCartItems, saveActiveCartItems } from "@/lib/cartHelper";
 import { getAuthUser } from "@/lib/authHelper";
+import { formatPrice, getActiveCurrency, CurrencyCode } from "@/lib/currencyHelper";
 
 const defaultInitialCart = [
   {
@@ -31,6 +32,14 @@ const defaultInitialCart = [
 export default function CartPage() {
   const router = useRouter();
   const [cartItems, setCartItems] = useState<any[]>([]);
+  const [currency, setCurrency] = useState<CurrencyCode>("INR");
+
+  useEffect(() => {
+    setCurrency(getActiveCurrency());
+    const handleCurr = (e: any) => setCurrency(e.detail || getActiveCurrency());
+    window.addEventListener("currency-updated", handleCurr);
+    return () => window.removeEventListener("currency-updated", handleCurr);
+  }, []);
 
   const handleCheckoutClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -204,12 +213,12 @@ export default function CartPage() {
                 <div className="flex justify-between font-label-bold uppercase">
                   <span>Shipping</span>
                   <span className="text-on-surface/60 text-xs font-bold">
-                    {subtotal >= 500 ? "FREE EXPRESS" : subtotal > 0 ? "$15.00" : "$0.00"}
+                    {subtotal >= 500 ? "FREE EXPRESS" : subtotal > 0 ? formatPrice(15, currency) : formatPrice(0, currency)}
                   </span>
                 </div>
                 <div className="flex justify-between font-label-bold uppercase">
                   <span>Tax</span>
-                  <span>$0.00</span>
+                  <span>{formatPrice(0, currency)}</span>
                 </div>
               </div>
 
@@ -271,7 +280,7 @@ export default function CartPage() {
               <div className="flex justify-between items-start pt-2 border-t-2 border-on-surface/20">
                 <div>
                   <h4 className="font-label-bold text-sm sm:text-base uppercase leading-tight">Logo Crew Socks</h4>
-                  <p className="font-headline-md text-milano-red text-sm sm:text-base mt-0.5">$22.00</p>
+                  <p className="font-headline-md text-milano-red text-sm sm:text-base mt-0.5">{formatPrice(22, currency)}</p>
                 </div>
               </div>
             </div>
@@ -303,7 +312,7 @@ export default function CartPage() {
               <div className="flex justify-between items-start pt-2 border-t-2 border-on-surface/20">
                 <div>
                   <h4 className="font-label-bold text-sm sm:text-base uppercase leading-tight">Tactical Keychain</h4>
-                  <p className="font-headline-md text-milano-red text-sm sm:text-base mt-0.5">$35.00</p>
+                  <p className="font-headline-md text-milano-red text-sm sm:text-base mt-0.5">{formatPrice(35, currency)}</p>
                 </div>
               </div>
             </div>
@@ -335,7 +344,7 @@ export default function CartPage() {
               <div className="flex justify-between items-start pt-2 border-t-2 border-on-surface/20">
                 <div>
                   <h4 className="font-label-bold text-sm sm:text-base uppercase leading-tight">Ribbed Wool Beanie</h4>
-                  <p className="font-headline-md text-milano-red text-sm sm:text-base mt-0.5">$45.00</p>
+                  <p className="font-headline-md text-milano-red text-sm sm:text-base mt-0.5">{formatPrice(45, currency)}</p>
                 </div>
               </div>
             </div>

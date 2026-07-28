@@ -208,7 +208,7 @@ export default function AdminOrdersPage() {
                         </td>
                         <td className="p-4 font-label-bold text-xs text-on-surface/60">{ord.created_at}</td>
                         <td className="p-4 font-headline-md uppercase">{parseItemsSummary(ord.items_json)}</td>
-                        <td className="p-4 font-headline-md text-milano-red">${Number(ord.total).toFixed(2)}</td>
+                        <td className="p-4 font-headline-md text-milano-red">₹{Number(ord.total).toFixed(2)}</td>
                         <td className="p-4">
                           <span className={`px-2.5 py-1 font-label-bold text-[10px] uppercase ${
                             ord.status === "DELIVERED" ? "bg-green-700 text-lemon-chiffon" : "bg-milano-red text-lemon-chiffon"

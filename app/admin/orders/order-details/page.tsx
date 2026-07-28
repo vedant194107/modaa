@@ -354,14 +354,14 @@ function AdminOrderDetailsContent() {
                             <span>COLOR: {item.color || "BLACK"}</span>
                           </div>
                           <p className="font-label-bold text-xs text-milano-red uppercase mt-1">
-                            QTY: {item.quantity || item.qty || 1} × ${Number(item.price || 0).toFixed(2)}
+                            QTY: {item.quantity || item.qty || 1} × ₹{Number(item.price || 0).toFixed(2)}
                           </p>
                         </div>
                       </div>
 
                       <div className="text-right sm:self-center">
                         <span className="font-headline-md text-lg text-on-surface">
-                          ${((Number(item.price) || 0) * (item.quantity || item.qty || 1)).toFixed(2)}
+                          ₹{((Number(item.price) || 0) * (item.quantity || item.qty || 1)).toFixed(2)}
                         </span>
                       </div>
                     </div>
@@ -436,17 +436,17 @@ function AdminOrderDetailsContent() {
                   <div className="space-y-2 font-label-bold text-xs uppercase border-b-2 border-on-surface/20 pb-4">
                     <div className="flex justify-between">
                       <span className="opacity-60">Subtotal</span>
-                      <span>${subtotal.toFixed(2)}</span>
+                      <span>₹{subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="opacity-60">Shipping Charges</span>
-                      <span>{shippingFee === 0 ? "FREE" : `$${shippingFee.toFixed(2)}`}</span>
+                      <span>{shippingFee === 0 ? "FREE" : `₹${shippingFee.toFixed(2)}`}</span>
                     </div>
                   </div>
 
                   <div className="flex justify-between items-baseline pt-1">
                     <span className="font-headline-md text-base uppercase">GRAND TOTAL</span>
-                    <span className="font-headline-md text-2xl text-milano-red">${grandTotal.toFixed(2)}</span>
+                    <span className="font-headline-md text-2xl text-milano-red">₹{grandTotal.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

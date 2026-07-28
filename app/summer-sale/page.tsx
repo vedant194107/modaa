@@ -1,7 +1,21 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import Footer from "@/components/Footer";
+import { formatPrice, getActiveCurrency, CurrencyCode } from "@/lib/currencyHelper";
 
 export default function SummerSalePage() {
+  const [currency, setCurrency] = useState<CurrencyCode>("INR");
+
+  useEffect(() => {
+    setCurrency(getActiveCurrency());
+    const handleCurr = (e: any) => setCurrency(e.detail || getActiveCurrency());
+    window.addEventListener("currency-updated", handleCurr);
+    return () => window.removeEventListener("currency-updated", handleCurr);
+  }, []);
+
   return (
     <div className="w-full min-h-screen">
       
@@ -38,8 +52,8 @@ export default function SummerSalePage() {
 <h3 className="font-headline-md text-headline-md uppercase mt-1">Struktur Crossbody</h3>
 </div>
 <p className="font-body-md text-body-md">
-<span className="text-primary font-bold">$180</span>
-<span className="line-through text-on-surface/40 ml-2">$300</span>
+<span className="text-primary font-bold">{formatPrice(180, currency)}</span>
+<span className="line-through text-on-surface/40 ml-2">{formatPrice(300, currency)}</span>
 </p>
 </div>
 </div>
@@ -57,8 +71,8 @@ export default function SummerSalePage() {
 <h3 className="font-headline-md text-headline-md uppercase mt-1">Graphic Box Tee</h3>
 </div>
 <p className="font-body-md text-body-md">
-<span className="text-primary font-bold">$45</span>
-<span className="line-through text-on-surface/40 ml-2">$90</span>
+<span className="text-primary font-bold">{formatPrice(45, currency)}</span>
+<span className="line-through text-on-surface/40 ml-2">{formatPrice(90, currency)}</span>
 </p>
 </div>
 </div>
@@ -85,8 +99,8 @@ export default function SummerSalePage() {
 <h3 className="font-headline-md text-headline-md uppercase mt-1">Vektor Runner</h3>
 </div>
 <p className="font-body-md text-body-md">
-<span className="text-primary font-bold">$210</span>
-<span className="line-through text-on-surface/40 ml-2">$300</span>
+<span className="text-primary font-bold">{formatPrice(210, currency)}</span>
+<span className="line-through text-on-surface/40 ml-2">{formatPrice(300, currency)}</span>
 </p>
 </div>
 </div>
@@ -104,8 +118,8 @@ export default function SummerSalePage() {
 <h3 className="font-headline-md text-headline-md uppercase mt-1">Chrono Red Dial</h3>
 </div>
 <p className="font-body-md text-body-md">
-<span className="text-primary font-bold">$480</span>
-<span className="line-through text-on-surface/40 ml-2">$600</span>
+<span className="text-primary font-bold">{formatPrice(480, currency)}</span>
+<span className="line-through text-on-surface/40 ml-2">{formatPrice(600, currency)}</span>
 </p>
 </div>
 </div>
@@ -123,8 +137,8 @@ export default function SummerSalePage() {
 <h3 className="font-headline-md text-headline-md uppercase mt-1">Canvas Field Jacket</h3>
 </div>
 <p className="font-body-md text-body-md">
-<span className="text-primary font-bold">$140</span>
-<span className="line-through text-on-surface/40 ml-2">$350</span>
+<span className="text-primary font-bold">{formatPrice(140, currency)}</span>
+<span className="line-through text-on-surface/40 ml-2">{formatPrice(350, currency)}</span>
 </p>
 </div>
 </div>

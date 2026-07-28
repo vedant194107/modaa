@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import { formatPrice, getActiveCurrency, CurrencyCode } from "@/lib/currencyHelper";
 
 const HERO_SLIDES = [
   {
@@ -20,7 +21,7 @@ const HERO_SLIDES = [
     link: "/product-detail?id=prod_1784982567628",
     productName: "MILANO RED PUFFER JACKET",
     category: "OUTERWEAR",
-    price: "$245.00",
+    price: 245,
   },
   {
     id: "slide_2",
@@ -36,7 +37,7 @@ const HERO_SLIDES = [
     link: "/product-detail?id=prod_2",
     productName: "ARCHITECT CARGO SYSTEM",
     category: "PANTS",
-    price: "$180.00",
+    price: 180,
   },
   {
     id: "slide_3",
@@ -52,13 +53,21 @@ const HERO_SLIDES = [
     link: "/product-detail?id=prod_3",
     productName: "CORE 500GSM HOODIE",
     category: "TOPS",
-    price: "$155.00",
+    price: 155,
   },
 ];
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [currency, setCurrency] = useState<CurrencyCode>("INR");
+
+  useEffect(() => {
+    setCurrency(getActiveCurrency());
+    const handleCurr = (e: any) => setCurrency(e.detail || getActiveCurrency());
+    window.addEventListener("currency-updated", handleCurr);
+    return () => window.removeEventListener("currency-updated", handleCurr);
+  }, []);
 
   // Auto-advance slides every 4 seconds unless hovered
   useEffect(() => {
@@ -106,9 +115,9 @@ export default function HomePage() {
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
               <Link
                 href={slide.link}
-                className={`text-center py-4 px-10 font-headline-md text-base uppercase tracking-widest border-2 border-on-surface shadow-[4px_4px_0px_0px_#000] transition-all duration-200 cursor-pointer ${slide.btnStyle}`}
+                className={`inline-block font-label-bold uppercase tracking-widest text-xs sm:text-sm py-3 sm:py-4 px-6 sm:px-8 transition-all ${slide.btnStyle} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]`}
               >
-                EXPLORE PIECE →
+                SHOP NOW — {formatPrice(slide.price, currency)}
               </Link>
               <Link
                 href="/products"
@@ -223,7 +232,7 @@ export default function HomePage() {
               </div>
               <div className="pt-2 border-t-2 border-on-surface">
                 <h3 className="font-label-bold text-xs sm:text-label-bold uppercase truncate">ARCHIVE HOODIE / BLK</h3>
-                <p className="font-body-md text-xs sm:text-body-md opacity-70">$185.00</p>
+                <p className="font-body-md text-xs sm:text-body-md opacity-70">{formatPrice(185, currency)}</p>
               </div>
             </div>
 
@@ -236,7 +245,7 @@ export default function HomePage() {
               </div>
               <div className="pt-2 border-t-2 border-on-surface">
                 <h3 className="font-label-bold text-xs sm:text-label-bold uppercase truncate">TACTICAL PANT 02</h3>
-                <p className="font-body-md text-xs sm:text-body-md opacity-70">$240.00</p>
+                <p className="font-body-md text-xs sm:text-body-md opacity-70">{formatPrice(240, currency)}</p>
               </div>
             </div>
 
@@ -249,7 +258,7 @@ export default function HomePage() {
               </div>
               <div className="pt-2 border-t-2 border-on-surface">
                 <h3 className="font-label-bold text-xs sm:text-label-bold uppercase truncate">GRAPHIC TEE / RED</h3>
-                <p className="font-body-md text-xs sm:text-body-md opacity-70">$75.00</p>
+                <p className="font-body-md text-xs sm:text-body-md opacity-70">{formatPrice(75, currency)}</p>
               </div>
             </div>
 
@@ -262,7 +271,7 @@ export default function HomePage() {
               </div>
               <div className="pt-2 border-t-2 border-on-surface">
                 <h3 className="font-label-bold text-xs sm:text-label-bold uppercase truncate">TECH SLING / 01</h3>
-                <p className="font-body-md text-xs sm:text-body-md opacity-70">$130.00</p>
+                <p className="font-body-md text-xs sm:text-body-md opacity-70">{formatPrice(130, currency)}</p>
               </div>
             </div>
           </div>

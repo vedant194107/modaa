@@ -562,7 +562,7 @@ function ViewProductContent() {
                       </h4>
                       <div className="flex justify-between items-baseline mt-1">
                         <span className="text-milano-red font-headline-md text-xl">
-                          ${price ? parseFloat(price).toFixed(2) : "0.00"}
+                          ₹{price ? parseFloat(price).toFixed(2) : "0.00"}
                         </span>
                         <span className="font-label-bold text-xs opacity-60 uppercase">
                           Stock: {stock}

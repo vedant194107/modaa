@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getAuthUser, logoutUser, UserSession } from "@/lib/authHelper";
 import { getWishlist } from "@/lib/wishlistHelper";
+import { formatPrice, getActiveCurrency, CurrencyCode } from "@/lib/currencyHelper";
 
 export default function AccountPage() {
   const router = useRouter();
@@ -15,6 +16,14 @@ export default function AccountPage() {
   const [authUser, setAuthUser] = useState<UserSession | null>(null);
   const [userStatus, setUserStatus] = useState<string>("active");
   const [loadingOrders, setLoadingOrders] = useState(true);
+  const [currency, setCurrency] = useState<CurrencyCode>("INR");
+
+  useEffect(() => {
+    setCurrency(getActiveCurrency());
+    const handleCurr = (e: any) => setCurrency(e.detail || getActiveCurrency());
+    window.addEventListener("currency-updated", handleCurr);
+    return () => window.removeEventListener("currency-updated", handleCurr);
+  }, []);
 
   useEffect(() => {
     const user = getAuthUser();
@@ -258,9 +267,10 @@ export default function AccountPage() {
                               <span className="font-label-bold text-xs uppercase text-on-surface/70">
                                 {order.orderNumber || order.id}
                               </span>
+                              <span className="font-label-bold text-xs sm:text-sm uppercase tracking-wider opacity-60">Total Amount</span>
                             </div>
-                            <span className="font-headline-md text-base sm:text-xl text-milano-red font-bold">
-                              ${(order.total || 0).toFixed(2)}
+                            <span className="font-headline-md text-base sm:text-lg">
+                              {formatPrice(order.total || 0, currency)}
                             </span>
                           </div>
 
