@@ -93,7 +93,37 @@ const config: Config = {
         "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
         "display-xl-mobile": ["72px", { lineHeight: "64px", letterSpacing: "-0.01em", fontWeight: "400" }],
         "display-xl": ["120px", { lineHeight: "100px", letterSpacing: "-0.02em", fontWeight: "400" }]
-      }
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        slideDrawer: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        slideDrawerOut: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        fadeInBackdrop: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeOutBackdrop: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+      },
+      animation: {
+        marquee: 'marquee 15s linear infinite',
+        'spin-slow': 'spin 8s linear infinite',
+        'slide-drawer': 'slideDrawer 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'slide-drawer-out': 'slideDrawerOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'fade-in-backdrop': 'fadeInBackdrop 0.4s ease-out forwards',
+        'fade-out-backdrop': 'fadeOutBackdrop 0.3s ease-out forwards',
+      },
     },
   },
   plugins: [],

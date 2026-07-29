@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import CustomCursor from "@/components/CustomCursor";
 
 export const metadata: Metadata = {
   title: "THE DROP | Editorial Streetwear",
@@ -26,6 +27,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-background text-on-background font-body-md overflow-x-hidden print:overflow-visible">
+        <CustomCursor />
         {children}
       </body>
     </html>

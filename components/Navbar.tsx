@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -32,6 +32,8 @@ export default function Navbar() {
   const [cartCount, setCartCount] = useState<number>(2);
   const [authUser, setAuthUser] = useState<UserSession | null>(null);
   const [currentCurrency, setCurrentCurrency] = useState<CurrencyCode>("USD");
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const quickSearchTags = ["DENIM", "HOODIES", "OUTERWEAR", "CARGO", "PANTS", "ACCESSORIES"];
 
@@ -51,6 +53,28 @@ export default function Navbar() {
     setIsSearchClosing(false);
     setIsMiniCartOpen(false);
   }, [pathname]);
+
+  
+  useEffect(() => {
+    if (!audioRef.current) {
+      const audio = new Audio("https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=dark-ambient-drone-99443.mp3");
+      audio.loop = true;
+      audio.volume = 0.2;
+      audioRef.current = audio;
+    }
+  }, []);
+
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isAudioPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(e => console.log("Audio play blocked by browser", e));
+      }
+      setIsAudioPlaying(!isAudioPlaying);
+    }
+  };
+
 
   const toggleSearch = () => {
     if (isSearchOpen) {
@@ -222,6 +246,14 @@ export default function Navbar() {
           {/* Right Icons: Currency Switcher, Search, Account, Cart */}
           <div className="flex items-center gap-3 sm:gap-5">
             {/* Multi-Currency Switcher Dropdown */}
+            <button 
+              onClick={toggleAudio}
+              className="hidden sm:flex items-center gap-1 font-label-bold text-[10px] sm:text-xs uppercase border-2 border-on-surface bg-surface-container text-on-surface px-2 py-1 cursor-pointer tracking-wider hover:bg-on-surface hover:text-lemon-chiffon transition-colors mr-2"
+              aria-label="Toggle Audio"
+            >
+              SOUND [{isAudioPlaying ? 'ON' : 'OFF'}]
+            </button>
+
             <select
               value={currentCurrency}
               onChange={(e) => setActiveCurrency(e.target.value as CurrencyCode)}

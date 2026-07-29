@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import Preloader from "@/components/Preloader";
 import { formatPrice, getActiveCurrency, CurrencyCode } from "@/lib/currencyHelper";
 
 const HERO_SLIDES = [
@@ -61,274 +62,663 @@ export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [currency, setCurrency] = useState<CurrencyCode>("INR");
+  const [scrollY, setScrollY] = useState(0);
+  const revealRef = useRef<HTMLElement>(null);
+  const [revealProgress, setRevealProgress] = useState(0);
+  const lookbookRef = useRef<HTMLElement>(null);
+  const [lookbookProgress, setLookbookProgress] = useState(0);
+  const heroRef = useRef<HTMLElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [currentArrivalSlide, setCurrentArrivalSlide] = useState(0);
+  const [arrivalTouchStart, setArrivalTouchStart] = useState<number | null>(null);
+  const [isArrivalDragging, setIsArrivalDragging] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+const [touchStart, setTouchStart] = useState<number | null>(null);
+
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Preload sticky scroll animation frames
+  useEffect(() => {
+    // We delay the preload slightly so it doesn't block initial page load
+    const timer = setTimeout(() => {
+      for (let i = 1; i <= 270; i++) {
+        const img = new window.Image();
+        img.src = `/men_sequence/ezgif-frame-${String(i).padStart(3, '0')}.jpg`;
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     setCurrency(getActiveCurrency());
     const handleCurr = (e: any) => setCurrency(e.detail || getActiveCurrency());
     window.addEventListener("currency-updated", handleCurr);
-    return () => window.removeEventListener("currency-updated", handleCurr);
+    
+return () => window.removeEventListener("currency-updated", handleCurr);
   }, []);
 
-  // Auto-advance slides every 4 seconds unless hovered
+
+  useEffect(() => {
+    const handleScroll = () => {
+      
+      setScrollY(window.scrollY);
+      if (revealRef.current) {
+        const rect = revealRef.current.getBoundingClientRect();
+        if (rect.top <= 0) {
+          const progress = Math.min(1, -rect.top / window.innerHeight);
+          setRevealProgress(progress);
+        } else {
+          setRevealProgress(0);
+        }
+      }
+
+      if (lookbookRef.current) {
+        const rect = lookbookRef.current.getBoundingClientRect();
+        if (rect.top <= 0 && rect.bottom >= window.innerHeight) {
+          const progress = Math.min(1, Math.max(0, -rect.top / (rect.height - window.innerHeight)));
+          setLookbookProgress(progress);
+        } else if (rect.top > 0) {
+          setLookbookProgress(0);
+        } else if (rect.bottom < window.innerHeight) {
+          setLookbookProgress(1);
+        }
+      }
+
+
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Auto-advance slides every 5 seconds unless hovered
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(timer);
   }, [isPaused]);
 
   const slide = HERO_SLIDES[currentSlide];
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!heroRef.current) return;
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    const x = (clientX / innerWidth) * 2 - 1;
+    const y = (clientY / innerHeight) * 2 - 1;
+    setMousePos({ x, y });
+  };
+
+  const [isHeroDragging, setIsHeroDragging] = useState(false);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    setIsHeroDragging(true);
+    setTouchStart(e.clientX);
+    setIsPaused(true);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    setIsHeroDragging(false);
+    if (touchStart === null) return;
+    const diff = touchStart - e.clientX;
+    
+    if (diff > 50) {
+      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    } else if (diff < -50) {
+      setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+    }
+    setTouchStart(null);
+    setIsPaused(false);
+  };
+
+  const handlePointerLeave = (e: React.PointerEvent) => {
+    if (isHeroDragging) {
+      handlePointerUp(e);
+    }
+  };
+
+  const NEW_ARRIVALS = [
+    { id: 'prod_1', title: 'ARCHIVE HOODIE / BLK', price: 185, cat: 'OUTERWEAR', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAMnaLnndF_wvRegzRbqWvrUQZ470GWCkFs_iCTTyXU-zATGX5IOJl2yKSgAa8Q6s78IrzlaPcNWYJW37ImRj8wONeKwjOPKaiGXCyx9yJsrq4qhhXAD_P-VUV-XFcIF1cTCLyNQ88sKtK0vCXe4RQScs2AByo2wUa2tmhlX_CnQcpeRZDUGVIQkW6X7e1iXkCrv69P4cQg5HQUaA671PeJLB7OyRda-E2-Cdi7lF6QGGraPhIqluhCD3PKGeU0mQH_whyw3HOD7ro' },
+    { id: 'prod_2', title: 'TACTICAL PANT 02', price: 240, cat: 'BOTTOMS', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDttnpXadaa46-oxQNQSH17C1Mf46Pdm_xTRrTCufhocwbzysLEJAMwaktgNSequZEN0IAM36LmZdW-mhJj4y_2ZkmvsaAnw2K1Qq3HXRHVQfMy1NjqxI26G7n3jaQWrQvZvxXAIxX-nadn4mJGHj6Xzbfp6lwiUS8fGN_N1MfB3cHUKS5qQTZ0soX8540QCjOEFEpzGudvIgP7_RhzbkvYLtuY7mlK_2Xg3V4j5dtTmdPfNJgnDrqbJI_ZOELGwWGCd5VcdZmuHLI' },
+    { id: 'prod_3', title: 'GRAPHIC TEE / RED', price: 75, cat: 'TOPS', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAqBXdrJO3-EFMJCE6sbxxP41wzr3xX7pN6BKhteHRo31X-0oOV6PjO2iDitxmHh132-dZQ0rE-Pf-aGtuhsVogJSfE3GYjuCHhOf57uDv6h06-NKhkwg8_-8_BTNo5axg6dX1iu-CKYY65esVx36vtQJ8u7b2IjaWimtABgQE6gz0aHOziSiIBLrzG0MP1-oAN_Jx9XzLEReWYrFLZwwmqGGSMbzbR8qQULP8P3iygBSWRjaTJT5K9ZwfkgSynfPbr0qFZ69BebJs' },
+    { id: 'prod_4', title: 'TECH SLING / 01', price: 130, cat: 'ACCESSORIES', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCYZY7z2ZrxeLdlhYfAoaTtUm-tsH2pQ6C65MW36Q_Dny63WBlpUgSs7N-sZA_CnCsv0Xzgct-8rxBbquXRrJiVOJxRQ4KujwoqMXEoPlTKCxxGEXrvsVMoing9XBPiMhUpcYjgyxhmSPvC8mXqeslzyGyr-WOI6O0UlD0Wl64LyILJ8HOIetR_C6FmGdD3PIHPwBx37Rs0hXeLkDuXxNkP8KbOICK042ADdBCHl9-tGhefIBUqImwFumqQ5JAwc--ZXDWU_xzLAXo' }
+  ];
+
+  const handleArrivalPointerDown = (e: React.PointerEvent) => {
+    setIsArrivalDragging(true);
+    setArrivalTouchStart(e.clientX);
+  };
+
+  const handleArrivalPointerUp = (e: React.PointerEvent) => {
+    setIsArrivalDragging(false);
+    if (arrivalTouchStart === null) return;
+    const diff = arrivalTouchStart - e.clientX;
+    
+    if (diff > 50) {
+      setCurrentArrivalSlide((prev) => Math.min(prev + 1, NEW_ARRIVALS.length - 1));
+    } else if (diff < -50) {
+      setCurrentArrivalSlide((prev) => Math.max(prev - 1, 0));
+    }
+    setArrivalTouchStart(null);
+  };
+
+  const handleArrivalPointerLeave = (e: React.PointerEvent) => {
+    if (isArrivalDragging) {
+      handleArrivalPointerUp(e);
+    }
+  };
+
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen bg-background">
+      <Preloader />
       {/* TopNavBar */}
       <Navbar />
 
-      {/* ── ANIMATED DYNAMIC HERO REEL SECTION ── */}
+      {/* ── THE ULTIMATE EDITORIAL PARALLAX HERO ── */}
       <section
+        ref={heroRef}
         onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        className={`relative min-h-[650px] sm:min-h-[750px] md:min-h-[850px] flex items-center overflow-hidden py-12 sm:py-16 transition-colors duration-700 ${slide.bg}`}
+        onMouseLeave={() => { setIsPaused(false); setMousePos({ x: 0, y: 0 }); }}
+        onMouseMove={handleMouseMove}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerLeave}
+        className={`relative w-full h-[calc(100vh-64px)] min-h-[550px] overflow-hidden transition-colors duration-1000 ${slide.bg} flex items-center justify-center select-none touch-pan-y`}
+        style={{ perspective: '1500px' }}
       >
-        {/* Subtle Noise / Grid Pattern Overlay */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        {/* Background Noise and Texture */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#000_2px,transparent_2px)] [background-size:24px_24px] mix-blend-overlay z-0"></div>
 
-        <div className="relative z-10 w-full max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        {/* Dynamic Background Typography - Parallax Layer 1 */}
+        <div 
+          className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04] font-display-xl whitespace-nowrap overflow-hidden z-0"
+          style={{ 
+              transform: `translate(${-mousePos.x * 60}px, ${-mousePos.y * 60}px)`,
+              transition: 'transform 0.2s ease-out'
+          }}
+        >
+          <span className="text-[300px] md:text-[500px] leading-none tracking-tighter">
+            {slide.titleLine1}
+          </span>
+        </div>
+
+        <div className="relative z-10 w-full max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop h-full flex flex-col md:flex-row items-center justify-between gap-8 md:gap-0">
           
-          {/* Left Column: Hero Text Content */}
-          <div className="md:col-span-6 space-y-6 animate-fadeIn">
-            <span className="font-label-bold text-xs uppercase tracking-widest px-3 py-1 bg-on-surface text-lemon-chiffon inline-block border border-on-surface font-bold shadow-[2px_2px_0px_0px_#a90e02]">
-              {slide.tag}
-            </span>
+          {/* Left: Huge Typography & CTA - Parallax Layer 2 */}
+          <div 
+            className="w-full md:w-1/2 space-y-6 md:space-y-8 z-20 pt-20 md:pt-0"
+            style={{ 
+              transform: `rotateY(${mousePos.x * 8}deg) rotateX(${-mousePos.y * 8}deg) translateZ(30px)`,
+              transition: 'transform 0.15s ease-out'
+            }}
+          >
+            <div className="inline-flex items-center gap-3 bg-black text-white px-4 py-2 border border-white/20 backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-milano-red animate-pulse"></span>
+              <span className="font-label-bold text-xs sm:text-sm uppercase tracking-[0.2em]">
+                {slide.tag}
+              </span>
+            </div>
 
-            <h1 className="font-display-xl text-5xl sm:text-7xl md:text-8xl uppercase leading-[0.88] tracking-tight drop-shadow-md">
-              {slide.titleLine1}<br />
-              {slide.titleLine2}<br />
-              <span className="text-amber-300 underline decoration-milano-red underline-offset-8">{slide.titleLine3}</span>
+            <h1 className="font-display-xl text-7xl sm:text-8xl md:text-[150px] uppercase leading-[0.8] tracking-tighter text-white">
+              <span className="block drop-shadow-2xl">{slide.titleLine1}</span>
+              <span className="block text-transparent [-webkit-text-stroke:2px_#ffffff] md:[-webkit-text-stroke:3px_#ffffff]">{slide.titleLine2}</span>
+              <span className="block drop-shadow-2xl text-milano-red">{slide.titleLine3}</span>
             </h1>
 
-            <p className="font-body-lg text-sm sm:text-base md:text-lg max-w-md opacity-90 leading-relaxed font-medium">
+            <p className="font-body-lg text-lg md:text-xl max-w-md leading-relaxed font-medium text-white/90 border-l-4 border-milano-red pl-4">
               {slide.desc}
             </p>
 
-            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <div className="pt-4">
               <Link
                 href={slide.link}
-                className={`inline-block font-label-bold uppercase tracking-widest text-xs sm:text-sm py-3 sm:py-4 px-6 sm:px-8 transition-all ${slide.btnStyle} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]`}
+                className="group relative inline-flex items-center justify-center font-label-bold text-sm md:text-base tracking-[0.2em] py-4 px-10 uppercase bg-white text-black overflow-hidden transition-transform hover:scale-105 active:scale-95"
               >
-                SHOP NOW — {formatPrice(slide.price, currency)}
-              </Link>
-              <Link
-                href="/products"
-                className="text-center py-4 px-8 font-label-bold text-xs uppercase tracking-widest border-2 border-on-surface bg-lemon-chiffon text-on-surface hover:bg-on-surface hover:text-lemon-chiffon transition-colors font-bold"
-              >
-                VIEW FULL CATALOG
+                <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
+                  SHOP {formatPrice(slide.price, currency)}
+                </span>
+                <div className="absolute inset-0 bg-milano-red -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-in-out"></div>
               </Link>
             </div>
           </div>
 
-          {/* Right Column: Animated Dual-Layer Image Carousel */}
-          <div className="md:col-span-6 relative h-[360px] sm:h-[480px] md:h-[580px] flex items-center justify-center">
+          {/* Right: Immersive Images - Parallax Layer 3 */}
+          <div className="w-full md:w-1/2 relative h-[50vh] md:h-[80vh] flex items-center justify-center z-10 mt-8 md:mt-0 pointer-events-none">
             
-            {/* Background Secondary Image Card (Sliding Parallax Layer) */}
-            <div className="absolute top-4 left-0 w-2/3 h-3/4 z-10 border-4 border-on-surface overflow-hidden shadow-[8px_8px_0px_0px_#000] transition-all duration-700 transform hover:rotate-1">
-              <Link href={slide.link} className="block w-full h-full">
+            {/* Secondary Image - Background Floating */}
+            <div 
+              className="absolute w-[50%] md:w-[55%] h-[60%] md:h-[55%] z-10 shadow-2xl left-0 md:-left-10 bottom-10 md:bottom-20 pointer-events-auto"
+              style={{ 
+                transform: `translate(${-mousePos.x * 40}px, ${-mousePos.y * 40}px) rotate(${-mousePos.x * 5}deg)`,
+                transition: 'transform 0.2s ease-out'
+              }}
+            >
+              <Link href={slide.link} className="block w-full h-full overflow-hidden border border-white/10 group">
                 <img
                   key={`sec-${slide.id}`}
                   src={slide.imgSecondary}
-                  alt={slide.productName}
-                  className="w-full h-full object-cover animate-fadeIn scale-100 hover:scale-110 transition-transform duration-700"
+                  alt=""
+                  className="w-full h-full object-cover filter brightness-75 group-hover:brightness-100 group-hover:scale-110 transition-all duration-700"
                 />
               </Link>
-              <span className="absolute top-2 left-2 bg-milano-red text-lemon-chiffon font-label-bold text-[9px] px-2 py-0.5 uppercase tracking-wider">
-                ARCHIVE LOOKBOOK
-              </span>
             </div>
 
-            {/* Foreground Main Image Card (Interactive Focal Layer) */}
-            <div className="absolute bottom-4 right-0 w-3/4 h-4/5 z-20 border-4 border-on-surface overflow-hidden shadow-[12px_12px_0px_0px_#a90e02] transition-all duration-700 transform hover:-translate-y-2">
-              <Link href={slide.link} className="block w-full h-full group relative">
+            {/* Primary Image - Main Focus */}
+            <div 
+              className="absolute w-[70%] md:w-[65%] h-[80%] md:h-[75%] z-20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] right-0 top-0 md:top-10 pointer-events-auto"
+              style={{ 
+                transform: `translate(${mousePos.x * 30}px, ${mousePos.y * 30}px) rotate(${mousePos.x * 2}deg)`,
+                transition: 'transform 0.15s ease-out'
+              }}
+            >
+              <Link href={slide.link} className="block w-full h-full overflow-hidden group border-2 border-white/20">
                 <img
                   key={`main-${slide.id}`}
                   src={slide.imgMain}
                   alt={slide.productName}
-                  className="w-full h-full object-cover animate-fadeIn group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                
-                {/* Floating Telemetry Badge */}
-                <div className="absolute bottom-3 left-3 right-3 bg-lemon-chiffon/95 border-2 border-on-surface p-3 backdrop-blur-sm flex justify-between items-center text-on-surface">
-                  <div>
-                    <span className="font-label-bold text-[9px] uppercase tracking-widest text-milano-red font-bold block">{slide.category}</span>
-                    <p className="font-headline-md text-sm uppercase truncate font-bold">{slide.productName}</p>
-                  </div>
-                  <span className="font-display-xl text-lg text-milano-red">{slide.price}</span>
-                </div>
+                <div className="absolute inset-0 bg-milano-red/0 group-hover:bg-milano-red/10 transition-colors duration-500 mix-blend-overlay"></div>
               </Link>
+              
+              {/* Floating Product Name Badge */}
+              <div className="absolute -bottom-6 -left-6 bg-black text-white px-6 py-4 font-headline-md text-2xl tracking-wide shadow-xl border border-white/10 hidden md:block">
+                {slide.productName}
+              </div>
             </div>
+            
+            {/* Accent Elements */}
+            <div 
+              className="absolute top-[10%] right-[-5%] font-display-xl text-8xl text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.3)] z-0 pointer-events-none"
+              style={{ transform: `translate(${-mousePos.x * 20}px, ${mousePos.y * 20}px)` }}
+            >
+              00{currentSlide + 1}
+            </div>
+          </div>
+        </div>
 
-            {/* Carousel Navigation Arrow Controls (Floating on Desktop) */}
-            <div className="absolute bottom-2 left-2 z-30 flex items-center gap-2">
+        {/* Progress Bar & Controls */}
+        <div className="absolute bottom-0 w-full z-30 pointer-events-none">
+          <div className="max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop pb-6 flex items-end justify-end gap-12 pointer-events-auto">
+            <div className="flex gap-3">
+              {HERO_SLIDES.map((s, idx) => (
+                <button
+                  key={s.id}
+                  onClick={() => setCurrentSlide(idx)}
+                  className="group py-2 flex flex-col gap-2 cursor-pointer"
+                >
+                  <span className={`text-[10px] font-label-bold tracking-widest transition-colors ${
+                    currentSlide === idx 
+                      ? slide.bg.includes('bg-surface-container') ? 'text-black' : 'text-white' 
+                      : slide.bg.includes('bg-surface-container') ? 'text-black/40 group-hover:text-black/80' : 'text-white/40 group-hover:text-white/80'
+                  }`}>
+                    0{idx + 1}
+                  </span>
+                  <div className={`h-[2px] transition-all duration-300 ${
+                    currentSlide === idx 
+                      ? 'w-16 bg-milano-red' 
+                      : slide.bg.includes('bg-surface-container') ? 'w-8 bg-black/20 group-hover:bg-black/40' : 'w-8 bg-white/30 group-hover:bg-white/60'
+                  }`}></div>
+                </button>
+              ))}
+            </div>
+            
+            <div className="hidden md:flex gap-4">
               <button
-                type="button"
                 onClick={() => setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)}
-                className="w-10 h-10 border-2 border-on-surface bg-lemon-chiffon text-on-surface hover:bg-milano-red hover:text-lemon-chiffon flex items-center justify-center transition-colors shadow-[2px_2px_0px_0px_#000] cursor-pointer"
-                title="Previous Editorial Slide"
-              >
-                <span className="material-symbols-outlined text-xl">arrow_back</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)}
-                className="w-10 h-10 border-2 border-on-surface bg-lemon-chiffon text-on-surface hover:bg-milano-red hover:text-lemon-chiffon flex items-center justify-center transition-colors shadow-[2px_2px_0px_0px_#000] cursor-pointer"
-                title="Next Editorial Slide"
-              >
-                <span className="material-symbols-outlined text-xl">arrow_forward</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Dynamic Progress Indicator Dots & Bar at Bottom */}
-        <div className="absolute bottom-4 inset-x-0 z-20 max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {HERO_SLIDES.map((s, idx) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => setCurrentSlide(idx)}
-                className={`h-2.5 transition-all duration-300 border border-on-surface cursor-pointer ${
-                  currentSlide === idx ? "w-10 bg-amber-300" : "w-3 bg-lemon-chiffon/60 hover:bg-lemon-chiffon"
+                className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm ${
+                  slide.bg.includes('bg-surface-container')
+                    ? 'border-black/30 text-black hover:bg-black hover:text-white bg-white/20'
+                    : 'border-white/30 text-white hover:bg-white hover:text-black bg-black/20'
                 }`}
-                title={`Go to slide ${idx + 1}`}
-              />
-            ))}
+              >
+                <span className="material-symbols-outlined text-lg">arrow_back</span>
+              </button>
+              <button
+                onClick={() => setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)}
+                className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm ${
+                  slide.bg.includes('bg-surface-container')
+                    ? 'border-black/30 text-black hover:bg-black hover:text-white bg-white/20'
+                    : 'border-white/30 text-white hover:bg-white hover:text-black bg-black/20'
+                }`}
+              >
+                <span className="material-symbols-outlined text-lg">arrow_forward</span>
+              </button>
+            </div>
           </div>
-
-          <span className="font-label-bold text-[10px] uppercase tracking-widest bg-on-surface text-lemon-chiffon px-2.5 py-1 border border-on-surface">
-            {isPaused ? "PAUSED" : "AUTO-SWIPE ON"} ({currentSlide + 1} / {HERO_SLIDES.length})
-          </span>
+        </div>
+      </section>
+            
+      {/* ── KINETIC TYPOGRAPHY MANIFESTO ── */}
+      <section className="w-full bg-black text-lemon-chiffon py-24 md:py-40 overflow-hidden flex flex-col justify-center border-t-2 border-on-surface">
+        <div className="flex flex-col gap-4 whitespace-nowrap">
+          <div 
+            className="font-display-xl text-[100px] sm:text-[140px] md:text-[200px] leading-none uppercase tracking-tighter"
+            style={{ transform: `translateX(${-30 + (scrollY * 0.02)}vw)` }}
+          >
+            REDEFINING ARCHIVAL AESTHETICS • REDEFINING ARCHIVAL AESTHETICS • REDEFINING ARCHIVAL AESTHETICS
+          </div>
+          <div 
+            className="font-display-xl text-[100px] sm:text-[140px] md:text-[200px] leading-none uppercase tracking-tighter text-transparent [-webkit-text-stroke:2px_#FFFBD4]"
+            style={{ transform: `translateX(${-10 + (scrollY * -0.02)}vw)` }}
+          >
+            NO COMPROMISE • NO COMPROMISE • NO COMPROMISE • NO COMPROMISE • NO COMPROMISE
+          </div>
+          <div 
+            className="font-display-xl text-[100px] sm:text-[140px] md:text-[200px] leading-none uppercase tracking-tighter text-milano-red"
+            style={{ transform: `translateX(${-50 + (scrollY * 0.03)}vw)` }}
+          >
+            FW26 COLLECTION DROPS NOW • FW26 COLLECTION DROPS NOW • FW26 COLLECTION DROPS NOW
+          </div>
         </div>
       </section>
 
-      {/* New Arrivals Carousel */}
-      <section className="py-12 sm:py-16 md:py-section-gap bg-background">
-        <div className="max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop mb-8 sm:mb-12 flex justify-between items-end">
+      {/* ── 3D PARALLAX COVERFLOW CAROUSEL ── */}
+      <section className="bg-on-surface py-16 sm:py-24 md:py-32 overflow-hidden relative">
+        {/* Background Ambient Glow */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
+          <div className="w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] rounded-full bg-milano-red blur-[120px] mix-blend-screen transition-transform duration-1000" style={{ transform: `translateX(${(currentArrivalSlide - 1.5) * -20}vw)` }}></div>
+        </div>
+
+        <div className="max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop flex flex-col md:flex-row justify-between items-end mb-12 sm:mb-20 relative z-10">
           <div>
-            <span className="font-label-bold text-xs sm:text-label-bold text-primary uppercase tracking-widest">JUST ARRIVED</span>
-            <h2 className="font-headline-lg text-2xl sm:text-4xl md:text-headline-lg uppercase">NEW ARRIVALS</h2>
+            <span className="font-label-bold text-xs sm:text-label-bold text-lemon-chiffon uppercase tracking-widest block mb-2 opacity-70">JUST ARRIVED // 004</span>
+            <h2 className="font-display-xl text-5xl sm:text-7xl md:text-8xl lg:text-[120px] leading-none uppercase text-lemon-chiffon tracking-tighter">
+              NEW DROPS
+            </h2>
           </div>
-          <Link className="font-label-bold text-xs sm:text-label-bold underline hover:text-primary transition-colors" href="/products">VIEW ALL</Link>
-        </div>
-        <div className="max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop">
-          <div className="hide-scrollbar flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-gutter pb-6 sm:pb-12">
-            {/* Product Card 1 */}
-            <div className="snap-start flex-none w-[220px] sm:w-[300px] md:w-[400px] group cursor-pointer">
-              <div className="relative aspect-[3/4] overflow-hidden mb-3 sm:mb-4 border-2 border-on-surface">
-                <Link className="block cursor-pointer w-full h-full" href="/product-detail?id=prod_1">
-                  <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Archive Hoodie" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMnaLnndF_wvRegzRbqWvrUQZ470GWCkFs_iCTTyXU-zATGX5IOJl2yKSgAa8Q6s78IrzlaPcNWYJW37ImRj8wONeKwjOPKaiGXCyx9yJsrq4qhhXAD_P-VUV-XFcIF1cTCLyNQ88sKtK0vCXe4RQScs2AByo2wUa2tmhlX_CnQcpeRZDUGVIQkW6X7e1iXkCrv69P4cQg5HQUaA671PeJLB7OyRda-E2-Cdi7lF6QGGraPhIqluhCD3PKGeU0mQH_whyw3HOD7ro"/>
-                </Link>
-                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-primary text-white px-2.5 sm:px-3 py-1 font-label-bold text-[10px] sm:text-label-sm">SOLD OUT</div>
-              </div>
-              <div className="pt-2 border-t-2 border-on-surface">
-                <h3 className="font-label-bold text-xs sm:text-label-bold uppercase truncate">ARCHIVE HOODIE / BLK</h3>
-                <p className="font-body-md text-xs sm:text-body-md opacity-70">{formatPrice(185, currency)}</p>
-              </div>
-            </div>
-
-            {/* Product Card 2 */}
-            <div className="snap-start flex-none w-[220px] sm:w-[300px] md:w-[400px] group cursor-pointer">
-              <div className="relative aspect-[3/4] overflow-hidden mb-3 sm:mb-4 border-2 border-on-surface">
-                <Link className="block cursor-pointer w-full h-full" href="/product-detail?id=prod_2">
-                  <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Tactical Pant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDttnpXadaa46-oxQNQSH17C1Mf46Pdm_xTRrTCufhocwbzysLEJAMwaktgNSequZEN0IAM36LmZdW-mhJj4y_2ZkmvsaAnw2K1Qq3HXRHVQfMy1NjqxI26G7n3jaQWrQvZvxXAIxX-nadn4mJGHj6Xzbfp6lwiUS8fGN_N1MfB3cHUKS5qQTZ0soX8540QCjOEFEpzGudvIgP7_RhzbkvYLtuY7mlK_2Xg3V4j5dtTmdPfNJgnDrqbJI_ZOELGwWGCd5VcdZmuHLI"/>
-                </Link>
-              </div>
-              <div className="pt-2 border-t-2 border-on-surface">
-                <h3 className="font-label-bold text-xs sm:text-label-bold uppercase truncate">TACTICAL PANT 02</h3>
-                <p className="font-body-md text-xs sm:text-body-md opacity-70">{formatPrice(240, currency)}</p>
-              </div>
-            </div>
-
-            {/* Product Card 3 */}
-            <div className="snap-start flex-none w-[220px] sm:w-[300px] md:w-[400px] group cursor-pointer">
-              <div className="relative aspect-[3/4] overflow-hidden mb-3 sm:mb-4 border-2 border-on-surface">
-                <Link className="block cursor-pointer w-full h-full" href="/product-detail?id=prod_3">
-                  <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Graphic Tee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqBXdrJO3-EFMJCE6sbxxP41wzr3xX7pN6BKhteHRo31X-0oOV6PjO2iDitxmHh132-dZQ0rE-Pf-aGtuhsVogJSfE3GYjuCHhOf57uDv6h06-NKhkwg8_-8_BTNo5axg6dX1iu-CKYY65esVx36vtQJ8u7b2IjaWimtABgQE6gz0aHOziSiIBLrzG0MP1-oAN_Jx9XzLEReWYrFLZwwmqGGSMbzbR8qQULP8P3iygBSWRjaTJT5K9ZwfkgSynfPbr0qFZ69BebJs"/>
-                </Link>
-              </div>
-              <div className="pt-2 border-t-2 border-on-surface">
-                <h3 className="font-label-bold text-xs sm:text-label-bold uppercase truncate">GRAPHIC TEE / RED</h3>
-                <p className="font-body-md text-xs sm:text-body-md opacity-70">{formatPrice(75, currency)}</p>
-              </div>
-            </div>
-
-            {/* Product Card 4 */}
-            <div className="snap-start flex-none w-[220px] sm:w-[300px] md:w-[400px] group cursor-pointer">
-              <div className="relative aspect-[3/4] overflow-hidden mb-3 sm:mb-4 border-2 border-on-surface">
-                <Link className="block cursor-pointer w-full h-full" href="/product-detail?id=prod_4">
-                  <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Tech Sling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYZY7z2ZrxeLdlhYfAoaTtUm-tsH2pQ6C65MW36Q_Dny63WBlpUgSs7N-sZA_CnCsv0Xzgct-8rxBbquXRrJiVOJxRQ4KujwoqMXEoPlTKCxxGEXrvsVMoing9XBPiMhUpcYjgyxhmSPvC8mXqeslzyGyr-WOI6O0UlD0Wl64LyILJ8HOIetR_C6FmGdD3PIHPwBx37Rs0hXeLkDuXxNkP8KbOICK042ADdBCHl9-tGhefIBUqImwFumqQ5JAwc--ZXDWU_xzLAXo"/>
-                </Link>
-              </div>
-              <div className="pt-2 border-t-2 border-on-surface">
-                <h3 className="font-label-bold text-xs sm:text-label-bold uppercase truncate">TECH SLING / 01</h3>
-                <p className="font-body-md text-xs sm:text-body-md opacity-70">{formatPrice(130, currency)}</p>
-              </div>
-            </div>
+          <div className="flex gap-4 mt-6 md:mt-0">
+            <button
+              onClick={() => setCurrentArrivalSlide(prev => Math.max(prev - 1, 0))}
+              disabled={currentArrivalSlide === 0}
+              className="w-12 h-12 rounded-full border border-lemon-chiffon/30 flex items-center justify-center text-lemon-chiffon hover:bg-lemon-chiffon hover:text-on-surface transition-all disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-lemon-chiffon cursor-pointer backdrop-blur-sm"
+            >
+              <span className="material-symbols-outlined">arrow_back</span>
+            </button>
+            <button
+              onClick={() => setCurrentArrivalSlide(prev => Math.min(prev + 1, NEW_ARRIVALS.length - 1))}
+              disabled={currentArrivalSlide === NEW_ARRIVALS.length - 1}
+              className="w-12 h-12 rounded-full border border-lemon-chiffon/30 flex items-center justify-center text-lemon-chiffon hover:bg-lemon-chiffon hover:text-on-surface transition-all disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-lemon-chiffon cursor-pointer backdrop-blur-sm"
+            >
+              <span className="material-symbols-outlined">arrow_forward</span>
+            </button>
           </div>
         </div>
 
-        {/* Progress Bar Indicator */}
-        <div className="max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop">
-          <div className="w-full h-[2px] bg-surface-variant relative">
-            <div className="absolute left-0 top-0 h-full bg-on-surface w-1/4 transition-all duration-300" id="carousel-progress"></div>
+        {/* 3D Coverflow Container */}
+        <div 
+          className="relative w-full h-[500px] sm:h-[600px] md:h-[700px] flex items-center justify-center perspective-[1500px] select-none touch-pan-y"
+          onPointerDown={handleArrivalPointerDown}
+          onPointerUp={handleArrivalPointerUp}
+          onPointerLeave={handleArrivalPointerLeave}
+        >
+          {NEW_ARRIVALS.map((item, idx) => {
+            const diff = idx - currentArrivalSlide;
+            const absDiff = Math.abs(diff);
+            
+            // Calculate 3D transforms
+            const translateX = diff * (isMobile ? 60 : 120);
+            const translateZ = absDiff * -250;
+            const rotateY = diff * -25;
+            const opacity = 1 - absDiff * 0.3;
+            const zIndex = 50 - absDiff;
+            
+            return (
+              <div 
+                key={item.id}
+                onClick={() => {
+                  if (diff !== 0) setCurrentArrivalSlide(idx);
+                }}
+                className="absolute w-[280px] sm:w-[350px] md:w-[450px] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer group"
+                style={{
+                  transform: `translateX(${translateX}%) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
+                  opacity: opacity > 0 ? opacity : 0,
+                  zIndex,
+                  pointerEvents: absDiff > 2 ? 'none' : 'auto'
+                }}
+              >
+                <div className="relative aspect-[3/4] overflow-hidden rounded-sm shadow-2xl bg-surface-variant group-hover:shadow-[0_0_40px_rgba(169,14,2,0.15)] transition-shadow duration-500">
+                  <img 
+                    src={item.img} 
+                    alt={item.title}
+                    draggable={false}
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 select-none"
+                    style={{ transformOrigin: 'center' }}
+                  />
+                  {/* Subtle glass overlay that disappears when active */}
+                  <div className={`absolute inset-0 bg-black transition-opacity duration-700 ${diff === 0 ? 'opacity-0' : 'opacity-40 group-hover:opacity-20'}`}></div>
+                  
+                  {/* Click to view detail button (only visible on active slide) */}
+                  <div className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ${diff === 0 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                    <div className="opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                      <Link href={`/product-detail?id=${item.id}`} className="inline-block w-max bg-lemon-chiffon text-on-surface px-6 py-3 font-headline-md text-sm uppercase tracking-widest hover:bg-milano-red hover:text-white transition-colors">
+                        VIEW PRODUCT
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Typography Layer below card */}
+                <div className={`mt-6 text-center transition-all duration-700 ${diff === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                  <span className="font-label-bold text-xs uppercase tracking-widest text-milano-red block mb-2">{item.cat}</span>
+                  <h3 className="font-display-xl text-3xl sm:text-4xl uppercase tracking-tighter text-lemon-chiffon mb-1">{item.title}</h3>
+                  <p className="font-headline-md text-lg text-lemon-chiffon/70">{formatPrice(item.price, currency)}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Progress indicators */}
+        <div className="flex justify-center gap-3 mt-12">
+          {NEW_ARRIVALS.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentArrivalSlide(idx)}
+              className={`h-1 transition-all duration-500 ${currentArrivalSlide === idx ? 'w-12 bg-milano-red' : 'w-4 bg-lemon-chiffon/20 hover:bg-lemon-chiffon/40'}`}
+              aria-label={`Go to slide ${idx + 1}`}
+            ></button>
+          ))}
+        </div>
+      </section>
+
+      
+      {/* ── STICKY SCROLL IMAGE SEQUENCE ── */}
+      <section ref={revealRef} className="relative w-full h-[300vh] bg-black border-y-2 border-on-surface">
+        <div className="sticky top-0 w-full h-screen overflow-hidden bg-black flex items-center justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src={`/men_sequence/ezgif-frame-${String(Math.min(270, Math.max(1, Math.floor(revealProgress * 270) + 1))).padStart(3, '0')}.jpg`} 
+            alt="Sequence frame" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40"></div>
+          
+          <div className="relative z-10 flex flex-col items-center justify-center w-full px-4 text-center pointer-events-none">
+            <h2 
+              className="font-display-xl text-5xl md:text-8xl lg:text-[120px] uppercase text-white tracking-tighter leading-[0.8] mb-6 drop-shadow-2xl"
+              style={{
+                opacity: revealProgress > 0.3 && revealProgress < 0.8 ? 1 : 0,
+                transform: `translateY(${(0.5 - revealProgress) * 100}px)`,
+                transition: 'opacity 0.3s, transform 0.1s ease-out'
+              }}
+            >
+              EXQUISITE<br />DETAILS
+            </h2>
+            <Link 
+              href="/products"
+              className="inline-block border-2 border-white text-white px-8 py-4 font-headline-md text-sm tracking-widest hover:bg-white hover:text-black transition-colors pointer-events-auto"
+              style={{
+                opacity: revealProgress > 0.6 && revealProgress < 0.9 ? 1 : 0,
+                transition: 'opacity 0.3s'
+              }}
+            >
+              EXPLORE THE COLLECTION
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Category Grid */}
-      <section className="py-8 sm:py-16 md:py-section-gap bg-surface-container my-8 sm:my-16 md:my-20">
-        <div className="max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 md:gap-gutter h-auto md:h-[650px] lg:h-[750px]">
-          {/* MEN Category Card */}
+      {/* ── EXPANDING SPLIT-SCREEN CATEGORIES ── */}
+      <section className="w-full border-t-2 border-on-surface bg-on-surface overflow-hidden">
+        <div className="w-full h-[60vh] sm:h-[70vh] md:h-[80vh] flex flex-col md:flex-row group/split">
+          {/* MEN */}
           <Link 
-            className="md:col-span-8 group relative overflow-hidden border-2 border-on-surface min-h-[260px] h-[300px] sm:h-[400px] md:h-full block w-full bg-on-surface" 
             href="/products"
+            className="relative flex-1 md:group-hover/split:flex-1 md:hover:!flex-[2.5] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] border-b-2 md:border-b-0 md:border-r-2 border-on-surface overflow-hidden group/card"
           >
-            <img 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 z-0" 
-              alt="MEN Collection" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHx3vBVf17o2brWQeW81OeaXsoWtiPZO86beqJrrMpIygPBI_BcWeITDNH11zzRpxiayScS4mlOsuPvqOpQ_iG4sEoC2ov2o3EVS7PmEO495yg4WZkJdOVP6dweokb533Vq1JqF9u54RIqUuPnUMP5NZgBx2h3MTEiJjtmJQWt7-iHH8HJTQ2ndT7xTidl9UGMetHmRpZ6D5GbgyWS2Revn7xDxp_cy4nTftE8szkPMh2JPmMXhZdpUq6DnIwA9vmPTFu9yOaN700"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/40 to-transparent group-hover:via-on-surface/20 transition-colors duration-500 z-10"></div>
-            <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 z-20">
-              <span className="font-label-bold text-[10px] sm:text-xs text-white uppercase tracking-widest bg-primary px-2.5 py-1 mb-2 inline-block shadow-md">
-                Featured Collection
+            <div className="absolute inset-0 bg-on-surface z-0">
+              <img 
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHx3vBVf17o2brWQeW81OeaXsoWtiPZO86beqJrrMpIygPBI_BcWeITDNH11zzRpxiayScS4mlOsuPvqOpQ_iG4sEoC2ov2o3EVS7PmEO495yg4WZkJdOVP6dweokb533Vq1JqF9u54RIqUuPnUMP5NZgBx2h3MTEiJjtmJQWt7-iHH8HJTQ2ndT7xTidl9UGMetHmRpZ6D5GbgyWS2Revn7xDxp_cy4nTftE8szkPMh2JPmMXhZdpUq6DnIwA9vmPTFu9yOaN700"
+                alt="Men"
+                className="w-full h-full object-cover opacity-60 group-hover/card:opacity-90 group-hover/card:scale-110 transition-all duration-1000 grayscale group-hover/card:grayscale-0"
+              />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none transition-opacity duration-700 group-hover/card:opacity-70"></div>
+            
+            <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 z-10">
+              <span className="font-label-bold text-xs text-milano-red uppercase tracking-widest mb-4 translate-y-4 opacity-0 group-hover/card:translate-y-0 group-hover/card:opacity-100 transition-all duration-500 delay-100">
+                Explore The Collection
               </span>
-              <h3 className="font-display-xl text-3xl sm:text-5xl md:text-headline-lg text-white uppercase drop-shadow-md">
-                MEN'S COLLECTION
-              </h3>
+              <h2 className="font-display-xl text-7xl sm:text-8xl lg:text-[140px] leading-none uppercase text-lemon-chiffon tracking-tighter">
+                MEN
+              </h2>
             </div>
           </Link>
 
-          {/* WOMEN Category Card */}
+          {/* WOMEN */}
           <Link 
-            className="md:col-span-4 group relative overflow-hidden border-2 border-on-surface min-h-[260px] h-[300px] sm:h-[400px] md:h-full block w-full bg-on-surface" 
             href="/products"
+            className="relative flex-1 md:group-hover/split:flex-1 md:hover:!flex-[2.5] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden group/card bg-on-surface"
           >
-            <img 
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 z-0" 
-              alt="WOMEN Collection" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC2bYg0-sJc88bY1LhPq7T1S4b-1P0jG5wY70Hk8XzV62pL5R88y1M-pW7g5eX6q4n2wR7u-T5y8-Q2x1w6h2j8"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/40 to-transparent group-hover:via-on-surface/20 transition-colors duration-500 z-10"></div>
-            <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 z-20">
-              <span className="font-label-bold text-[10px] sm:text-xs text-white uppercase tracking-widest bg-primary px-2.5 py-1 mb-2 inline-block shadow-md">
-                Archive Drop
+            <div className="absolute inset-0 bg-on-surface z-0">
+              <img 
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=1000"
+                alt="Women"
+                className="w-full h-full object-cover opacity-60 group-hover/card:opacity-90 group-hover/card:scale-110 transition-all duration-1000 grayscale group-hover/card:grayscale-0"
+                style={{ objectPosition: 'center 20%' }}
+              />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none transition-opacity duration-700 group-hover/card:opacity-70"></div>
+            
+            <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12 z-10">
+              <span className="font-label-bold text-xs text-milano-red uppercase tracking-widest mb-4 translate-y-4 opacity-0 group-hover/card:translate-y-0 group-hover/card:opacity-100 transition-all duration-500 delay-100">
+                Archive Drop 004
               </span>
-              <h3 className="font-display-xl text-3xl sm:text-4xl md:text-headline-lg text-white uppercase drop-shadow-md">
-                WOMEN'S
-              </h3>
+              <h2 className="font-display-xl text-7xl sm:text-8xl lg:text-[140px] leading-none uppercase text-lemon-chiffon tracking-tighter">
+                WOMEN
+              </h2>
             </div>
           </Link>
+        </div>
+      </section>
+
+      
+      {/* ── ASYMMETRIC BENTO BOX GRID ── */}
+      <section className="w-full bg-background py-20 md:py-32 border-b-2 border-on-surface">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-16">
+            <h2 className="font-display-xl text-6xl md:text-8xl uppercase leading-none tracking-tighter text-on-surface">
+              CURATED<br />ESSENTIALS
+            </h2>
+            <Link href="/products" className="inline-block border-b-2 border-on-surface pb-1 mt-6 md:mt-0 font-headline-md text-sm uppercase tracking-widest hover:text-milano-red hover:border-milano-red transition-colors">
+              VIEW ALL ACCESSORIES
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 auto-rows-[300px] md:auto-rows-[400px]">
+            {/* Bento Item 1 - Large Left */}
+            <Link href="/product-detail?id=prod_3" className="md:col-span-7 row-span-1 group relative overflow-hidden bg-surface-container border-2 border-on-surface shadow-[8px_8px_0px_0px_rgba(39,24,21,1)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all duration-300">
+              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1000" alt="Sneakers" className="w-full h-full object-cover filter contrast-125 group-hover:scale-110 transition-transform duration-700 ease-out" />
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
+              <div className="absolute top-6 left-6 bg-lemon-chiffon text-on-surface px-3 py-1 font-label-bold text-[10px] uppercase tracking-widest border border-on-surface">FOOTWEAR</div>
+              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end mix-blend-difference text-lemon-chiffon">
+                <h3 className="font-display-xl text-4xl uppercase">Crimson Runner</h3>
+                <span className="font-headline-md text-xl">$145</span>
+              </div>
+            </Link>
+
+            {/* Bento Item 2 - Top Right */}
+            <Link href="/product-detail?id=prod_4" className="md:col-span-5 row-span-1 group relative overflow-hidden bg-surface-container border-2 border-on-surface shadow-[8px_8px_0px_0px_rgba(39,24,21,1)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all duration-300">
+              <img src="https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?auto=format&fit=crop&q=80&w=800" alt="Bag" className="w-full h-full object-cover filter contrast-125 group-hover:scale-110 transition-transform duration-700 ease-out" />
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
+              <div className="absolute top-6 left-6 bg-lemon-chiffon text-on-surface px-3 py-1 font-label-bold text-[10px] uppercase tracking-widest border border-on-surface">ACCESSORIES</div>
+              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end mix-blend-difference text-lemon-chiffon">
+                <h3 className="font-display-xl text-3xl uppercase">Tactical Sling</h3>
+                <span className="font-headline-md text-xl">$85</span>
+              </div>
+            </Link>
+
+            {/* Bento Item 3 - Bottom Left */}
+            <Link href="/product-detail?id=prod_5" className="md:col-span-4 row-span-1 group relative overflow-hidden bg-on-surface border-2 border-on-surface shadow-[8px_8px_0px_0px_rgba(39,24,21,1)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all duration-300 flex items-center justify-center p-8">
+              <h3 className="font-display-xl text-5xl md:text-7xl uppercase text-lemon-chiffon text-center leading-none">
+                HARD<br/>WARE<br/>SERIES
+              </h3>
+            </Link>
+
+            {/* Bento Item 4 - Bottom Right */}
+            <Link href="/product-detail?id=prod_6" className="md:col-span-8 row-span-1 group relative overflow-hidden bg-surface-container border-2 border-on-surface shadow-[8px_8px_0px_0px_rgba(39,24,21,1)] hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all duration-300">
+              <img src="https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?auto=format&fit=crop&q=80&w=1000" alt="Rings" className="w-full h-full object-cover filter contrast-125 group-hover:scale-110 transition-transform duration-700 ease-out" style={{ objectPosition: 'center 30%' }} />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors"></div>
+              <div className="absolute top-6 left-6 bg-lemon-chiffon text-on-surface px-3 py-1 font-label-bold text-[10px] uppercase tracking-widest border border-on-surface">JEWELRY</div>
+              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end mix-blend-difference text-lemon-chiffon">
+                <h3 className="font-display-xl text-4xl uppercase">Signet Ring 01</h3>
+                <span className="font-headline-md text-xl">$60</span>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── THE CAMPAIGN LOOKBOOK (STICKY HORIZONTAL SCROLL) ── */}
+      <section ref={lookbookRef} className="relative w-full h-[300vh] bg-black">
+        <div className="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-center border-t-2 border-white/20">
+          <div className="absolute top-10 left-10 z-20">
+            <h2 className="font-display-xl text-4xl md:text-6xl text-white uppercase tracking-tighter">
+              FW26 LOOKBOOK
+            </h2>
+            <div className="w-full h-[2px] bg-white/20 mt-4 overflow-hidden">
+              <div 
+                className="h-full bg-milano-red transition-all duration-100 ease-linear"
+                style={{ width: `${lookbookProgress * 100}%` }}
+              ></div>
+            </div>
+          </div>
+          
+          {/* Horizontal Track */}
+          <div 
+            className="flex items-center gap-8 md:gap-20 px-10 md:px-[10vw] w-fit h-[60vh]"
+            style={{ 
+              transform: `translateX(${-lookbookProgress * 65}%)`,
+              transition: 'transform 0.1s ease-out'
+            }}
+          >
+            {/* Image 1 */}
+            <div className="relative w-[80vw] md:w-[60vw] h-full shrink-0 group overflow-hidden border border-white/10">
+              <img src="https://images.unsplash.com/photo-1550614000-4b95d4ebf5eb?auto=format&fit=crop&q=80&w=1200" alt="Look 1" className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100" />
+              <div className="absolute bottom-6 right-6 font-display-xl text-5xl text-white mix-blend-overlay">01</div>
+            </div>
+            
+            {/* Image 2 */}
+            <div className="relative w-[80vw] md:w-[60vw] h-full shrink-0 group overflow-hidden border border-white/10">
+              <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=1200" alt="Look 2" className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100" />
+              <div className="absolute bottom-6 right-6 font-display-xl text-5xl text-white mix-blend-overlay">02</div>
+            </div>
+            
+            {/* Image 3 */}
+            <div className="relative w-[80vw] md:w-[60vw] h-full shrink-0 group overflow-hidden border border-white/10">
+              <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=1200" alt="Look 3" className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100" />
+              <div className="absolute bottom-6 right-6 font-display-xl text-5xl text-white mix-blend-overlay">03</div>
+            </div>
+          </div>
         </div>
       </section>
 

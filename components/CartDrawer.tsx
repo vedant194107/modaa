@@ -18,6 +18,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const [discountFlat, setDiscountFlat] = useState(0);
   const [promoMsg, setPromoMsg] = useState("");
   const [promoError, setPromoError] = useState("");
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     setCurrency(getActiveCurrency());
@@ -32,6 +33,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     window.addEventListener("cart-updated", handleCartUpdate);
     return () => window.removeEventListener("cart-updated", handleCartUpdate);
   }, []);
+
+  const triggerClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 280);
+  };
 
   if (!isOpen) return null;
 
@@ -94,21 +103,29 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[120] flex justify-end bg-black/75 backdrop-blur-sm animate-fadeIn">
+    <div className={`fixed inset-0 z-[120] flex justify-end bg-black/75 backdrop-blur-sm ${isClosing ? 'animate-fade-out-backdrop' : 'animate-fade-in-backdrop'}`}>
       {/* Backdrop overlay click to close */}
-      <div className="absolute inset-0" onClick={onClose} />
+      <div className="absolute inset-0" onClick={triggerClose} />
 
       {/* Drawer Content */}
-      <div className="relative w-full max-w-md bg-lemon-chiffon border-l-4 border-on-surface h-full flex flex-col justify-between z-10 shadow-[-12px_0px_0px_0px_#a90e02] animate-slideInRight">
+      <div className={`relative w-full max-w-md bg-lemon-chiffon border-l-4 border-on-surface h-full flex flex-col justify-between z-10 shadow-[-12px_0px_0px_0px_#a90e02] ${isClosing ? 'animate-slide-drawer-out' : 'animate-slide-drawer'}`}>
         {/* Header */}
-        <div className="p-6 border-b-2 border-on-surface flex justify-between items-center bg-surface">
+        <div className="p-4 sm:p-6 border-b-2 border-on-surface flex justify-between items-start bg-surface">
           <div>
-            <span className="font-label-bold text-[10px] uppercase text-milano-red tracking-widest font-bold block">EDITORIAL BAG</span>
-            <h2 className="font-display-xl text-2xl uppercase">YOUR SHOPPING BAG ({items.length})</h2>
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-0.5">
+              <Link href="/" onClick={triggerClose} className="font-display-xl text-xl sm:text-2xl text-milano-red tracking-tighter hover:text-on-surface transition-colors">
+                THE DROP
+              </Link>
+              <span className="text-on-surface/40 text-sm font-bold">/</span>
+              <h2 className="font-display-xl text-xl sm:text-2xl uppercase">BAG</h2>
+            </div>
+            <span className="font-label-bold text-[10px] sm:text-[11px] uppercase text-on-surface/60 tracking-widest font-bold block">
+              {items.length} {items.length === 1 ? "ITEM" : "ITEMS"} • EDITORIAL
+            </span>
           </div>
           <button
-            onClick={onClose}
-            className="material-symbols-outlined text-2xl hover:text-milano-red cursor-pointer"
+            onClick={triggerClose}
+            className="material-symbols-outlined text-2xl hover:text-milano-red cursor-pointer mt-0.5"
           >
             close
           </button>

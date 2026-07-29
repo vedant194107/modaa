@@ -1,77 +1,73 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { getAuthUser, UserSession } from "@/lib/authHelper";
-import { getActiveCartItems, saveActiveCartItems } from "@/lib/cartHelper";
+import { getActiveCartItems, saveActiveCartItems, updateCartQuantity, removeFromCart } from "@/lib/cartHelper";
 import { formatPrice, getActiveCurrency, CurrencyCode } from "@/lib/currencyHelper";
-
-interface Address {
-  id: string;
-  label: string;
-  name: string;
-  line1: string;
-  line2?: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-  phone?: string;
-  isDefault: boolean;
-}
-
-const defaultAddresses: Address[] = [
-  {
-    id: "addr-1",
-    label: "Home",
-    name: "Vedant Dayala",
-    line1: "A-701 Brown stone",
-    line2: "M.G. Road",
-    city: "Ahmedabad",
-    state: "Gujarat",
-    zip: "382350",
-    country: "India",
-    isDefault: true,
-  },
-];
-
-const defaultCheckoutCart = [
-  {
-    id: "archive-hoodie-blk",
-    title: "ARCHIVE HOODIE / BLK",
-    price: 185,
-    size: "L",
-    color: "Black",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAMnaLnndF_wvRegzRbqWvrUQZ470GWCkFs_iCTTyXU-zATGX5IOJl2yKSgAa8Q6s78IrzlaPcNWYJW37ImRj8wONeKwjOPKaiGXCyx9yJsrq4qhhXAD_P-VUV-XFcIF1cTCLyNQ88sKtK0vCXe4RQScs2AByo2wUa2tmhlX_CnQcpeRZDUGVIQkW6X7e1iXkCrv69P4cQg5HQUaA671PeJLB7OyRda-E2-Cdi7lF6QGGraPhIqluhCD3PKGeU0mQH_whyw3HOD7ro",
-    quantity: 1,
-  },
-  {
-    id: "raven-distressed-denim",
-    title: "RAVEN DISTRESSED DENIM",
-    price: 245,
-    size: "M",
-    color: "Milano Red Stitch",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuArnnoDag-q0ElalEK4sqtvt6w91FtYcY9aGxycQpCOKInmR7cffSVuI_FVMLsBbFD4H4-poBZB7jOnp-_oOwFoavvZXTbPCJ8JAOxItFfA6KjQzry7IpE5ZJKWX7MZBpYzTNY1hHV3OvSkntY8nnBiYCWHXgKpw7c-b39YBevNkM2Ria2q6i_QhJuOwGjUBMfeBYwxjK7tKQ0eeqmCXMzo9IhrpkEzceLaj2VigECxB6AHYemp9n_QuiHvuQp2FkYWXH9IdB2za4M",
-    quantity: 1,
-  },
-];
 
 export default function CheckoutPage() {
   const router = useRouter();
   const [authUser, setAuthUser] = useState<UserSession | null>(null);
   const [cartItems, setCartItems] = useState<any[]>([]);
-  const [savedAddresses, setSavedAddresses] = useState<Address[]>([]);
-  const [selectedAddressId, setSelectedAddressId] = useState<string>("");
-
-  // Promo Code / Coupon State
-  const [promoInput, setPromoInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<any | null>(null);
-  const [promoError, setPromoError] = useState("");
-  const [validatingPromo, setValidatingPromo] = useState(false);
   const [currency, setCurrency] = useState<CurrencyCode>("INR");
+
+  const [shippingForm, setShippingForm] = useState({
+    email: "",
+    firstName: "",
+    lastName: "",
+    address: "",
+    apartment: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "India",
+    phone: "",
+  });
+
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>("new");
+
+  const handleAddressSelect = (addrId: string, addressesToSearch = savedAddresses) => {
+    setSelectedAddressId(addrId);
+    if (addrId === "new") {
+      setShippingForm(prev => ({
+        ...prev,
+        firstName: "",
+        lastName: "",
+        address: "",
+        apartment: "",
+        city: "",
+        state: "",
+        zip: "",
+        country: "India",
+        phone: "",
+      }));
+    } else {
+      const addr = addressesToSearch.find(a => a.id === addrId);
+      if (addr) {
+        const nameParts = addr.name ? addr.name.split(" ") : [""];
+        const firstName = nameParts[0];
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
+        setShippingForm(prev => ({
+          ...prev,
+          firstName,
+          lastName,
+          address: addr.line1 || "",
+          apartment: addr.line2 || "",
+          city: addr.city || "",
+          state: addr.state || "",
+          zip: addr.zip || "",
+          country: addr.country || "India",
+          phone: addr.phone || "",
+        }));
+      }
+    }
+  };
 
   useEffect(() => {
     setCurrency(getActiveCurrency());
@@ -81,592 +77,361 @@ export default function CheckoutPage() {
   }, []);
 
   useEffect(() => {
+    const handleCartUpdate = (e: any) => setCartItems(e.detail || getActiveCartItems());
+    window.addEventListener("cart-updated", handleCartUpdate);
+    return () => window.removeEventListener("cart-updated", handleCartUpdate);
+  }, []);
+
+  useEffect(() => {
     const user = getAuthUser();
     if (!user) {
       router.push("/login?redirect=/checkout");
       return;
     }
     setAuthUser(user);
-
-    const handleAuth = () => {
-      const u = getAuthUser();
-      if (!u) {
-        router.push("/login?redirect=/checkout");
-      } else {
-        setAuthUser(u);
-      }
-    };
-    window.addEventListener("auth-updated", handleAuth);
-    return () => window.removeEventListener("auth-updated", handleAuth);
+    setShippingForm(prev => ({ ...prev, email: user.email }));
+    setCartItems(getActiveCartItems());
+    
+    fetch(`/api/admin/addresses?userId=${user.id}&t=${Date.now()}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.addresses && data.addresses.length > 0) {
+          setSavedAddresses(data.addresses);
+          const defaultAddr = data.addresses.find((a: any) => a.isDefault);
+          if (defaultAddr) {
+            handleAddressSelect(defaultAddr.id, data.addresses);
+          }
+        }
+      })
+      .catch(err => console.error("Error fetching addresses:", err));
   }, [router]);
 
-  const [shippingForm, setShippingForm] = useState({
-    firstName: "Vedant",
-    lastName: "Dayala",
-    line1: "A-701 Brown stone",
-    city: "Ahmedabad",
-    zip: "382350",
-    state: "Gujarat",
-    country: "India",
-    phone: "+91 98765 43210",
-  });
-
-  useEffect(() => {
-    // Sync Cart
-    const syncCart = () => {
-      const items = getActiveCartItems();
-      setCartItems(items);
-    };
-
-    syncCart();
-
-    const handleCartUpdated = (e: any) => {
-      if (e.detail) {
-        setCartItems(e.detail);
-      } else {
-        syncCart();
-      }
-    };
-
-    const handleAuthUpdated = () => {
-      syncCart();
-    };
-
-    window.addEventListener("cart-updated", handleCartUpdated);
-    window.addEventListener("auth-updated", handleAuthUpdated);
-
-    // Sync Saved Addresses from localStorage or Backend
-    const user = getAuthUser();
-    if (user) {
-      fetch(`/api/admin/addresses?userId=${user.id}&t=${Date.now()}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.success && data.addresses.length > 0) {
-            setSavedAddresses(data.addresses);
-            localStorage.setItem("the_drop_addresses", JSON.stringify(data.addresses));
-            const defaultAddr = data.addresses.find((a: Address) => a.isDefault) || data.addresses[0];
-            if (defaultAddr) {
-              setSelectedAddressId(defaultAddr.id);
-              populateAddressForm(defaultAddr);
-            }
-          } else {
-            loadLocalAddresses();
-          }
-        })
-        .catch(() => loadLocalAddresses());
-    } else {
-      loadLocalAddresses();
-    }
-
-    function loadLocalAddresses() {
-      const savedAddr = localStorage.getItem("the_drop_addresses");
-      let addrList: Address[] = defaultAddresses;
-      if (savedAddr !== null) {
-        try {
-          const parsed = JSON.parse(savedAddr);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            addrList = parsed;
-          }
-        } catch (e) {}
-      }
-      setSavedAddresses(addrList);
-      const defaultAddr = addrList.find((a) => a.isDefault) || addrList[0];
-      if (defaultAddr) {
-        setSelectedAddressId(defaultAddr.id);
-        populateAddressForm(defaultAddr);
-      }
-    }
-
-
-
-    return () => {
-      window.removeEventListener("cart-updated", handleCartUpdated);
-      window.removeEventListener("auth-updated", handleAuthUpdated);
-    };
-  }, []);
-
-  const populateAddressForm = (addr: Address) => {
-    const parts = addr.name.split(" ");
-    setShippingForm({
-      firstName: parts[0] || "",
-      lastName: parts.slice(1).join(" ") || "",
-      line1: addr.line1 || "",
-      city: addr.city || "",
-      zip: addr.zip || "",
-      state: addr.state || "",
-      country: addr.country || "India",
-      phone: addr.phone || "+91 98765 43210",
-    });
-  };
-
-  const handleAddressChange = (addressId: string) => {
-    setSelectedAddressId(addressId);
-    if (addressId === "custom") {
-      setShippingForm({
-        firstName: "",
-        lastName: "",
-        line1: "",
-        city: "",
-        zip: "",
-        state: "",
-        country: "India",
-        phone: "",
-      });
-    } else {
-      const found = savedAddresses.find((a) => a.id === addressId);
-      if (found) {
-        populateAddressForm(found);
-      }
+  const handleInputChange = (field: string, value: string) => {
+    setShippingForm(prev => ({ ...prev, [field]: value }));
+    if (formErrors[field]) {
+      setFormErrors(prev => ({ ...prev, [field]: "" }));
     }
   };
 
-  const handleApplyCoupon = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!promoInput.trim()) return;
-
-    setValidatingPromo(true);
-    setPromoError("");
-
-    try {
-      const res = await fetch(`/api/admin/coupons?code=${encodeURIComponent(promoInput.trim())}`);
-      const data = await res.json();
-      setValidatingPromo(false);
-
-      if (data.success && data.coupon) {
-        const coupon = data.coupon;
-        if (subtotal < coupon.minSpend) {
-          setPromoError(`Minimum spend of ${formatPrice(coupon.minSpend, currency)} required for coupon ${coupon.code}.`);
-          return;
-        }
-        setAppliedCoupon(coupon);
-        setPromoError("");
-      } else {
-        setPromoError(data.error || "Invalid or expired promo code.");
-      }
-    } catch (err) {
-      setValidatingPromo(false);
-      setPromoError("Failed to validate promo code.");
-    }
-  };
-
-  const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0);
-
-  let discountAmount = 0;
-  if (appliedCoupon) {
-    if (appliedCoupon.type === "PERCENTAGE") {
-      discountAmount = (subtotal * appliedCoupon.value) / 100;
-    } else {
-      discountAmount = appliedCoupon.value;
-    }
-  }
-
   const shippingFee = subtotal >= 500 ? 0 : subtotal > 0 ? 15 : 0;
-  const grandTotal = Math.max(0, subtotal - discountAmount + shippingFee);
+  const taxes = subtotal * 0.05; // Dummy 5% tax
+  const grandTotal = Math.max(0, subtotal + shippingFee + taxes);
 
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (cartItems.length === 0 || !authUser || isPlacingOrder) return;
+    
+    // Basic Validation
+    const errors: Record<string, string> = {};
+    const required = ["email", "firstName", "lastName", "address", "city", "state", "zip", "phone"];
+    let hasError = false;
+    
+    required.forEach(field => {
+      if (!shippingForm[field as keyof typeof shippingForm].trim()) {
+        errors[field] = "Required";
+        hasError = true;
+      }
+    });
+
+    if (hasError) {
+      setFormErrors(errors);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     setIsPlacingOrder(true);
-
-    const newOrder = {
-      id: `ORDER-${Math.floor(8000 + Math.random() * 1000)}`,
-      orderNumber: `#TD-${Math.floor(8000 + Math.random() * 1000)}`,
-      date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-      status: "Processing",
-      statusColor: "text-milano-red",
-      progress: "w-1/2 bg-milano-red",
-      statusText: "Expected in 2-3 Days",
-      items: cartItems,
-      total: grandTotal,
-      shippingAddress: shippingForm,
-    };
-
-    try {
-      await fetch("/api/admin/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: newOrder.id,
-          user_id: authUser.id,
-          order_number: newOrder.orderNumber,
-          total: newOrder.total,
-          status: "PROCESSING",
-          items_json: JSON.stringify(newOrder.items),
-        }),
-      });
-    } catch (e) {
-      console.error(e);
-    }
-
-    const savedOrders = localStorage.getItem("the_drop_recent_orders");
-    let ordersList: any[] = [];
-    if (savedOrders !== null) {
-      try {
-        ordersList = JSON.parse(savedOrders);
-      } catch (e) {}
-    }
-
-    ordersList.unshift(newOrder);
-    localStorage.setItem("the_drop_recent_orders", JSON.stringify(ordersList));
-
-    // Clear active cart after placing order
-    saveActiveCartItems([]);
-
-    setIsPlacingOrder(false);
-    router.push("/thank-you");
+    
+    setTimeout(() => {
+      saveActiveCartItems([]);
+      router.push("/thank-you");
+    }, 2000);
   };
 
-  if (!authUser) {
-    return (
-      <div className="w-full min-h-screen bg-lemon-chiffon text-on-surface flex flex-col justify-between">
-        <Navbar />
-        <main className="max-w-xl mx-auto px-4 py-16 text-center">
-          <div className="border-4 border-on-surface p-8 sm:p-12 bg-surface shadow-[8px_8px_0px_0px_#a90e02] space-y-4">
-            <span className="material-symbols-outlined text-6xl text-milano-red">lock</span>
-            <h1 className="font-display-xl text-3xl uppercase">LOGIN REQUIRED TO CHECKOUT</h1>
-            <p className="font-body-md text-sm text-on-surface/70 uppercase">
-              You must be logged in to your account before proceeding to order checkout.
-            </p>
-            <Link
-              href="/login?redirect=/checkout"
-              className="inline-block w-full py-4 bg-milano-red text-lemon-chiffon font-headline-md text-sm uppercase tracking-widest hover:bg-on-surface transition-colors border-2 border-on-surface cursor-pointer"
-            >
-              LOG IN TO CONTINUE
-            </Link>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  if (!authUser) return null;
 
   return (
-    <div className="w-full min-h-screen bg-lemon-chiffon text-on-surface">
-      {/* Top Navigation Bar */}
+    <div className="min-h-screen bg-lemon-chiffon text-on-surface font-body-md flex flex-col">
       <Navbar />
+      
+      {/* Main Content Area */}
+      <div className="flex-grow flex flex-col lg:flex-row w-full max-w-container-max mx-auto">
+        
+        {/* LEFT COLUMN: FORMS (Light/Brand Colored) */}
+        <div className="w-full lg:w-[55%] xl:w-3/5 bg-lemon-chiffon order-2 lg:order-1 flex justify-end">
+          <div className="w-full max-w-2xl px-4 py-8 lg:px-12 lg:py-16">
+            
+            {/* Breadcrumbs */}
+            <nav className="flex items-center text-xs font-label-bold uppercase tracking-widest text-on-surface/60 mb-10 space-x-3">
+              <Link href="/cart" className="text-milano-red hover:underline">Cart</Link>
+              <span>›</span>
+              <span className="font-bold text-on-surface">Information</span>
+              <span>›</span>
+              <span>Shipping</span>
+              <span>›</span>
+              <span>Payment</span>
+            </nav>
 
-      <main className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 sm:py-12 md:py-section-gap">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter md:gap-16 items-start">
-          {/* Left Side: Forms */}
-          <div className="lg:col-span-7 space-y-12 sm:space-y-16">
-            {/* Section Header */}
-            <div>
-              <h1 className="font-display-xl text-3xl sm:text-headline-lg uppercase mb-3">Checkout</h1>
-              <p className="font-body-lg text-sm sm:text-base opacity-70 max-w-lg">
-                Complete your order. All items are limited edition and secured only upon successful payment.
-              </p>
-            </div>
-
-            {/* Shipping Details */}
-            <section className="space-y-6 sm:space-y-8">
-              <div className="flex items-center justify-between border-b-2 border-on-surface pb-3">
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <span className="font-headline-md text-xl sm:text-2xl text-milano-red">01</span>
-                  <h2 className="font-headline-md text-xl sm:text-2xl uppercase">Shipping Details</h2>
+            <form onSubmit={handlePlaceOrder} className="space-y-10">
+              
+              {/* Contact Section */}
+              <section>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="font-headline-md text-2xl uppercase">Contact</h2>
                 </div>
-                <Link href="/account/addresses" className="font-label-bold text-xs uppercase text-milano-red hover:underline flex items-center gap-1">
-                  <span className="material-symbols-outlined text-sm">edit_location</span>
-                  Manage Saved Addresses
-                </Link>
-              </div>
-
-              {/* ── ADDRESS SELECTOR: DROPDOWN IF > 2 ADDRESSES, CARDS IF <= 2 ADDRESSES ── */}
-              {savedAddresses.length > 2 ? (
-                /* DROPDOWN SELECTOR WHEN ADDRESSES > 2 */
-                <div className="border-2 border-on-surface bg-lemon-chiffon p-4 sm:p-5 shadow-[4px_4px_0px_0px_#a90e02]">
-                  <label className="font-label-bold text-xs uppercase text-milano-red tracking-wider block mb-2 flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-sm">location_on</span>
-                      SELECT SAVED SHIPPING ADDRESS ({savedAddresses.length} SAVED)
-                    </span>
-                    <span className="text-[10px] text-on-surface/50">CHOOSE FROM DROPDOWN</span>
-                  </label>
-                  <select
-                    value={selectedAddressId}
-                    onChange={(e) => handleAddressChange(e.target.value)}
-                    className="w-full bg-surface border-2 border-on-surface p-3 font-label-bold text-xs sm:text-sm uppercase focus:outline-none focus:border-milano-red cursor-pointer"
-                  >
-                    {savedAddresses.map((addr) => (
-                      <option key={addr.id} value={addr.id}>
-                        {addr.isDefault ? "[DEFAULT] " : ""}{addr.label.toUpperCase()} — {addr.line1}, {addr.city} ({addr.name})
-                      </option>
-                    ))}
-                    <option value="custom">+ ENTER NEW SHIPPING ADDRESS</option>
-                  </select>
-                </div>
-              ) : savedAddresses.length > 0 ? (
-                /* CARDS SELECTOR WHEN ADDRESSES <= 2 */
-                <div className="space-y-3">
-                  <label className="font-label-bold text-xs uppercase text-milano-red tracking-wider block flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-sm">location_on</span>
-                    SELECT SAVED SHIPPING ADDRESS
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {savedAddresses.map((addr) => (
-                      <div
-                        key={addr.id}
-                        onClick={() => handleAddressChange(addr.id)}
-                        className={`p-4 border-2 cursor-pointer transition-all relative ${
-                          selectedAddressId === addr.id
-                            ? "border-milano-red bg-lemon-chiffon shadow-[4px_4px_0px_0px_#a90e02]"
-                            : "border-on-surface bg-surface hover:bg-lemon-chiffon/50"
-                        }`}
-                      >
-                        {addr.isDefault && (
-                          <span className="absolute top-2 right-2 bg-milano-red text-lemon-chiffon font-label-bold text-[8px] uppercase px-1.5 py-0.5">
-                            DEFAULT
-                          </span>
-                        )}
-                        <p className="font-label-bold text-[10px] uppercase text-on-surface/60">{addr.label}</p>
-                        <p className="font-headline-md text-sm uppercase font-bold mt-0.5">{addr.name}</p>
-                        <p className="font-body-md text-xs text-on-surface/80 truncate mt-1">{addr.line1}</p>
-                        <p className="font-body-md text-xs text-on-surface/80">{addr.city}, {addr.state} {addr.zip}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-
-              {/* Shipping Form Fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 sm:gap-y-8">
-                <div className="relative group">
-                  <label className="font-label-bold text-xs uppercase opacity-60 block mb-1">First Name</label>
+                <div className="relative">
                   <input
-                    value={shippingForm.firstName}
-                    onChange={(e) => setShippingForm({ ...shippingForm, firstName: e.target.value })}
-                    className="w-full bg-transparent border-b-2 border-on-surface focus:border-milano-red px-0 py-2 font-label-bold text-sm focus:outline-none uppercase"
-                    placeholder="e.g. Alex"
-                    type="text"
+                    type="email"
+                    value={shippingForm.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    placeholder="Email"
+                    className={`w-full bg-surface border-2 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red transition-all ${formErrors.email ? 'border-milano-red bg-red-50' : 'border-on-surface/30'}`}
                   />
+                  <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">Email</label>
+                  {formErrors.email && <p className="text-milano-red text-xs mt-1 font-label-bold uppercase">{formErrors.email}</p>}
                 </div>
-                <div className="relative group">
-                  <label className="font-label-bold text-xs uppercase opacity-60 block mb-1">Last Name</label>
-                  <input
-                    value={shippingForm.lastName}
-                    onChange={(e) => setShippingForm({ ...shippingForm, lastName: e.target.value })}
-                    className="w-full bg-transparent border-b-2 border-on-surface focus:border-milano-red px-0 py-2 font-label-bold text-sm focus:outline-none uppercase"
-                    placeholder="e.g. Smith"
-                    type="text"
-                  />
+                <div className="mt-4 flex items-center gap-3">
+                  <input type="checkbox" id="news" className="w-5 h-5 rounded-none border-2 border-on-surface text-milano-red focus:ring-milano-red" defaultChecked />
+                  <label htmlFor="news" className="text-xs font-label-bold uppercase tracking-widest text-on-surface/80">Email me with news and offers</label>
                 </div>
-                <div className="md:col-span-2 relative group">
-                  <label className="font-label-bold text-xs uppercase opacity-60 block mb-1">Address Line 1</label>
-                  <input
-                    value={shippingForm.line1}
-                    onChange={(e) => setShippingForm({ ...shippingForm, line1: e.target.value })}
-                    className="w-full bg-transparent border-b-2 border-on-surface focus:border-milano-red px-0 py-2 font-label-bold text-sm focus:outline-none uppercase"
-                    placeholder="Street name and house number"
-                    type="text"
-                  />
-                </div>
-                <div className="relative group">
-                  <label className="font-label-bold text-xs uppercase opacity-60 block mb-1">City</label>
-                  <input
-                    value={shippingForm.city}
-                    onChange={(e) => setShippingForm({ ...shippingForm, city: e.target.value })}
-                    className="w-full bg-transparent border-b-2 border-on-surface focus:border-milano-red px-0 py-2 font-label-bold text-sm focus:outline-none uppercase"
-                    placeholder="e.g. Mumbai"
-                    type="text"
-                  />
-                </div>
-                <div className="relative group">
-                  <label className="font-label-bold text-xs uppercase opacity-60 block mb-1">Postal Code</label>
-                  <input
-                    value={shippingForm.zip}
-                    onChange={(e) => setShippingForm({ ...shippingForm, zip: e.target.value })}
-                    className="w-full bg-transparent border-b-2 border-on-surface focus:border-milano-red px-0 py-2 font-label-bold text-sm focus:outline-none uppercase"
-                    placeholder="e.g. 400001"
-                    type="text"
-                  />
-                </div>
-                <div className="relative group md:col-span-2">
-                  <label className="font-label-bold text-xs uppercase opacity-60 block mb-1">Mobile Number</label>
-                  <input
-                    value={shippingForm.phone}
-                    onChange={(e) => setShippingForm({ ...shippingForm, phone: e.target.value })}
-                    className="w-full bg-transparent border-b-2 border-on-surface focus:border-milano-red px-0 py-2 font-label-bold text-sm focus:outline-none uppercase"
-                    placeholder="e.g. +91 98765 43210"
-                    type="text"
-                  />
-                </div>
-              </div>
-            </section>
+              </section>
 
-            {/* Delivery Method */}
-            <section className="space-y-6 sm:space-y-8">
-              <div className="flex items-center gap-3 sm:gap-4 border-b-2 border-on-surface pb-3">
-                <span className="font-headline-md text-xl sm:text-2xl text-milano-red">02</span>
-                <h2 className="font-headline-md text-xl sm:text-2xl uppercase">Delivery Method</h2>
-              </div>
-              <div className="space-y-4">
-                <label className="group flex items-center justify-between p-4 sm:p-6 border-2 border-on-surface bg-surface cursor-pointer hover:border-milano-red hover:bg-lemon-chiffon/50 hover:shadow-[4px_4px_0px_0px_#a90e02] transition-all">
-                  <div className="flex items-center gap-4">
-                    <input
-                      defaultChecked
-                      className="w-5 h-5 accent-milano-red cursor-pointer"
-                      name="delivery"
-                      type="radio"
-                    />
-                    <div>
-                      <span className="font-label-bold text-sm sm:text-base block uppercase text-on-surface">EXPRESS COURIER</span>
-                      <span className="font-label-bold text-xs opacity-70 uppercase text-on-surface">1-2 Business Days</span>
-                    </div>
-                  </div>
-                  <span className="font-headline-md text-lg sm:text-xl text-milano-red">
-                    {subtotal >= 500 ? "FREE" : formatPrice(15, currency)}
-                  </span>
-                </label>
-              </div>
-            </section>
-
-            {/* Payment Information */}
-            <section className="space-y-6 sm:space-y-8">
-              <div className="flex items-center gap-3 sm:gap-4 border-b-2 border-on-surface pb-3">
-                <span className="font-headline-md text-xl sm:text-2xl text-milano-red">03</span>
-                <h2 className="font-headline-md text-xl sm:text-2xl uppercase">Payment Information</h2>
-              </div>
-              <div className="space-y-6 sm:space-y-8">
-                <div className="relative group">
-                  <label className="font-label-bold text-xs uppercase opacity-60 block mb-1">Card Number</label>
-                  <input
-                    className="w-full bg-transparent border-b-2 border-on-surface focus:border-milano-red px-0 py-2 font-label-bold text-sm focus:outline-none uppercase"
-                    placeholder="0000 0000 0000 0000"
-                    type="text"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-6 sm:gap-8">
-                  <div className="relative group">
-                    <label className="font-label-bold text-xs uppercase opacity-60 block mb-1">Expiry Date</label>
-                    <input
-                      className="w-full bg-transparent border-b-2 border-on-surface focus:border-milano-red px-0 py-2 font-label-bold text-sm focus:outline-none uppercase"
-                      placeholder="MM/YY"
-                      type="text"
-                    />
-                  </div>
-                  <div className="relative group">
-                    <label className="font-label-bold text-xs uppercase opacity-60 block mb-1">CVC</label>
-                    <input
-                      className="w-full bg-transparent border-b-2 border-on-surface focus:border-milano-red px-0 py-2 font-label-bold text-sm focus:outline-none uppercase"
-                      placeholder="123"
-                      type="text"
-                    />
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
-
-          {/* Right Side: Order Summary */}
-          <div className="lg:col-span-5 sticky top-28">
-            <div className="border-4 border-on-surface p-6 sm:p-8 bg-surface shadow-[8px_8px_0px_0px_#a90e02] space-y-6 sm:space-y-8">
-              <h2 className="font-display-xl text-xl sm:text-2xl uppercase border-b-2 border-on-surface pb-4">
-                Order Summary ({totalItems})
-              </h2>
-
-              {/* Items List */}
-              <div className="space-y-4 max-h-80 overflow-y-auto pr-1 divide-y border-on-surface/10">
-                {cartItems.map((item, idx) => (
-                  <div key={item.id + idx} className="flex gap-4 pt-3 first:pt-0">
-                    <div className="w-16 h-20 bg-white border border-on-surface flex-shrink-0 overflow-hidden">
-                      <img className="w-full h-full object-cover" alt={item.title} src={item.image} />
-                    </div>
-                    <div className="flex-1 space-y-1">
-                      <h3 className="font-headline-md text-sm uppercase leading-tight">{item.title}</h3>
-                      <p className="font-label-bold text-xs text-on-surface/60 uppercase">
-                        Size: {item.size || "M"} | Qty: {item.quantity || 1}
-                      </p>
-                      <div className="flex justify-between items-center mt-2">
-                        <p className="font-headline-md text-sm text-milano-red">{formatPrice((item.price || 0) * (item.quantity || 1), currency)}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Promo Code / Coupon Form */}
-              <div className="border-t-2 border-on-surface pt-4 space-y-2">
-                <form onSubmit={handleApplyCoupon} className="flex gap-2">
-                  <input
-                    type="text"
-                    value={promoInput}
-                    onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
-                    placeholder="PROMO CODE (e.g. DROP20)"
-                    className="flex-1 bg-lemon-chiffon border-2 border-on-surface p-2 font-label-bold text-xs uppercase focus:outline-none focus:border-milano-red"
-                  />
-                  <button
-                    type="submit"
-                    disabled={validatingPromo}
-                    className="px-4 py-2 bg-on-surface text-lemon-chiffon font-label-bold text-xs uppercase hover:bg-milano-red transition-colors cursor-pointer border-2 border-on-surface"
-                  >
-                    {validatingPromo ? "..." : "APPLY"}
-                  </button>
-                </form>
-
-                {promoError && (
-                  <p className="font-label-bold text-[10px] text-milano-red uppercase">{promoError}</p>
-                )}
-
-                {appliedCoupon && (
-                  <div className="flex justify-between items-center bg-green-100 border border-green-700 p-2 font-label-bold text-xs uppercase text-green-900">
-                    <span className="flex items-center gap-1">
-                      <span className="material-symbols-outlined text-sm">verified</span>
-                      COUPON {appliedCoupon.code} APPLIED ({appliedCoupon.type === "PERCENTAGE" ? `${appliedCoupon.value}% OFF` : `${formatPrice(appliedCoupon.value, currency)} OFF`})
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setAppliedCoupon(null)}
-                      className="text-milano-red hover:underline text-[10px] cursor-pointer"
+              {/* Shipping Section */}
+              <section>
+                <h2 className="font-headline-md text-2xl uppercase mb-6">Shipping address</h2>
+                
+                {savedAddresses.length > 0 && (
+                  <div className="mb-6 relative">
+                    <select 
+                      value={selectedAddressId}
+                      onChange={(e) => handleAddressSelect(e.target.value)}
+                      className="w-full bg-surface border-2 border-on-surface/30 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red"
                     >
-                      REMOVE
-                    </button>
+                      <option value="new">Use a new address</option>
+                      {savedAddresses.map(addr => (
+                        <option key={addr.id} value={addr.id}>
+                          {addr.label} ({addr.line1}, {addr.city})
+                        </option>
+                      ))}
+                    </select>
+                    <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">Saved Addresses</label>
                   </div>
                 )}
-              </div>
-
-              {/* Price Calculations */}
-              <div className="space-y-3 border-t-2 border-on-surface pt-4 font-label-bold text-sm uppercase">
-                <div className="flex justify-between font-label-bold text-sm sm:text-base uppercase">
-                  <span>Subtotal</span>
-                  <span>{formatPrice(subtotal, currency)}</span>
-                </div>
-                {discountAmount > 0 && (
-                  <div className="flex justify-between font-label-bold text-sm sm:text-base uppercase text-emerald-600">
-                    <span>Discount ({appliedCoupon.code})</span>
-                    <span>-{formatPrice(discountAmount, currency)}</span>
+                
+                <div className="space-y-4">
+                  <div className="relative">
+                    <select 
+                      value={shippingForm.country}
+                      onChange={(e) => handleInputChange("country", e.target.value)}
+                      className="w-full bg-surface border-2 border-on-surface/30 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red"
+                    >
+                      <option value="India">India</option>
+                      <option value="United States">United States</option>
+                      <option value="United Kingdom">United Kingdom</option>
+                    </select>
+                    <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">Country/Region</label>
                   </div>
-                )}
-                <div className="flex justify-between font-label-bold text-sm sm:text-base uppercase">
-                  <span>Express Shipping</span>
-                  <span>{shippingFee === 0 ? "FREE" : formatPrice(shippingFee, currency)}</span>
-                </div>
-                {shippingFee > 0 && (
-                  <p className="text-[10px] text-milano-red">FREE SHIPPING ON ORDERS OVER {formatPrice(500, currency)}</p>
-                )}
-                <div className="flex justify-between font-headline-md text-lg sm:text-xl uppercase text-milano-red">
-                  <span>Grand Total</span>
-                  <span>{formatPrice(grandTotal, currency)}</span>
-                </div>
-              </div>
 
-              {/* Action Button */}
-              <button
-                onClick={handlePlaceOrder}
-                disabled={isPlacingOrder}
-                className={`w-full text-lemon-chiffon font-headline-md text-lg sm:text-xl uppercase py-4 sm:py-5 border-2 border-on-surface transition-colors shadow-[6px_6px_0px_0px_#050505] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[4px_4px_0px_0px_#050505] ${isPlacingOrder ? 'bg-on-surface cursor-not-allowed opacity-80' : 'bg-milano-red hover:bg-on-surface hover:text-lemon-chiffon'}`}
-              >
-                {isPlacingOrder ? "PROCESSING..." : `Place Order — ${formatPrice(grandTotal, currency)}`}
-              </button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={shippingForm.firstName}
+                        onChange={(e) => handleInputChange("firstName", e.target.value)}
+                        placeholder="First name"
+                        className={`w-full bg-surface border-2 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red transition-all ${formErrors.firstName ? 'border-milano-red bg-red-50' : 'border-on-surface/30'}`}
+                      />
+                      <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">First name</label>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={shippingForm.lastName}
+                        onChange={(e) => handleInputChange("lastName", e.target.value)}
+                        placeholder="Last name"
+                        className={`w-full bg-surface border-2 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red transition-all ${formErrors.lastName ? 'border-milano-red bg-red-50' : 'border-on-surface/30'}`}
+                      />
+                      <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">Last name</label>
+                    </div>
+                  </div>
 
-              <div className="text-center font-label-bold text-[10px] opacity-60 uppercase tracking-widest space-y-1">
-                <p>256-BIT ENCRYPTED CHECKOUT</p>
-                <p>GUARANTEED AUTHENTIC DROP ARCHIVE</p>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={shippingForm.address}
+                      onChange={(e) => handleInputChange("address", e.target.value)}
+                      placeholder="Address"
+                      className={`w-full bg-surface border-2 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red transition-all ${formErrors.address ? 'border-milano-red bg-red-50' : 'border-on-surface/30'}`}
+                    />
+                    <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">Address</label>
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={shippingForm.apartment}
+                      onChange={(e) => handleInputChange("apartment", e.target.value)}
+                      placeholder="Apartment, suite, etc. (optional)"
+                      className="w-full bg-surface border-2 border-on-surface/30 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red transition-all"
+                    />
+                    <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">Apartment, suite, etc. (optional)</label>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={shippingForm.city}
+                        onChange={(e) => handleInputChange("city", e.target.value)}
+                        placeholder="City"
+                        className={`w-full bg-surface border-2 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red transition-all ${formErrors.city ? 'border-milano-red bg-red-50' : 'border-on-surface/30'}`}
+                      />
+                      <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">City</label>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={shippingForm.state}
+                        onChange={(e) => handleInputChange("state", e.target.value)}
+                        placeholder="State"
+                        className={`w-full bg-surface border-2 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red transition-all ${formErrors.state ? 'border-milano-red bg-red-50' : 'border-on-surface/30'}`}
+                      />
+                      <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">State</label>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={shippingForm.zip}
+                        onChange={(e) => handleInputChange("zip", e.target.value)}
+                        placeholder="PIN code"
+                        className={`w-full bg-surface border-2 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red transition-all ${formErrors.zip ? 'border-milano-red bg-red-50' : 'border-on-surface/30'}`}
+                      />
+                      <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">PIN code</label>
+                    </div>
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={shippingForm.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      placeholder="Phone"
+                      className={`w-full bg-surface border-2 px-4 pt-6 pb-2 font-headline-md text-base focus:outline-none focus:border-milano-red transition-all ${formErrors.phone ? 'border-milano-red bg-red-50' : 'border-on-surface/30'}`}
+                    />
+                    <label className="absolute left-4 top-2 text-[10px] font-label-bold uppercase tracking-widest text-on-surface/50 pointer-events-none">Phone</label>
+                  </div>
+                </div>
+              </section>
+
+              {/* Actions */}
+              <div className="flex flex-col sm:flex-row items-center justify-between pt-8">
+                <Link href="/cart" className="text-milano-red text-sm font-label-bold uppercase tracking-widest hover:underline mb-6 sm:mb-0">
+                  &lt; Return to cart
+                </Link>
+                <button 
+                  type="submit"
+                  disabled={isPlacingOrder || cartItems.length === 0}
+                  className="w-full sm:w-auto bg-milano-red hover:bg-on-surface text-lemon-chiffon border-2 border-on-surface font-headline-md uppercase tracking-widest px-8 py-4 transition-colors flex items-center justify-center min-w-[250px]"
+                >
+                  {isPlacingOrder ? (
+                    <span className="material-symbols-outlined animate-spin">autorenew</span>
+                  ) : (
+                    "Continue to shipping"
+                  )}
+                </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
-      </main>
+
+        {/* RIGHT COLUMN: ORDER SUMMARY (Surface Darker) */}
+        <div className="w-full lg:w-[45%] xl:w-2/5 bg-on-surface text-lemon-chiffon border-t-8 lg:border-t-0 lg:border-l-8 border-milano-red order-1 lg:order-2 flex justify-start">
+          <div className="w-full max-w-lg px-4 py-8 lg:px-12 lg:py-16 lg:sticky lg:top-0 h-fit">
+            
+            <div className="space-y-6">
+              {cartItems.map((item) => (
+                <div key={`${item.id}-${item.size}`} className="flex gap-4 items-center group">
+                  <div className="relative">
+                    <div className="w-20 h-24 border-2 border-lemon-chiffon/20 bg-white overflow-hidden">
+                      <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="text-base font-headline-md uppercase">{item.title}</h3>
+                    <p className="text-xs font-label-bold uppercase tracking-widest text-lemon-chiffon/50 mt-1 mb-2">{item.size} / {item.color}</p>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center border border-lemon-chiffon/30 rounded-none w-fit">
+                        <button 
+                          onClick={() => updateCartQuantity(item.id, item.quantity - 1, item.size)} 
+                          className="px-2 py-1 text-lemon-chiffon hover:text-milano-red transition-colors cursor-pointer"
+                        >
+                          -
+                        </button>
+                        <span className="px-2 font-label-bold text-xs">{item.quantity}</span>
+                        <button 
+                          onClick={() => updateCartQuantity(item.id, item.quantity + 1, item.size)} 
+                          className="px-2 py-1 text-lemon-chiffon hover:text-milano-red transition-colors cursor-pointer"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <button 
+                        onClick={() => removeFromCart(item.id, item.size)} 
+                        className="text-[10px] font-label-bold uppercase tracking-widest text-lemon-chiffon/50 hover:text-milano-red transition-colors underline cursor-pointer"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-base font-headline-md">
+                    {formatPrice(item.price * item.quantity, currency)}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 pt-8 border-t-2 border-lemon-chiffon/20">
+              <div className="flex gap-4">
+                <input 
+                  type="text" 
+                  placeholder="Discount code" 
+                  className="flex-grow bg-transparent border-2 border-lemon-chiffon/30 px-4 py-3 font-headline-md text-base focus:outline-none focus:border-milano-red placeholder:text-lemon-chiffon/50 uppercase"
+                />
+                <button className="bg-lemon-chiffon text-on-surface px-6 py-3 font-headline-md uppercase hover:bg-milano-red hover:text-lemon-chiffon hover:border-milano-red border-2 border-transparent transition-colors">
+                  Apply
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-8 border-t-2 border-lemon-chiffon/20 space-y-4">
+              <div className="flex justify-between text-xs font-label-bold uppercase tracking-widest text-lemon-chiffon/60">
+                <span>Subtotal</span>
+                <span className="text-lemon-chiffon">{formatPrice(subtotal, currency)}</span>
+              </div>
+              <div className="flex justify-between text-xs font-label-bold uppercase tracking-widest text-lemon-chiffon/60">
+                <span>Shipping</span>
+                <span>{shippingFee === 0 ? "Free" : formatPrice(shippingFee, currency)}</span>
+              </div>
+              <div className="flex justify-between text-xs font-label-bold uppercase tracking-widest text-lemon-chiffon/60">
+                <span>Estimated taxes</span>
+                <span>{formatPrice(taxes, currency)}</span>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-8 border-t-2 border-lemon-chiffon/20 flex justify-between items-end">
+              <span className="text-xl font-headline-md uppercase">Total</span>
+              <div className="flex items-end gap-2">
+                <span className="text-xs font-label-bold text-lemon-chiffon/50 mb-1">{currency}</span>
+                <span className="text-4xl font-headline-md text-milano-red">{formatPrice(grandTotal, currency)}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        
+      </div>
 
       <Footer />
     </div>
